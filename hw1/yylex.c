@@ -13,7 +13,7 @@ int yylex(){
   int whitespace = 0;
   int i = 0;
 
-  //enter the grabby loop
+  //enter the loop to get a lexeme
   while(whitespace == 0){
     
     x = fgetc( yyin ); //grab character
@@ -36,7 +36,23 @@ int yylex(){
     i++; //iterate our counter
 
   }
-  return 1;
+  
+  //printf("Passing %d to parseFirst ", x);
+  //parse the lexeme
+  switch( parseSingle( yytext[0] ) ){
+  case 1:
+    return 1;
+  case 2:
+    return 2;
+  case 3:
+    return 3;
+  case 4: 
+    return 4;
+  case 5: 
+    return 5;
+  default:
+    return 0;
+  }
 }
 
 int parseIdentifier(){
@@ -57,6 +73,29 @@ int parsePunctuation(){
 
 int parseMixture(){
   return 5;
+}
+
+int parseSingle(int x){
+  //identifier 97-122
+  //name 65-90
+  //digit 48-57 - = 45 . = 46 
+  //punctuation 33-47 58-64 91-96 123-126
+  //mixture
+  //printf("Looking at %d", x);
+  if(x >= 97 && x <= 122){
+    return 1;
+  }
+  else if(x >= 65 && x <= 90){
+    return 2;
+  }
+  else if((x >= 48 && x <= 57) || x == 45 || x == 46){
+    return 3;
+  }
+  else if((x >= 33 && x <= 47) || (x >= 58 && x <= 64) || (x >= 91 && x <= 96) || (x >= 123 && x <= 126)){
+    return 4;
+  } 
+  
+ return 5;
 }
 
 //1 == whitespace. 0 == not whitespace
