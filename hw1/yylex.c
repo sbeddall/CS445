@@ -41,34 +41,56 @@ int yylex(){
   //parse the lexeme
   switch( parseSingle( yytext[0] ) ){
   case 1:
-    return 1;
+    return parseIdentifier();
   case 2:
-    return 2;
+    return parseName();
   case 3:
-    return 3;
-  case 4: 
-    return 4;
+    return parseNumber();
+  case 4:
+    return parsePunctuation();
   case 5: 
-    return 5;
+    return parseMixture();
   default:
     return 0;
   }
 }
 
 int parseIdentifier(){
+  char* iterator = yytext;
+  
+  while(*iterator != '\0'){
+    // printf("%c\n", *iterator);
+    if( parseSingle( *iterator ) != 1 ) return 5;
+    iterator++;
+  }
   return 1;
 }
 
 int parseName(){
+  char* iterator = yytext;
+  
+  while(*iterator != '\0'){
+    // printf("%c\n", *iterator);
+    if( parseSingle( *iterator ) != 1 || parseSingle( *iterator ) != 2) return 5;
+    iterator++;
+  }
+
   return 2;
 }
 
 int parseNumber(){
+  char* iterator = yytext;
+  while(*iterator != '\0'){
+    if( parseSingle( *iterator ) != 3 ) return 5;
+    iterator++;
+  }
   return 3;
 }
 
 int parsePunctuation(){
-  return 4;
+  if(yytext[1] == '\0')
+    return 4;
+  else return parseMixture();
 }
 
 int parseMixture(){
