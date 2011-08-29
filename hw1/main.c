@@ -10,14 +10,17 @@ int main(int argc, char* argv[]){
   
   //grab each file in the command line
   for(i; i < argc; i++){
-  
+    identifier = 0;
+    //printf("%s", argv[i]);
     yyin = fopen( argv[i], "r" );
     
     //check that it's a real file
+    
     if(yyin == 0){
       printf("Could not open file");
       return (0);
     }
+    
     
 
     //attend to each beautiful lexeme
