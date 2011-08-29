@@ -88,9 +88,19 @@ int parseName(){
 }
 
 int parseNumber(){
+  int neg_count = 0;
+  int dot_count = 0;
+  int i = 0;
+
   char* iterator = yytext;
   while(*iterator != '\0'){
-    if( parseSingle( *iterator ) != 3 ) return 5;
+    if( parseSingle( *iterator ) != 3 ) return 5; //anything other than - . #s
+    if(*iterator == 46) dot_count++; //we saw a dot? count it!
+    if(dot_count > 1) return 5; //if there is more than one dot.
+    //negative sign must be ONLY first
+    if(*iterator == 45 && i>0)return 5;
+    
+    i++;
     iterator++;
   }
   return 3;
@@ -99,6 +109,9 @@ int parseNumber(){
 int parsePunctuation(){
   if(yytext[1] == '\0')
     return 4;
+  else if(yytext[0] == 45 || yytext[0] == 46){
+    return parseNumber();
+  }
   else return parseMixture();
 }
 
@@ -119,7 +132,7 @@ int parseSingle(int x){
   else if(x >= 65 && x <= 90){
     return 2;
   }
-  else if((x >= 48 && x <= 57) || x == 45 || x == 46){
+  else if((x >= 48 && x <= 57) || x == 45 || x == 46){//
     return 3;
   }
   else if((x >= 33 && x <= 47) || (x >= 58 && x <= 64) || (x >= 91 && x <= 96) || (x >= 123 && x <= 126)){
