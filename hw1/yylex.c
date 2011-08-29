@@ -98,7 +98,8 @@ int parseNumber(){
     if(*iterator == 46) dot_count++; //we saw a dot? count it!
     if(dot_count > 1) return 5; //if there is more than one dot.
     //negative sign must be ONLY first
-    if(*iterator == 45 && i>0)return 5;
+    if(*iterator == 45 && i > 0)return 5;
+    
     
     i++;
     iterator++;
