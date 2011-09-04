@@ -191,10 +191,10 @@
 "override" { return _OVERRIDE; }
 "static" { return _STATIC; }
 
-[a-zA-Z][a-zA-Z0-9]* {  return IDENT;}
+[a-zA-Z][a-zA-Z0-9]* { addCategoryToYYToken(IDENT); return IDENT;}
 
-\[ { return LBRACKET; }
-\] { return RBRACKET; } 
+\[ { addCategoryToYYToken(LBRACKET); return LBRACKET; }
+\] { addCategoryToYYToken(RBRACKET); return RBRACKET; } 
 
 \= { addCategoryToYYToken(ASSIGN); return ASSIGN; }
 
@@ -202,16 +202,16 @@
 
 [0-9]*'.'?[0-9]* { addCategoryToYYToken(NUMBER); return NUMBER; }
 
-"*=" { return MULTIPLYEQ; }
+"*=" { addCategoryToYYToken(MULTIPLYEQ); return MULTIPLYEQ; }
 
-"/=" { return DIVIDEEQ; }
+"/=" { addCategoryToYYToken(DIVIDEEQ); return DIVIDEEQ; }
 
-"%=" { return MODULOEQ; }
+"%=" { addCategoryToYYToken(MODULOEQ); return MODULOEQ; }
 
-"+=" { return PLUSEQ; }
+"+=" { addCategoryToYYToken(PLUSEQ); return PLUSEQ; }
 
-"-=" { return MINUSEQ; }
+"-=" { addCategoryToYYToken(MINUSEQ); return MINUSEQ; }
 
-. { return OTHER; }
+. { addCategoryToYYToken(OTHER); return OTHER; }
 
 %%
