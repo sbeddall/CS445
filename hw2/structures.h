@@ -20,6 +20,9 @@ typedef struct tokenlist {
 } token_item ;
 
 void addToList(token_item* head, token* new);
+void addYYTokenToList(token_item* head);
 void printList(token_item* head);
+token* YYDup();
+void addCategoryToYYToken(int category);
 
 #endif

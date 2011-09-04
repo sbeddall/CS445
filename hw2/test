@@ -1,0 +1,24 @@
+import fl.controls.ComboBox;
+import fl.controls.Slider;
+import fl.controls.SliderDirection;
+import fl.data.DataProvider;
+ 
+var dp:DataProvider = new DataProvider();
+dp.addItem({label:SliderDirection.HORIZONTAL});
+dp.addItem({label:SliderDirection.VERTICAL});
+ 
+var comboBox:ComboBox = new ComboBox();
+comboBox.dataProvider = dp;
+comboBox.selectedIndex = 1;
+comboBox.move(20, 20);
+comboBox.addEventListener(Event.CHANGE, comboBox_change);
+addChild(comboBox);
+ 
+var slider:Slider = new Slider();
+slider.direction *= SliderDirection.VERTICAL;
+slider.move(20, 50);
+addChild(slider);
+ 
+function comboBox_change(evt:Event):void {
+    slider.direction = comboBox.selectedItem.label;
+}
