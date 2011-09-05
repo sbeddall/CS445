@@ -138,15 +138,18 @@
   
   //misc
   #define IDENT 358
-  #define QUOTES 359
   #define OTHER 400
  
 %}
 %option noyywrap
 
+
 %%
-     //RESERVED WORDS
-    //  #define _AS 
+
+[ \t] 
+"\n" { printf("%s", "I see newline");LINENO++; } 
+
+
 "break" { evalToYYToken(_BREAK, yytext); return _BREAK; }
 "case" { return _CASE; }
 "catch" { return _CATCH; } 
@@ -201,15 +204,14 @@
 "instanceof"  { return _INSTANCEOF; } 
 "is"  { return _IS; } 
 
-
-[a-zA-Z][a-zA-Z0-9]* { evalToYYToken(IDENT, yytext); return IDENT;}
+[a-zA-Z^\n][a-zA-Z0-9^\n]* { evalToYYToken(IDENT, yytext); return IDENT;}
 
 \[ { evalToYYToken(LBRACKET, yytext); return LBRACKET; }
 \] { evalToYYToken(RBRACKET, yytext);  return RBRACKET; } 
 
 \= { evalToYYToken(ASSIGN, yytext); return ASSIGN; }
 
-\"[.]+\" { evalToYYToken(STRING, yytext); return STRING; }
+\"[.^\n]+\" { evalToYYToken(STRING, yytext); return STRING; }
 
 [0-9]*'.'?[0-9]* { evalToYYToken(NUMBER, yytext); return NUMBER; }
 
@@ -220,7 +222,6 @@
 "%=" { evalToYYToken(MODULOEQ, yytext); return MODULOEQ; }
 "+=" { evalToYYToken(PLUSEQ, yytext); return PLUSEQ; }
 "-=" { evalToYYToken(MINUSEQ, yytext); return MINUSEQ; }
-'\n' {LINENO++;}
 
 . { evalToYYToken(OTHER, yytext); return OTHER; }
 

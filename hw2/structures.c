@@ -48,7 +48,7 @@ void printYYList(token_item* head){
   token_item* iterator = head;
   printf("Category\tText\tLineno\tFilename\tIval/Sval\n\n");
   while(iterator->next != 0){
-    printf("%d\t\t\t%s\t\t\t%d\t\t%s\t\t\n", iterator->t->category,iterator->t->text,iterator->t->lineno,"test",0);
+    printf("%d %*s\t%d\t%s\t\n", iterator->t->category,20, iterator->t->text,iterator->t->lineno,"test",0);
     iterator = iterator->next;
   }
 }
