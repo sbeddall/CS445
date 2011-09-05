@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 
-typedef struct token {
+typedef struct tokenitem {
    int category;   /* the integer code returned by yylex */
    char *text;     /* the actual string (lexeme) matched */
    int lineno;     /* the line number on which the token occurs */
@@ -15,8 +15,8 @@ typedef struct token {
 } token ;        /* the string (less quotes and after escapes) here */
 
 typedef struct tokenlist {
-  token *t;
-  struct tokenlist *next;
+  struct tokenitem* t;
+  struct tokenlist* next;
 } token_item ;
 
 void addToList(token_item* head, token* new);
