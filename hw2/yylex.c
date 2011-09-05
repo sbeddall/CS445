@@ -4,7 +4,7 @@
   #include "structures.h"
   
   extern token* YYTOKEN;
-  
+  extern int LINENO;
   
   
   
@@ -138,15 +138,16 @@
   
   //misc
   #define IDENT 358
+  #define QUOTES 359
   #define OTHER 400
-
+ 
 %}
 %option noyywrap
 
 %%
      //RESERVED WORDS
     //  #define _AS 
-"break" { return _BREAK; }
+"break" { evalToYYToken(_BREAK, yytext); return _BREAK; }
 "case" { return _CASE; }
 "catch" { return _CATCH; } 
 "class" { return _CLASS; }
@@ -161,7 +162,7 @@
 "function" { return _FUNCTION; }
 "if" { return _IF; }
 "implements" { return _IMPLEMENTS; }
-"import" { return _IMPORT; }
+"import" {evalToYYToken(_IMPORT, yytext); return _IMPORT; }
 "interface" { return _INTERFACE; }
 "internal" { return _INTERNAL; }
 "null"|"NULL" { return _NULL; }
@@ -191,27 +192,36 @@
 "override" { return _OVERRIDE; }
 "static" { return _STATIC; }
 
-[a-zA-Z][a-zA-Z0-9]* { addCategoryToYYToken(IDENT); return IDENT;}
+"new" { return _NEW; }
+"delete" { return _DELETE; }
+"typeof" {   return _TYPEOF; }
+"void" {   return _VOID; }
+"as"  { return _AS; }
+"in"  { return _IN; }
+"instanceof"  { return _INSTANCEOF; } 
+"is"  { return _IS; } 
 
-\[ { addCategoryToYYToken(LBRACKET); return LBRACKET; }
-\] { addCategoryToYYToken(RBRACKET); return RBRACKET; } 
 
-\= { addCategoryToYYToken(ASSIGN); return ASSIGN; }
+[a-zA-Z][a-zA-Z0-9]* { evalToYYToken(IDENT, yytext); return IDENT;}
 
-\"[.]+\" { addCategoryToYYToken(STRING); return STRING; }
+\[ { evalToYYToken(LBRACKET, yytext); return LBRACKET; }
+\] { evalToYYToken(RBRACKET, yytext);  return RBRACKET; } 
 
-[0-9]*'.'?[0-9]* { addCategoryToYYToken(NUMBER); return NUMBER; }
+\= { evalToYYToken(ASSIGN, yytext); return ASSIGN; }
 
-"*=" { addCategoryToYYToken(MULTIPLYEQ); return MULTIPLYEQ; }
+\"[.]+\" { evalToYYToken(STRING, yytext); return STRING; }
 
-"/=" { addCategoryToYYToken(DIVIDEEQ); return DIVIDEEQ; }
+[0-9]*'.'?[0-9]* { evalToYYToken(NUMBER, yytext); return NUMBER; }
 
-"%=" { addCategoryToYYToken(MODULOEQ); return MODULOEQ; }
+"?:" { evalToYYToken(_TERNARY, yytext); return _TERNARY; }
 
-"+=" { addCategoryToYYToken(PLUSEQ); return PLUSEQ; }
+"*=" { evalToYYToken(MULTIPLYEQ, yytext); return MULTIPLYEQ; }
+"/=" { evalToYYToken(DIVIDEEQ, yytext); return DIVIDEEQ; }
+"%=" { evalToYYToken(MODULOEQ, yytext); return MODULOEQ; }
+"+=" { evalToYYToken(PLUSEQ, yytext); return PLUSEQ; }
+"-=" { evalToYYToken(MINUSEQ, yytext); return MINUSEQ; }
+'\n' {LINENO++;}
 
-"-=" { addCategoryToYYToken(MINUSEQ); return MINUSEQ; }
-
-. { addCategoryToYYToken(OTHER); return OTHER; }
+. { evalToYYToken(OTHER, yytext); return OTHER; }
 
 %%
