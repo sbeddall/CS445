@@ -146,63 +146,62 @@
 
 %%
 
-[ \t] 
-"\n" { printf("%s", "I see newline");LINENO++; } 
-
+[ \t]
+ 
+"\n" {  LINENO++; } 
 
 "break" { evalToYYToken(_BREAK, yytext); return _BREAK; }
-"case" { return _CASE; }
-"catch" { return _CATCH; } 
-"class" { return _CLASS; }
-"const" { return _CONST; }
-"continue" { return _CONTINUE; }
-"default" { return _DEFAULT; }
-"do" { return _DO; }
-"else" { return _ELSE; } 
-"extends" { return _EXTENDS; }
-"finally" { return _FINALLY; }
-"for" { return _FOR; }
-"function" { return _FUNCTION; }
-"if" { return _IF; }
-"implements" { return _IMPLEMENTS; }
+"case" { evalToYYToken(_CASE,yytext); return _CASE; }
+"catch" { evalToYYToken(_CATCH,yytext); return _CATCH; } 
+"class" { evalToYYToken(_CLASS,yytext); return _CLASS; }
+"const" { evalToYYToken(_CONST,yytext); return _CONST; }
+"continue" { evalToYYToken(_CONTINUE,yytext); return _CONTINUE; }
+"default" { evalToYYToken(_DEFAULT,yytext); return _DEFAULT; }
+"do" { evalToYYToken(_DO,yytext); return _DO; }
+"else" { evalToYYToken(_ELSE,yytext); return _ELSE; } 
+"extends" { evalToYYToken(_EXTENDS,yytext); return _EXTENDS; }
+"finally" { evalToYYToken(_FINALLY,yytext); return _FINALLY; }
+"for" { evalToYYToken(_FOR,yytext); return _FOR; }
+"function" { evalToYYToken(_FUNCTION,yytext); return _FUNCTION; }
+"if" { evalToYYToken(_IF,yytext); return _IF; }
+"implements" { evalToYYToken(_IMPLEMENTS,yytext); return _IMPLEMENTS; }
 "import" {evalToYYToken(_IMPORT, yytext); return _IMPORT; }
-"interface" { return _INTERFACE; }
-"internal" { return _INTERNAL; }
-"null"|"NULL" { return _NULL; }
-"package" { return _PACKAGE; }
-"private" { return _PRIVATE; }
-"protected" { return _PROTECTED; }
-"public" { return _PUBLIC; }
-"return" { return _RETURN; }
-"super" { return _SUPER; }
-"switch" { return _SWITCH; }
-"this" { return _THIS; }
-"throw" { return _THROW; }
-"to" { return _TO; }
-"try" { return _TRY; }
-"use" { return _USE; }
-"var" { return _VAR; }
-"while" { return _WHILE; }
-"with" { return _WITH; }  
-"each" { return _EACH; }
-"get" { return _GET; }
-"set" { return _SET; }
-"namespace" { return _NAMESPACE; }
-"include" { return _INCLUDE; }
-"dynamic" { return _DYNAMIC; }
-"final" { return _FINAL; }
-"native" { return _NATIVE; }
-"override" { return _OVERRIDE; }
-"static" { return _STATIC; }
+"interface" { evalToYYToken(_INTERFACE,yytext); return _INTERFACE; }
+"null"|"NULL" { evalToYYToken(_NULL,yytext); return _NULL; }
+"package" { evalToYYToken(_PACKAGE,yytext);  return _PACKAGE; }
+"private" { evalToYYToken(_PRIVATE,yytext); return _PRIVATE; }
+"protected" { evalToYYToken(_PROTECTED,yytext); return _PROTECTED; }
+"public" { evalToYYToken(_PUBLIC,yytext); return _PUBLIC; }
+"return" { evalToYYToken(_RETURN,yytext);return _RETURN; }
+"super" { evalToYYToken(_SUPER,yytext); return _SUPER; }
+"switch" { evalToYYToken(_SWITCH,yytext); return _SWITCH; }
+"this" { evalToYYToken(_THIS,yytext); return _THIS; }
+"throw" { evalToYYToken(_THROW,yytext); return _THROW; }
+"to" { evalToYYToken(_TO,yytext); return _TO; }
+"try" { evalToYYToken(_TRY,yytext); return _TRY; }
+"use" { evalToYYToken(_USE,yytext); return _USE; }
+"var" { evalToYYToken(_VAR,yytext); return _VAR; }
+"while" { evalToYYToken(_WHILE,yytext); return _WHILE; }
+"with" { evalToYYToken(_WITH,yytext); return _WITH; }  
+"each" { evalToYYToken(_EACH,yytext); return _EACH; }
+"get" { evalToYYToken(_GET,yytext); return _GET; }
+"set" { evalToYYToken(_SET,yytext); return _SET; }
+"namespace" { evalToYYToken(_NAMESPACE,yytext); return _NAMESPACE; }
+"dynamic" { evalToYYToken(_DYNAMIC,yytext); return _DYNAMIC; }
+"final" { evalToYYToken(_FINAL,yytext); return _FINAL; }
+"native" { evalToYYToken(_NATIVE,yytext); return _NATIVE; }
+"override" { evalToYYToken(_OVERRIDE,yytext); return _OVERRIDE; }
+"static" { evalToYYToken(_STATIC,yytext); return _STATIC; }
 
-"new" { return _NEW; }
-"delete" { return _DELETE; }
-"typeof" {   return _TYPEOF; }
-"void" {   return _VOID; }
-"as"  { return _AS; }
-"in"  { return _IN; }
-"instanceof"  { return _INSTANCEOF; } 
-"is"  { return _IS; } 
+
+"new" { evalToYYToken(_NEW,yytext); return _NEW; }
+"delete" { evalToYYToken(_DELETE,yytext); return _DELETE; }
+"typeof" { evalToYYToken(_TYPEOF,yytext);  return _TYPEOF; }
+"void" {evalToYYToken(_VOID,yytext);   return _VOID; }
+"as"  { evalToYYToken(_AS, yytext); return _AS; }
+"in"  { evalToYYToken(_IN, yytext); return _IN; }
+"instanceof"  { evalToYYToken(_INSTANCEOF, yytext); return _INSTANCEOF; } 
+"is"  { evalToYYToken(_IS, yytext); return _IS; } 
 
 [a-zA-Z^\n][a-zA-Z0-9^\n]* { evalToYYToken(IDENT, yytext); return IDENT;}
 
