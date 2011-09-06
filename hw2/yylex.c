@@ -211,9 +211,22 @@
 [a-zA-Z][a-zA-Z0-9]* { evalToYYToken(IDENT, yytext); return IDENT;}
 
 \[ { evalToYYToken(LBRACKET, yytext); return LBRACKET; }
-\] { evalToYYToken(RBRACKET, yytext);  return RBRACKET; } 
+\] { evalToYYToken(RBRACKET, yytext);  return RBRACKET; }
 
 \= { evalToYYToken(ASSIGN, yytext); return ASSIGN; }
+  
+\< { evalToYYToken(LESSTHAN, yytext); return LESSTHAN; }
+\> { evalToYYToken(GREATERTHAN, yytext); return GREATERTHAN; }
+"==" { evalToYYToken(EQUALSEQUALS, yytext); return EQUALSEQUALS; }
+"===" { evalToYYToken(STRICTEQUALS, yytext); return STRICTEQUALS; }
+"!==" { evalToYYToken(STRICTNOTEQ, yytext); return STRICTNOTEQ; }
+">=" { evalToYYToken(GTHANEQ, yytext); return GTHANEQ; }
+"<=" { evalToYYToken(LTHANEQ, yytext); return LTHANEQ; }
+"!=" { evalToYYToken(NOTEQUAL, yytext); return NOTEQUAL; }
+\! { evalToYYToken(NOT, yytext); return NOT; }
+"&&" { evalToYYToken(LOGICALAND, yytext); return LOGICALAND; }
+"||" { evalToYYToken(LOGICALOR, yytext); return LOGICALOR; }
+
 
 \"[.^\n]+\" { evalToYYToken(STRING, yytext); return STRING; }
 
