@@ -139,10 +139,12 @@
   //misc
   #define IDENT 358
   #define OTHER 400
- 
-%}
-%option noyywrap
 
+  //C comments  http://stackoverflow.com/questions/2130097/problem-getting-c-style-comments-in-flex-lex
+
+//%option noyywrap
+
+%}
 
 %%
 
@@ -206,7 +208,7 @@
 "instanceof"  { evalToYYToken(_INSTANCEOF, yytext); return _INSTANCEOF; } 
 "is"  { evalToYYToken(_IS, yytext); return _IS; } 
 
-[a-zA-Z^\n][a-zA-Z0-9^\n]* { evalToYYToken(IDENT, yytext); return IDENT;}
+[a-zA-Z][a-zA-Z0-9]* { evalToYYToken(IDENT, yytext); return IDENT;}
 
 \[ { evalToYYToken(LBRACKET, yytext); return LBRACKET; }
 \] { evalToYYToken(RBRACKET, yytext);  return RBRACKET; } 
@@ -228,3 +230,5 @@
 . { evalToYYToken(OTHER, yytext); return OTHER; }
 
 %%
+
+int yywrap(){ return -1; }
