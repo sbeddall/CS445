@@ -9,7 +9,6 @@ extern FILE* yyin;
 
 main(int argc, char* argv[]){
 
-  yyin = fopen("test", "r");
   LINENO = 0;
   YYTOKEN = (token*)malloc(sizeof(token));
   
@@ -23,14 +22,23 @@ main(int argc, char* argv[]){
   populizer->lineno = 0;
   head->t = populizer; 
   //addYYTokenToList(head);
-  
-  int result = 1;
-  while(result != 0){
-    result = yylex();
-    addYYTokenToList(head);
-  }  
- 
-  printYYList(head);
 
+  int i = 1;
+  for(i; i < argc; i++){
+    FILENAME = argv[i];
+    yyin = fopen(argv[i], "r");
+    int result = 1;
+    while(result != 0){
+      result = yylex();
+      addYYTokenToList(head);
+    }  
+    fclose(yyin);
+    LINENO = 0;
+    FILENAME = argv[i];
+  }
+  
+  printYYList(head);
+      
+  
   return 0;
 }

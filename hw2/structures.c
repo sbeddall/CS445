@@ -3,7 +3,7 @@
 
 extern token* YYTOKEN;
 extern int LINENO;
-
+extern char* FILENAME;
 
 //linked list implementation stuff
 void addToList(token_item* head, token* new){
@@ -82,5 +82,5 @@ void addStringToYYToken(char* yytext){
 
 void populateYYGlobals(){
   YYTOKEN->lineno = LINENO;
-  //YYTOKEN->filename = FILENAME;
+  YYTOKEN->filename = FILENAME;
 }

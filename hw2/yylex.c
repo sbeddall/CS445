@@ -150,7 +150,7 @@
 
 [ \t]
  
-"\n" { printf("%s", "I see newline"); LINENO++; } 
+"\n" { LINENO++; } 
 
 "break" { evalToYYToken(_BREAK, yytext); return _BREAK; }
 "case" { evalToYYToken(_CASE,yytext); return _CASE; }
@@ -217,7 +217,7 @@
 
 \"[.^\n]+\" { evalToYYToken(STRING, yytext); return STRING; }
 
-[0-9]*'.'?[0-9]* { evalToYYToken(NUMBER, yytext); return NUMBER; }
+[0-9]*['.']?[0-9]* { evalToYYToken(NUMBER, yytext); return NUMBER; }
 
 "?:" { evalToYYToken(_TERNARY, yytext); return _TERNARY; }
 
