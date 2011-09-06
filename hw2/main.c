@@ -5,8 +5,11 @@
 int LINENO;
 char* FILENAME;
 token* YYTOKEN;
+extern FILE* yyin;
 
 main(int argc, char* argv[]){
+
+  yyin = fopen("test", "r");
   LINENO = 0;
   YYTOKEN = (token*)malloc(sizeof(token));
   

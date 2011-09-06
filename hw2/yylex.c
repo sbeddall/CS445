@@ -32,7 +32,7 @@
     //  #define _IN
     //  #define _INSTANCEOF
   #define _INTERFACE 276 
-  #define _INTERNAL 277; 
+  #define _INTERNAL 277 
     //  #define _IS
     //  #define _NATIVE
     //  #define _NEW 
@@ -60,7 +60,7 @@
   #define _GET 295 
   #define _SET 296 
   #define _NAMESPACE 297
-  #define _INCLUDE 298;
+  #define _INCLUDE 298
   #define _DYNAMIC 299
   #define _FINAL 300 
   #define _NATIVE 301
@@ -148,7 +148,7 @@
 
 [ \t]
  
-"\n" {  LINENO++; } 
+"\n" { printf("%s", "I see newline"); LINENO++; } 
 
 "break" { evalToYYToken(_BREAK, yytext); return _BREAK; }
 "case" { evalToYYToken(_CASE,yytext); return _CASE; }
@@ -193,6 +193,9 @@
 "override" { evalToYYToken(_OVERRIDE,yytext); return _OVERRIDE; }
 "static" { evalToYYToken(_STATIC,yytext); return _STATIC; }
 
+
+"internal" { evalToYYToken(_INTERNAL, yytext); return _INTERNAL; }
+"include" { evalToYYToken(_INCLUDE, yytext); return _INCLUDE; }
 
 "new" { evalToYYToken(_NEW,yytext); return _NEW; }
 "delete" { evalToYYToken(_DELETE,yytext); return _DELETE; }
