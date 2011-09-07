@@ -212,6 +212,13 @@
 
 \[ { evalToYYToken(LBRACKET, yytext); return LBRACKET; }
 \] { evalToYYToken(RBRACKET, yytext);  return RBRACKET; }
+\( { evalToYYToken(LPAREN, yytext); return LPAREN;}
+\) { evalToYYToken(RPAREN, yytext); return RPAREN; }
+"{" { evalToYYToken(LBRACE, yytext); return LBRACE; }
+"}" { evalToYYToken(RBRACE, yytext); return RBRACE; }
+';' { evalToYYToken(SEMICOLON, yytext); return SEMICOLON; }
+\" { evalToYYToken(QUOTES, yytext); return QUOTES; }
+\: { evalToYYToken(COLON, yytext); return COLON; }
 
 \= { evalToYYToken(ASSIGN, yytext); return ASSIGN; }
   
