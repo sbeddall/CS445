@@ -48,7 +48,7 @@ void printYYList(token_item* head){
   token_item* iterator = head;
   printf("Category\tText\tLineno\tFilename\tIval/Sval\n\n");
   while(iterator->next != 0){
-    printf("%d %*s\t%d\t%s\t\n", iterator->t->category,20, iterator->t->text,iterator->t->lineno,"test",0);
+    printf("%d %*s\t%d\t%s\t\n", iterator->t->category,20, iterator->t->text,iterator->t->lineno,iterator->t->filename,0);
     iterator = iterator->next;
   }
 }
@@ -59,7 +59,8 @@ token* YYDup(){
   new->category = YYTOKEN->category;
   new->text = strdup(YYTOKEN->text);
   new->lineno = LINENO;
-  
+  new->filename = strdup(YYTOKEN->filename);
+
   return new;
 }
 

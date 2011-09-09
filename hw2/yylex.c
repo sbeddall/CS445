@@ -99,8 +99,6 @@
   #define LOGICALOR 330//|| Logical OR
   
   //LITERALS
-  #define STRING 331
-  #define NUMBER 332
   #define _TRUE 334 
   #define _FALSE 335
   
@@ -136,10 +134,20 @@
   #define PLUSEQ 356// += Addition assignment
   #define MINUSEQ 357// -= Subtraction assignment  
   
+    //TYPES no already covered
+  #define _UINT 359
+  #define _INT 360
+  #define _BOOLEAN 361
+  #define _STRING 331
+  #define _NUMBER 332
+  
   //misc
   #define IDENT 358
   #define OTHER 400
 
+  #define eval(x) evalToYYToken(x, yytext)
+
+  
   //C comments  http://stackoverflow.com/questions/2130097/problem-getting-c-style-comments-in-flex-lex
 
 //%option noyywrap
@@ -150,104 +158,104 @@
 
 [ \t]
  
-"\n" { LINENO++; } 
+\n { LINENO++; } 
 
-"break" { evalToYYToken(_BREAK, yytext); return _BREAK; }
-"case" { evalToYYToken(_CASE,yytext); return _CASE; }
-"catch" { evalToYYToken(_CATCH,yytext); return _CATCH; } 
-"class" { evalToYYToken(_CLASS,yytext); return _CLASS; }
-"const" { evalToYYToken(_CONST,yytext); return _CONST; }
-"continue" { evalToYYToken(_CONTINUE,yytext); return _CONTINUE; }
-"default" { evalToYYToken(_DEFAULT,yytext); return _DEFAULT; }
-"do" { evalToYYToken(_DO,yytext); return _DO; }
-"else" { evalToYYToken(_ELSE,yytext); return _ELSE; } 
-"extends" { evalToYYToken(_EXTENDS,yytext); return _EXTENDS; }
-"finally" { evalToYYToken(_FINALLY,yytext); return _FINALLY; }
-"for" { evalToYYToken(_FOR,yytext); return _FOR; }
-"function" { evalToYYToken(_FUNCTION,yytext); return _FUNCTION; }
-"if" { evalToYYToken(_IF,yytext); return _IF; }
-"implements" { evalToYYToken(_IMPLEMENTS,yytext); return _IMPLEMENTS; }
-"import" {evalToYYToken(_IMPORT, yytext); return _IMPORT; }
-"interface" { evalToYYToken(_INTERFACE,yytext); return _INTERFACE; }
-"null"|"NULL" { evalToYYToken(_NULL,yytext); return _NULL; }
-"package" { evalToYYToken(_PACKAGE,yytext);  return _PACKAGE; }
-"private" { evalToYYToken(_PRIVATE,yytext); return _PRIVATE; }
-"protected" { evalToYYToken(_PROTECTED,yytext); return _PROTECTED; }
-"public" { evalToYYToken(_PUBLIC,yytext); return _PUBLIC; }
-"return" { evalToYYToken(_RETURN,yytext);return _RETURN; }
-"super" { evalToYYToken(_SUPER,yytext); return _SUPER; }
-"switch" { evalToYYToken(_SWITCH,yytext); return _SWITCH; }
-"this" { evalToYYToken(_THIS,yytext); return _THIS; }
-"throw" { evalToYYToken(_THROW,yytext); return _THROW; }
-"to" { evalToYYToken(_TO,yytext); return _TO; }
-"try" { evalToYYToken(_TRY,yytext); return _TRY; }
-"use" { evalToYYToken(_USE,yytext); return _USE; }
-"var" { evalToYYToken(_VAR,yytext); return _VAR; }
-"while" { evalToYYToken(_WHILE,yytext); return _WHILE; }
-"with" { evalToYYToken(_WITH,yytext); return _WITH; }  
-"each" { evalToYYToken(_EACH,yytext); return _EACH; }
-"get" { evalToYYToken(_GET,yytext); return _GET; }
-"set" { evalToYYToken(_SET,yytext); return _SET; }
-"namespace" { evalToYYToken(_NAMESPACE,yytext); return _NAMESPACE; }
-"dynamic" { evalToYYToken(_DYNAMIC,yytext); return _DYNAMIC; }
-"final" { evalToYYToken(_FINAL,yytext); return _FINAL; }
-"native" { evalToYYToken(_NATIVE,yytext); return _NATIVE; }
-"override" { evalToYYToken(_OVERRIDE,yytext); return _OVERRIDE; }
-"static" { evalToYYToken(_STATIC,yytext); return _STATIC; }
+"break" { eval(_BREAK); return _BREAK; }
+"case" { eval(_CASE); return _CASE; }
+"catch" { eval(_CATCH); return _CATCH; } 
+"class" { eval(_CLASS); return _CLASS; }
+"const" { eval(_CONST); return _CONST; }
+"continue" { eval(_CONTINUE); return _CONTINUE; }
+"default" { eval(_DEFAULT); return _DEFAULT; }
+"do" { eval(_DO); return _DO; }
+"else" { eval(_ELSE); return _ELSE; } 
+"extends" { eval(_EXTENDS); return _EXTENDS; }
+"finally" { eval(_FINALLY); return _FINALLY; }
+"for" { eval(_FOR); return _FOR; }
+"function" { eval(_FUNCTION); return _FUNCTION; }
+"if" { eval(_IF); return _IF; }
+"implements" { eval(_IMPLEMENTS); return _IMPLEMENTS; }
+"import" {eval(_IMPORT); return _IMPORT; }
+"interface" { eval(_INTERFACE); return _INTERFACE; }
+"null"|"NULL" { eval(_NULL); return _NULL; }
+"package" { eval(_PACKAGE);  return _PACKAGE; }
+"private" { eval(_PRIVATE); return _PRIVATE; }
+"protected" { eval(_PROTECTED); return _PROTECTED; }
+"public" { eval(_PUBLIC); return _PUBLIC; }
+"return" { eval(_RETURN);return _RETURN; }
+"super" { eval(_SUPER); return _SUPER; }
+"switch" { eval(_SWITCH); return _SWITCH; }
+"this" { eval(_THIS); return _THIS; }
+"throw" { eval(_THROW); return _THROW; }
+"to" { eval(_TO); return _TO; }
+"try" { eval(_TRY); return _TRY; }
+"use" { eval(_USE); return _USE; }
+"var" { eval(_VAR); return _VAR; }
+"while" { eval(_WHILE); return _WHILE; }
+"with" { eval(_WITH); return _WITH; }  
+"each" { eval(_EACH); return _EACH; }
+"get" { eval(_GET); return _GET; }
+"set" { eval(_SET); return _SET; }
+"namespace" { eval(_NAMESPACE); return _NAMESPACE; }
+"dynamic" { eval(_DYNAMIC); return _DYNAMIC; }
+"final" { eval(_FINAL); return _FINAL; }
+"native" { eval(_NATIVE); return _NATIVE; }
+"override" { eval(_OVERRIDE); return _OVERRIDE; }
+"static" { eval(_STATIC); return _STATIC; }
 
 
-"internal" { evalToYYToken(_INTERNAL, yytext); return _INTERNAL; }
-"include" { evalToYYToken(_INCLUDE, yytext); return _INCLUDE; }
+"internal" { eval(_INTERNAL); return _INTERNAL; }
+"include" { eval(_INCLUDE); return _INCLUDE; }
 
-"new" { evalToYYToken(_NEW,yytext); return _NEW; }
-"delete" { evalToYYToken(_DELETE,yytext); return _DELETE; }
-"typeof" { evalToYYToken(_TYPEOF,yytext);  return _TYPEOF; }
-"void" {evalToYYToken(_VOID,yytext);   return _VOID; }
-"as"  { evalToYYToken(_AS, yytext); return _AS; }
-"in"  { evalToYYToken(_IN, yytext); return _IN; }
-"instanceof"  { evalToYYToken(_INSTANCEOF, yytext); return _INSTANCEOF; } 
-"is"  { evalToYYToken(_IS, yytext); return _IS; } 
+"new" { eval(_NEW); return _NEW; }
+"delete" { eval(_DELETE); return _DELETE; }
+"typeof" { eval(_TYPEOF);  return _TYPEOF; }
+"void" {eval(_VOID);   return _VOID; }
+"as"  { eval(_AS); return _AS; }
+"in"  { eval(_IN); return _IN; }
+"instanceof"  { eval(_INSTANCEOF); return _INSTANCEOF; } 
+"is"  { eval(_IS); return _IS; } 
 
-[a-zA-Z][a-zA-Z0-9]* { evalToYYToken(IDENT, yytext); return IDENT;}
+[a-zA-Z][a-zA-Z0-9]* { eval(IDENT); return IDENT;}
 
-\[ { evalToYYToken(LBRACKET, yytext); return LBRACKET; }
-\] { evalToYYToken(RBRACKET, yytext);  return RBRACKET; }
-\( { evalToYYToken(LPAREN, yytext); return LPAREN;}
-\) { evalToYYToken(RPAREN, yytext); return RPAREN; }
-"{" { evalToYYToken(LBRACE, yytext); return LBRACE; }
-"}" { evalToYYToken(RBRACE, yytext); return RBRACE; }
-';' { evalToYYToken(SEMICOLON, yytext); return SEMICOLON; }
-\" { evalToYYToken(QUOTES, yytext); return QUOTES; }
-\: { evalToYYToken(COLON, yytext); return COLON; }
+\[ { eval(LBRACKET); return LBRACKET; }
+\] { eval(RBRACKET);  return RBRACKET; }
+\( { eval(LPAREN); return LPAREN;}
+\) { eval(RPAREN); return RPAREN; }
+"{" { eval(LBRACE); return LBRACE; }
+"}" { eval(RBRACE); return RBRACE; }
+";" { eval(SEMICOLON); return SEMICOLON; }
+\" { eval(QUOTES); return QUOTES; }
+\: { eval(COLON); return COLON; }
 
-\= { evalToYYToken(ASSIGN, yytext); return ASSIGN; }
+\= { eval(ASSIGN); return ASSIGN; }
   
-\< { evalToYYToken(LESSTHAN, yytext); return LESSTHAN; }
-\> { evalToYYToken(GREATERTHAN, yytext); return GREATERTHAN; }
-"==" { evalToYYToken(EQUALSEQUALS, yytext); return EQUALSEQUALS; }
-"===" { evalToYYToken(STRICTEQUALS, yytext); return STRICTEQUALS; }
-"!==" { evalToYYToken(STRICTNOTEQ, yytext); return STRICTNOTEQ; }
-">=" { evalToYYToken(GTHANEQ, yytext); return GTHANEQ; }
-"<=" { evalToYYToken(LTHANEQ, yytext); return LTHANEQ; }
-"!=" { evalToYYToken(NOTEQUAL, yytext); return NOTEQUAL; }
-\! { evalToYYToken(NOT, yytext); return NOT; }
-"&&" { evalToYYToken(LOGICALAND, yytext); return LOGICALAND; }
-"||" { evalToYYToken(LOGICALOR, yytext); return LOGICALOR; }
+\< { eval(LESSTHAN); return LESSTHAN; }
+\> { eval(GREATERTHAN); return GREATERTHAN; }
+"==" { eval(EQUALSEQUALS); return EQUALSEQUALS; }
+"===" { eval(STRICTEQUALS); return STRICTEQUALS; }
+"!==" { eval(STRICTNOTEQ); return STRICTNOTEQ; }
+">=" { eval(GTHANEQ); return GTHANEQ; }
+"<=" { eval(LTHANEQ); return LTHANEQ; }
+"!=" { eval(NOTEQUAL); return NOTEQUAL; }
+\! { eval(NOT); return NOT; }
+"&&" { eval(LOGICALAND); return LOGICALAND; }
+"||" { eval(LOGICALOR); return LOGICALOR; }
 
 
-\"[.^\n]+\" { evalToYYToken(STRING, yytext); return STRING; }
+\"[.^\n]+\" { eval(_STRING); return _STRING; }
 
-[0-9]*['.']?[0-9]* { evalToYYToken(NUMBER, yytext); return NUMBER; }
+[0-9]*['.']?[0-9]* { eval(_NUMBER); return _NUMBER; }
 
-"?:" { evalToYYToken(_TERNARY, yytext); return _TERNARY; }
+"?:" { eval(_TERNARY); return _TERNARY; }
 
-"*=" { evalToYYToken(MULTIPLYEQ, yytext); return MULTIPLYEQ; }
-"/=" { evalToYYToken(DIVIDEEQ, yytext); return DIVIDEEQ; }
-"%=" { evalToYYToken(MODULOEQ, yytext); return MODULOEQ; }
-"+=" { evalToYYToken(PLUSEQ, yytext); return PLUSEQ; }
-"-=" { evalToYYToken(MINUSEQ, yytext); return MINUSEQ; }
+"*=" { eval(MULTIPLYEQ); return MULTIPLYEQ; }
+"/=" { eval(DIVIDEEQ); return DIVIDEEQ; }
+"%=" { eval(MODULOEQ); return MODULOEQ; }
+"+=" { eval(PLUSEQ); return PLUSEQ; }
+"-=" { eval(MINUSEQ); return MINUSEQ; }
 
-. { evalToYYToken(OTHER, yytext); return OTHER; }
+. { eval(OTHER); return OTHER; }
 
 %%
 

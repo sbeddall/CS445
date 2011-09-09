@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "structures.h"
+#include <string.h>
 
 int LINENO;
 char* FILENAME;
@@ -20,6 +21,7 @@ main(int argc, char* argv[]){
   populizer->category = -1;
   populizer->text = "start";
   populizer->lineno = 0;
+  
   head->t = populizer; 
   //addYYTokenToList(head);
 
