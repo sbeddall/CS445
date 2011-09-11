@@ -46,9 +46,10 @@ void printList(token_item* head){
 
 void printYYList(token_item* head){
   token_item* iterator = head;
-  printf("Category\tText\tLineno\tFilename\tIval/Sval\n\n");
+  //printf("CategoryTextLinenoFilename\tIval/Sval\n\n");
+  printf("%-10s %-20s%-10s%-30s%-20s\n", "Category","Text","Line #","Filename","Ival/Sval");
   while(iterator->next != 0){
-    printf("%d %*s\t%d\t%s\t\n", iterator->t->category,20, iterator->t->text,iterator->t->lineno,iterator->t->filename,0);
+    printf("%-10d %-20s%-10d%-30s%-20s\n", iterator->t->category, iterator->t->text,iterator->t->lineno,iterator->t->filename,"null");
     iterator = iterator->next;
   }
 }

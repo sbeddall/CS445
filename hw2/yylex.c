@@ -255,7 +255,7 @@
 "+=" { eval(PLUSEQ); return PLUSEQ; }
 "-=" { eval(MINUSEQ); return MINUSEQ; }
 
-. { eval(OTHER); return OTHER; }
+. {  }
 
 %%
 
