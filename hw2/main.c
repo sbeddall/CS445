@@ -21,6 +21,8 @@ main(int argc, char* argv[]){
   populizer->category = -1;
   populizer->text = "start";
   populizer->lineno = 0;
+  populizer->ival = 0;
+  populizer->sval = "start";
   
   head->t = populizer; 
   //addYYTokenToList(head);

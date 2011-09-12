@@ -44,12 +44,21 @@ void printList(token_item* head){
   }
 }
 
+//this thing is gnarly ugly. just sayin
 void printYYList(token_item* head){
   token_item* iterator = head;
   //printf("CategoryTextLinenoFilename\tIval/Sval\n\n");
   printf("%-10s %-20s%-10s%-30s%-20s\n", "Category","Text","Line #","Filename","Ival/Sval");
   while(iterator->next != 0){
-    printf("%-10d %-20s%-10d%-30s%-20s\n", iterator->t->category, iterator->t->text,iterator->t->lineno,iterator->t->filename,"null");
+    if(iterator->t->category == 332){
+      printf("%-10d %-20s%-10d%-30s%-20d\n", iterator->t->category, iterator->t->text,iterator->t->lineno,iterator->t->filename,iterator->t->ival);
+    }
+    else if(iterator->t->category == 331){
+      printf("%-10d %-20s%-10d%-30s%-20s\n", iterator->t->category, iterator->t->text,iterator->t->lineno,iterator->t->filename,iterator->t->sval);
+    }
+    else {
+      printf("%-10d %-20s%-10d%-30s%-20s\n", iterator->t->category, iterator->t->text,iterator->t->lineno,iterator->t->filename,"null");
+    }
     iterator = iterator->next;
   }
 }
@@ -61,7 +70,13 @@ token* YYDup(){
   new->text = strdup(YYTOKEN->text);
   new->lineno = LINENO;
   new->filename = strdup(YYTOKEN->filename);
-
+  if(YYTOKEN->sval != NULL){
+       new->sval = strdup(YYTOKEN->sval);
+  }
+  if(YYTOKEN->ival != 0){
+    new->ival = YYTOKEN->ival;
+  }
+  
   return new;
 }
 
@@ -72,7 +87,7 @@ void evalToYYToken(int category, char* yytext){
   addCategoryToYYToken(category);
   addStringToYYToken(yytext);
   populateYYGlobals();
-  
+  if(category == 331 || category == 332) ISval(category, yytext);   
 }
 
 void addCategoryToYYToken(int category){
@@ -90,9 +105,18 @@ void populateYYGlobals(){
 
 void ISval(int category, char* yytext){
   switch(category){
-  case 331:
+  case 331://string
+    YYTOKEN->sval = strdup(yytext);
+    YYTOKEN->sval++;
+    char* iterator = YYTOKEN->sval;
+    
+    while(*iterator != '\"'){
+      iterator++;
+    }
+    *iterator = '\0';
     break;
-  case 332:
+  case 332://number
+    YYTOKEN->ival = atoi(yytext);
     break;
   default:
     break;
