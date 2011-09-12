@@ -35,6 +35,7 @@ void evalToYYToken(int category, char* yytext);
 void addCategoryToYYToken(int category);
 void addStringToYYToken(char* yytext);
 void populateYYGlobals();
+void ISval(int category, char* yytext){
 //ival
 //sval
 

@@ -154,7 +154,13 @@
 
 %}
 
+%x C_COMMENT
+
 %%
+
+"/*"            { BEGIN(C_COMMENT); }
+<C_COMMENT>"*/" { BEGIN(INITIAL); }
+<C_COMMENT>.    { }
 
 [ \t]
  
@@ -225,6 +231,8 @@
 "{" { eval(LBRACE); return LBRACE; }
 "}" { eval(RBRACE); return RBRACE; }
 ";" { eval(SEMICOLON); return SEMICOLON; }
+\".*\" { eval(_STRING); return _STRING; }
+
 \" { eval(QUOTES); return QUOTES; }
 \: { eval(COLON); return COLON; }
 
@@ -243,7 +251,8 @@
 "||" { eval(LOGICALOR); return LOGICALOR; }
 
 
-\"[.^\n]+\" { eval(_STRING); return _STRING; }
+"//"* { }
+
 
 [0-9]*['.']?[0-9]* { eval(_NUMBER); return _NUMBER; }
 

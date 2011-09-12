@@ -72,6 +72,7 @@ void evalToYYToken(int category, char* yytext){
   addCategoryToYYToken(category);
   addStringToYYToken(yytext);
   populateYYGlobals();
+  
 }
 
 void addCategoryToYYToken(int category){
@@ -85,4 +86,15 @@ void addStringToYYToken(char* yytext){
 void populateYYGlobals(){
   YYTOKEN->lineno = LINENO;
   YYTOKEN->filename = FILENAME;
+}
+
+void ISval(int category, char* yytext){
+  switch(category){
+  case 331:
+    break;
+  case 332:
+    break;
+  default:
+    break;
+  }
 }
