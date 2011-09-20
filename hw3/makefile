@@ -1,4 +1,4 @@
-ec: lex.yy.o main.o structures.o tree.o yyparse.tab.o
+ec: yyparse.tab.o lex.yy.o main.o structures.o tree.o 
 	gcc -o ec lex.yy.o main.o structures.o tree.o yyparse.tab.o
 
 lex.yy.o : lex.yy.c
