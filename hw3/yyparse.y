@@ -17,7 +17,8 @@ void yyerror(const char *msg)
 
 %union {
   int var;  
-} %token _BREAK 261 
+ }
+%token _BREAK 261 
 %token _CASE 363  
 %token _CATCH 262  
 %token _CLASS 263 
@@ -155,53 +156,51 @@ sourceElements:
     ;
 
 sourceElement:
-    IDENT
-//statement 
+//IDENT
+    statement 
     //    | functionDeclaration
     ;
 
 // statements
-/*statement:
+statement:
    block
    | variableStatement
-   | emptyStatement
-   | expressionStatement
-   | ifStatement
-   | iterationStatement
-   | continueStatement
-   | breakStatement
-   | returnStatement
-   | withStatement
-   | labelledStatement
-   | switchStatement
-   | throwStatement
-   | tryStatement
+   // | emptyStatement
+   //| expressionStatement
+   //| ifStatement
+   //| iterationStatement
+   //| continueStatement
+   //| breakStatement
+   //| returnStatement
+   //| withStatement
+   //| labelledStatement
+   //| switchStatement
+   //| throwStatement
+   // | tryStatement
    ;
-   *
-/*
+   
+
 block:
      LBRACE RBRACE	
-     | LBRACE statementList RBRACE
+     | LBRACE sourceElements RBRACE
      ;
 
-statementList:
+/*statementList:
     statement
     | statementList statement
     ;
-
+*/
 variableStatement:
-	VAR  variableDeclarationList SEMI
+	_VAR variableDeclarationList SEMICOLON
 	;
 
 variableDeclarationList:
-	/*
-	 * SPEC:
-	 * variableDeclaration
-	 * | variableDeclarationList COMMA variableDeclaration
-	 */
-/*	variableDeclaration (variableDeclarationTail)*
+	  variableDeclaration
+	  //| variableDeclarationList COMMA variableDeclaration
+	 
+//	variableDeclaration (variableDeclarationTail)*
 	;
-
+						     /*
 variableDeclarationTail:
 	COMMA variableDeclaration
 	;
@@ -218,11 +217,11 @@ variableDeclarationListNoln:
 variableDeclarationListNolnTail:
 	COMMA variableDeclarationNoln
 	;
-
+						     */
 variableDeclaration:
-	identifier (initialiser)?
+	IDENT
 	;
-
+				/*
 variableDeclarationNoln:
 	identifier (initialiserNoln)?
 	;
@@ -234,12 +233,12 @@ initialiser:
 initialiserNoln:
 	EQ assignmentExpressionNoln
 	;
-
-emptyStatement:
+				*/
+/*emptyStatement:
 	;
-
+/*
 expressionStatement:
-	/* [lookahead not a member of {{, function}}  expression SEMI
+	/* [lookahead not a member of {{, function}}  expression SMI
 	;
 				    /*
 ifStatement:

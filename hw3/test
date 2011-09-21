@@ -1,5 +1,7 @@
-break
-"hello"
+var hello;
+
+/*break
+"hello"*/
 import fl.controls.ComboBox;
 import fl.controls.Slider;
 import fl.controls.SliderDirection;
