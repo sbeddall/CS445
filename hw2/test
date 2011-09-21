@@ -1,5 +1,6 @@
 break
 "hello"
+'hello'
 import fl.controls.ComboBox;
 import fl.controls.Slider;
 import fl.controls.SliderDirection;

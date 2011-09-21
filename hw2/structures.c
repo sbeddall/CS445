@@ -51,7 +51,7 @@ void printYYList(token_item* head){
   printf("%-10s %-20s%-10s%-30s%-20s\n", "Category","Text","Line #","Filename","Ival/Sval");
   while(iterator->next != 0){
     if(iterator->t->category == 332){
-      printf("%-10d %-20s%-10d%-30s%-20d\n", iterator->t->category, iterator->t->text,iterator->t->lineno,iterator->t->filename,iterator->t->ival);
+      printf("%-10d %-20s%-10d%-30s%-20f\n", iterator->t->category, iterator->t->text,iterator->t->lineno,iterator->t->filename,iterator->t->ival);
     }
     else if(iterator->t->category == 331){
       printf("%-10d %-20s%-10d%-30s%-20s\n", iterator->t->category, iterator->t->text,iterator->t->lineno,iterator->t->filename,iterator->t->sval);
@@ -110,13 +110,14 @@ void ISval(int category, char* yytext){
     YYTOKEN->sval++;
     char* iterator = YYTOKEN->sval;
     
-    while(*iterator != '\"'){
+    while(*iterator != '\0'){
       iterator++;
     }
+    iterator--;
     *iterator = '\0';
     break;
   case 332://number
-    YYTOKEN->ival = atoi(yytext);
+    YYTOKEN->ival = atof(yytext);
     break;
   default:
     break;
