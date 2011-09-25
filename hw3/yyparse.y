@@ -150,19 +150,20 @@ program:
     ;
 
 sourceElements:
-// sourceStatement
     sourceElement
     | sourceElements sourceElement    
     ;
 
 sourceElement:
     statement 
+   
     ;
 
 // statements
 statement:
    block
    | variableStatement
+   | importStatement
    // | emptyStatement
    //| expressionStatement
    //| ifStatement
@@ -174,9 +175,17 @@ statement:
    //| labelledStatement
    //| switchStatement
    //| throwStatement
-   // | tryStatement
+   //| tryStatement
    ;
-   
+
+importStatement:
+   _IMPORT dotStream SEMICOLON
+   ;
+
+dotStream:
+    IDENT 
+    | ACCESSDOT IDENT
+    ;
 
 block:
      LBRACE RBRACE	
@@ -202,6 +211,8 @@ value:
      _STRING
      | _NUMBER
      ;
+
+
 						     /*
 variableDeclarationListNoln:
 	/*

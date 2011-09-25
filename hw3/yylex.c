@@ -87,6 +87,7 @@
 
 [a-zA-Z][a-zA-Z0-9]* {   return IDENT;}
 
+\. { return ACCESSDOT; }
 \[ {   return LBRACKET; }
 \] {    return RBRACKET; }
 \( {   return LPAREN;}
