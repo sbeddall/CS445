@@ -36,3 +36,6 @@ clean:
 	- rm *~x
 	- rm *.o
 	- rm *~
+
+tar: 
+	tar cf hw2.tar makefile main.c yylex.c structures.c structures.h yyparse.y tree.c tree.h	

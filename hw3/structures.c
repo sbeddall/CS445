@@ -110,9 +110,10 @@ void ISval(int category, char* yytext){
     YYTOKEN->sval++;
     char* iterator = YYTOKEN->sval;
     
-    while(*iterator != '\"'){
+    while(*iterator != '\0'){
       iterator++;
     }
+    iterator--;
     *iterator = '\0';
     break;
   case 332://number

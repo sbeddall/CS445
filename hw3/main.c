@@ -31,12 +31,14 @@ main(int argc, char* argv[]){
   for(i; i < argc; i++){
     FILENAME = argv[i];
     yyin = fopen(argv[i], "r");
+    if(yyin != 0){
     //int result = 1;
     //while(result != 0){
       //result = yylex();
       //addYYTokenToList(head);
     //}
-    yyparse();
+      yyparse();
+    }
     fclose(yyin);
     LINENO = 0;
     FILENAME = argv[i];

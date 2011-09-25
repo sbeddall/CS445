@@ -156,9 +156,7 @@ sourceElements:
     ;
 
 sourceElement:
-//IDENT
     statement 
-    //    | functionDeclaration
     ;
 
 // statements
@@ -185,26 +183,26 @@ block:
      | LBRACE sourceElements RBRACE
      ;
 
-/*statementList:
-    statement
-    | statementList statement
-    ;
-*/
 variableStatement:
 	_VAR variableDeclarationList SEMICOLON
+	_VAR IDENT ASSIGN value SEMICOLON
 	;
 
 variableDeclarationList:
-	  variableDeclaration
-	  //| variableDeclarationList COMMA variableDeclaration
-	 
-//	variableDeclaration (variableDeclarationTail)*
-	;
-						     /*
+          IDENT
+          | IDENT variableDeclarationTail
+	  | variableDeclarationTail
+	  ;
+
 variableDeclarationTail:
-	COMMA variableDeclaration
+	COMMA IDENT
 	;
 
+value:
+     _STRING
+     | _NUMBER
+     ;
+						     /*
 variableDeclarationListNoln:
 	/*
 	 * SPEC:
@@ -216,10 +214,6 @@ variableDeclarationListNoln:
 
 variableDeclarationListNolnTail:
 	COMMA variableDeclarationNoln
-	;
-						     */
-variableDeclaration:
-	IDENT
 	;
 				/*
 variableDeclarationNoln:
@@ -342,6 +336,8 @@ functionBody:
 	sourceElements
 	;
 */
+
+
 
 
 
