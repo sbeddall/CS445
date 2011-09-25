@@ -151,12 +151,11 @@ program:
 
 sourceElements:
     sourceElement
-    | sourceElements sourceElement    
+    | sourceElement sourceElements    
     ;
 
 sourceElement:
-    statement 
-   
+    statement    
     ;
 
 // statements
@@ -179,12 +178,12 @@ statement:
    ;
 
 importStatement:
-   _IMPORT dotStream SEMICOLON
+   _IMPORT moduleName SEMICOLON
    ;
 
-dotStream:
-    IDENT 
-    | ACCESSDOT IDENT
+moduleName:
+    IDENT
+    | IDENT ACCESSDOT moduleName
     ;
 
 block:
@@ -193,14 +192,14 @@ block:
      ;
 
 variableStatement:
-	_VAR variableDeclarationList SEMICOLON
-	_VAR IDENT ASSIGN value SEMICOLON
-	;
+    _VAR variableDeclarationList SEMICOLON
+    _VAR IDENT ASSIGN value SEMICOLON
+    ;
 
 variableDeclarationList:
           IDENT
           | IDENT variableDeclarationTail
-	  | variableDeclarationTail
+	  | variableDeclarationTail //this will parse var , 
 	  ;
 
 variableDeclarationTail:

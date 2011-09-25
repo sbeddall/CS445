@@ -17,14 +17,14 @@ main(int argc, char* argv[]){
   head->t = 0;
   head->next = 0;
   
-  token* populizer = (token*)malloc(sizeof(token));  
-  populizer->category = -1;
-  populizer->text = "start";
-  populizer->lineno = 0;
-  populizer->ival = 0;
-  populizer->sval = "start";
+  //token* populizer = (token*)malloc(sizeof(token));  
+  //populizer->category = -1;
+  //populizer->text = "start";
+  // populizer->lineno = 0;
+  //populizer->ival = 0;
+  //populizer->sval = "start";
   
-  head->t = populizer; 
+  //  head->t = populizer; 
   //addYYTokenToList(head);
 
   int i = 1;
@@ -44,7 +44,7 @@ main(int argc, char* argv[]){
     FILENAME = argv[i];
   }
   
-  printYYList(head);
+  //printYYList(head);
       
   
   return 0;
