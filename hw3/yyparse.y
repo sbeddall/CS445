@@ -217,9 +217,10 @@ variableName:
    | IDENT ACCESSDOT variableName
 
 value:
-   _NEW IDENT LPAREN RPAREN SEMICOLON
+   _NEW IDENT LPAREN RPAREN
    | NUMBERLIT
    | STRINGLIT
+   | variableName
    ;
 
 /*
