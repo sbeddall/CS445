@@ -14,8 +14,6 @@ comboBox.selectedIndex = 1;
 comboBox.move(20, 20);
 comboBox.addEventListener(Event.CHANGE, comboBox_change);
 addChild(comboBox);
-dp.addItem({label:SliderDirection.HORIZONTAL});
-dp.addItem({label:SliderDirection.VERTICAL});
  
 var slider:Slider = new Slider();
 slider.direction *= SliderDirection.VERTICAL;
@@ -25,3 +23,6 @@ addChild(slider);
 function comboBox_change(evt:Event):void {
     slider.direction = comboBox.selectedItem.label;
 }
+
+dp.addItem({label:SliderDirection.HORIZONTAL});
+dp.addItem({label:SliderDirection.VERTICAL});

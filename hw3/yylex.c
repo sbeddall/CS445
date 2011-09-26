@@ -15,6 +15,8 @@
 
 //%option noyywrap
 
+
+//"void" {    return _VOID; }
 %}
 
 %x C_COMMENT
@@ -79,13 +81,12 @@
 "new" {   return _NEW; }
 "delete" {   return _DELETE; }
 "typeof" {    return _TYPEOF; }
-"void" {    return _VOID; }
 "as"  {   return _AS; }
 "in"  {   return _IN; }
 "instanceof"  {   return _INSTANCEOF; } 
 "is"  {   return _IS; } 
 
-[a-zA-Z][a-zA-Z0-9]* {   return IDENT;}
+[a-zA-Z_][a-zA-Z0-9_]* {   return IDENT;}
 
 \. { return ACCESSDOT; }
 \, { return COMMA;}

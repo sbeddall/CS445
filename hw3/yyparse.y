@@ -115,7 +115,6 @@ void yyerror(const char *msg)
 %token _NEW 343//new Calls a constructor
 %token _DELETE 344//delete Deletes a property
 %token _TYPEOF 345//typeof Returns type information
-%token _VOID 346//returns undefined value
 %token _AS 347//as Checks data type
 %token _IN 348//in Checks for object properties
 %token _INSTANCEOF 349//instanceof Checks prototype chain
@@ -138,7 +137,7 @@ void yyerror(const char *msg)
 %token _BOOLEAN 361
 %token _STRING 331
 %token _NUMBER 332
-
+ //%token _VOID 346//returns undefined value
 %token STRINGLIT
 %token NUMBERLIT
   
@@ -168,6 +167,7 @@ statement:
    block
    | variableStatement
    | importStatement
+   | functionStatement
    // | emptyStatement
    //| expressionStatement
    //| ifStatement
@@ -198,8 +198,8 @@ block:
 
 variableStatement:
     _VAR variableDeclarationList SEMICOLON
-    | _VAR variableConstruct ASSIGN value SEMICOLON
-    | variableConstruct ASSIGN value SEMICOLON
+    | _VAR variableConstruct assign value SEMICOLON
+    | variableConstruct assign value SEMICOLON
     ;
 
 variableDeclarationList:
@@ -208,20 +208,51 @@ variableDeclarationList:
    ;
 
 variableConstruct:
-   variableName COLON variableName 
-   | variableName
+   value COLON value 
+   | value
    ;
 
 variableName:
    IDENT
    | IDENT ACCESSDOT variableName
 
+functionStatement:
+   functionCall
+   | functionDeclaration
+   ;
+
+functionDeclaration:
+   _FUNCTION IDENT LPAREN variableDeclarationList RPAREN block
+   | _FUNCTION IDENT LPAREN variableDeclarationList RPAREN COLON variableConstruct
+   ;
+
+functionCall:
+   variableName LPAREN variableDeclarationList RPAREN SEMICOLON
+   ;
+   
 value:
    _NEW IDENT LPAREN RPAREN
    | NUMBERLIT
    | STRINGLIT
    | variableName
+   | objectInitializer
    ;
+
+objectInitializer:
+   LBRACE variableDeclarationList RBRACE
+   ;
+
+assign:
+   ASSIGN // =
+   | MULTIPLYEQ // *= Multiplication assignment
+   | DIVIDEEQ // /= Division assignment
+   | MODULOEQ // %= Modulo assignment
+   | PLUSEQ // += Addition assignment
+   | MINUSEQ // -= Subtraction assignment  
+   ;
+
+
+
 
 /*
 type:
