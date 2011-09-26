@@ -88,6 +88,7 @@
 [a-zA-Z][a-zA-Z0-9]* {   return IDENT;}
 
 \. { return ACCESSDOT; }
+\, { return COMMA;}
 \[ {   return LBRACKET; }
 \] {    return RBRACKET; }
 \( {   return LPAREN;}
@@ -95,7 +96,8 @@
 "{" {   return LBRACE; }
 "}" {   return RBRACE; }
 ";" {   return SEMICOLON; }
-\".+\"|\'.+\' {   return _STRING; }
+
+\".+\"|\'.+\' {   return STRINGLIT; }
 
 \" {   return QUOTES; }
 
@@ -117,7 +119,7 @@
 
 "//"* { }
 
-[0-9]*['.']?[0-9]* {   return _NUMBER; }
+[0-9]*['.']?[0-9]* {   return NUMBERLIT; }
 
 "?:" {   return _TERNARY; }
 

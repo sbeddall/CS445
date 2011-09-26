@@ -5,11 +5,13 @@
 
 // better error reporting
 #define YYERROR_VERBOSE
+  extern char* yytext;
+  extern int LINENO;
 
 // bison requires that you supply this function
 void yyerror(const char *msg)
 {
-      printf("ERROR(PARSER): %s\n", msg);
+  printf("ERROR(PARSER): %s, %s\nLine Number: %d\n", msg, yytext, LINENO);
 }
 
 %}
@@ -136,6 +138,9 @@ void yyerror(const char *msg)
 %token _BOOLEAN 361
 %token _STRING 331
 %token _NUMBER 332
+
+%token STRINGLIT
+%token NUMBERLIT
   
 //misc 
 %token IDENT 358
@@ -193,43 +198,36 @@ block:
 
 variableStatement:
     _VAR variableDeclarationList SEMICOLON
-    _VAR IDENT ASSIGN value SEMICOLON
+    | _VAR variableConstruct ASSIGN value SEMICOLON
+    | variableConstruct ASSIGN value SEMICOLON
     ;
 
 variableDeclarationList:
-          IDENT
-          | IDENT variableDeclarationTail
-	  | variableDeclarationTail //this will parse var , 
-	  ;
+   variableConstruct 
+   | variableConstruct COMMA variableDeclarationList
+   ;
 
-variableDeclarationTail:
-	COMMA IDENT
-	;
+variableConstruct:
+   variableName COLON variableName 
+   | variableName
+   ;
+
+variableName:
+   IDENT
+   | IDENT ACCESSDOT variableName
 
 value:
-     _STRING
-     | _NUMBER
-     ;
+   _NEW IDENT LPAREN RPAREN SEMICOLON
+   | NUMBERLIT
+   | STRINGLIT
+   ;
 
-
-						     /*
-variableDeclarationListNoln:
-	/*
-	 * SPEC:
-	 * variableDeclarationNoln
-	 * | variableDeclarationListNoln COMMA variableDeclarationNoln
-	 
-	variableDeclarationNoln (variableDeclarationListNolnTail)*
-	;
-
-variableDeclarationListNolnTail:
-	COMMA variableDeclarationNoln
-	;
-				/*
-variableDeclarationNoln:
-	identifier (initialiserNoln)?
-	;
-
+/*
+type:
+   
+   ;
+*/
+/*
 initialiser:
 	EQ assignmentExpression
 	;	

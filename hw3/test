@@ -1,13 +1,13 @@
 var hello;
 
-/*break
-"hello"*/
 import fl.controls.ComboBox;
 import fl.controls.Slider;
 import fl.controls.SliderDirection;
 import fl.data.DataProvider;
- 
-var dp:DataProvider = new DataProvider();
+
+var awesome = "sweet"; 
+
+var DataProvider = new DataProvider();
 dp.addItem({label:SliderDirection.HORIZONTAL});
 dp.addItem({label:SliderDirection.VERTICAL});
  

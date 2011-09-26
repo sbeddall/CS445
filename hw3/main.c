@@ -10,7 +10,7 @@ extern FILE* yyin;
 
 main(int argc, char* argv[]){
 
-  LINENO = 0;
+  LINENO = 1;
   YYTOKEN = (token*)malloc(sizeof(token));
   
   token_item* head = (token_item*)malloc(sizeof(token_item));
@@ -40,7 +40,7 @@ main(int argc, char* argv[]){
       yyparse();
     }
     fclose(yyin);
-    LINENO = 0;
+    LINENO = 1;
     FILENAME = argv[i];
   }
   
