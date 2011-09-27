@@ -168,7 +168,6 @@ statement:
    | variableStatement
    | importStatement
    | functionStatement
-   // | emptyStatement
    //| expressionStatement
    //| ifStatement
    //| iterationStatement
@@ -180,6 +179,7 @@ statement:
    //| switchStatement
    //| throwStatement
    //| tryStatement
+   | packageStatement
    ;
 
 importStatement:
@@ -228,6 +228,10 @@ functionDeclaration:
 
 functionCall:
    variableName LPAREN variableDeclarationList RPAREN SEMICOLON
+   ;
+
+packageStatement:
+   _PACKAGE moduleName block 
    ;
    
 value:

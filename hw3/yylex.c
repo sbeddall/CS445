@@ -118,7 +118,7 @@
 "&&" {   return LOGICALAND; }
 "||" {   return LOGICALOR; }
 
-"//"* { }
+"//".* { }
 
 [0-9]*['.']?[0-9]* {   return NUMBERLIT; }
 
