@@ -246,6 +246,25 @@ objectInitializer:
    LBRACE variableDeclarationList RBRACE
    ;
 
+modifier:
+   modifierPrefix modifierSuffix 
+   | modifierPrefix
+   | modifierSuffix
+   ;
+
+modifierSuffix:
+   _DYNAMIC 
+   | _FINAL 
+   | _NATIVE
+   | _STATIC
+   ;
+
+modifierPrefix:
+   _PUBLIC
+   | _PRIVATE
+   | _PROTECTED
+   ;
+
 assign:
    ASSIGN // =
    | MULTIPLYEQ // *= Multiplication assignment

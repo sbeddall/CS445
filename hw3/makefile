@@ -11,7 +11,7 @@ yyparse.tab.o : yyparse.tab.c
 	gcc -c yyparse.tab.c
 
 yyparse.tab.c : yyparse.y
-	bison -d -t yyparse.y
+	bison -d -t -v -g yyparse.y
 
 main.o : main.c
 	gcc -c main.c
