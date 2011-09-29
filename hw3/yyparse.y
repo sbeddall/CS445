@@ -179,7 +179,10 @@ statement:
    //| switchStatement
    //| throwStatement
    //| tryStatement
+   | superStatement
+   | classStatement 
    | packageStatement
+   | returnStatement
    ;
 
 importStatement:
@@ -196,15 +199,24 @@ block:
      | LBRACE sourceElements RBRACE
      ;
 
+//Error with this. this will allow a declaration list with leading private static etc
 variableStatement:
-    _VAR variableDeclarationList SEMICOLON
+    modifier _VAR variableDeclarationList SEMICOLON
+    | modifier _VAR variableConstruct assign value SEMICOLON
+    | _VAR variableDeclarationList SEMICOLON
     | _VAR variableConstruct assign value SEMICOLON
+    | modifier _CONST variableDeclarationList SEMICOLON
+    | modifier _CONST  variableConstruct assign value SEMICOLON
+    | _CONST variableDeclarationList SEMICOLON
+    | _CONST variableConstruct assign value SEMICOLON 
     | variableConstruct assign value SEMICOLON
     ;
 
 variableDeclarationList:
    variableConstruct 
    | variableConstruct COMMA variableDeclarationList
+   //| functionCall
+   //  | functionCall COMMA variableDeclarationList
    ;
 
 variableConstruct:
@@ -223,7 +235,9 @@ functionStatement:
 
 functionDeclaration:
    _FUNCTION IDENT LPAREN variableDeclarationList RPAREN block
-   | _FUNCTION IDENT LPAREN variableDeclarationList RPAREN COLON variableConstruct
+   | _FUNCTION IDENT LPAREN variableDeclarationList RPAREN COLON variableConstruct block
+   | modifier _FUNCTION IDENT LPAREN variableDeclarationList RPAREN block
+   | modifier _FUNCTION IDENT LPAREN variableDeclarationList RPAREN COLON variableConstruct block
    ;
 
 functionCall:
@@ -236,6 +250,7 @@ packageStatement:
    
 value:
    _NEW IDENT LPAREN RPAREN
+   | _NEW IDENT LPAREN variableDeclarationList RPAREN
    | NUMBERLIT
    | STRINGLIT
    | variableName
@@ -246,17 +261,37 @@ objectInitializer:
    LBRACE variableDeclarationList RBRACE
    ;
 
+superStatement:
+   _SUPER LPAREN value RPAREN SEMICOLON
+   ;
+
+
+returnStatement:
+   _RETURN value SEMICOLON
+   | _RETURN functionCall SEMICOLON
+   ;
+
+classStatement:
+   _CLASS IDENT block
+   | modifier _CLASS IDENT block
+   | _CLASS IDENT _EXTENDS IDENT block
+   | modifier _CLASS IDENT _EXTENDS IDENT block
+   ;
+
 modifier:
    modifierPrefix modifierSuffix 
-   | modifierPrefix
+   | modifierPrefix 
    | modifierSuffix
+   //  modifierPrefix modifierSuffix _CONST 
+   //| modifierPrefix _CONST
+   //| modifierSuffix _CONST    
    ;
 
 modifierSuffix:
    _DYNAMIC 
    | _FINAL 
    | _NATIVE
-   | _STATIC
+   | _STATIC 
    ;
 
 modifierPrefix:
