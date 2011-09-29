@@ -107,7 +107,7 @@ void yyerror(const char *msg)
 %token OBJECT 337//{x:y} Initializes an object
 %token FUNCTION 338//f(x) Calls a function
 %token ACCESSDOT 339//x.y 
-%token ACCESSBRACKET 340//x[y] Accesses a property
+ //%token ACCESSBRACKET 340//x[y] Accesses a property
 %token INCREMENT 341//++
 %token DECREMENT 342//--	
   
@@ -169,7 +169,8 @@ statement:
    | importStatement
    | functionStatement
    //| expressionStatement
-   //| ifStatement
+   | ifStatement
+   //   | elseStatement
    //| iterationStatement
    //| continueStatement
    //| breakStatement
@@ -215,13 +216,13 @@ variableStatement:
 variableDeclarationList:
    variableConstruct 
    | variableConstruct COMMA variableDeclarationList
-   //| functionCall
-   //  | functionCall COMMA variableDeclarationList
    ;
 
 variableConstruct:
    value COLON value 
-   | value
+   | value 
+   | variableName LPAREN variableDeclarationList RPAREN //functioncall
+   | variableName LPAREN RPAREN
    ;
 
 variableName:
@@ -242,6 +243,7 @@ functionDeclaration:
 
 functionCall:
    variableName LPAREN variableDeclarationList RPAREN SEMICOLON
+   | variableName LPAREN RPAREN SEMICOLON 
    ;
 
 packageStatement:
@@ -309,8 +311,63 @@ assign:
    | MINUSEQ // -= Subtraction assignment  
    ;
 
+ifStatement:
+    _IF LPAREN expression RPAREN statement 
+    | _IF LPAREN expression RPAREN statement elseStatement
+    ;
+
+elseStatement:
+   _ELSE statement
+   ;
+
+expression:
+   value logicalOperator value
+   ;
+
+logicalOperator:
+   LESSTHAN //<
+   | GREATERTHAN //>
+   | EQUALSEQUALS //==
+   | STRICTEQUALS //===
+   | STRICTNOTEQ //!==
+   | GTHANEQ // >=
+   | LTHANEQ // <=
+   | NOTEQUAL //!=
+   | NOT //!
+   | NOTEQUALEQUAL 
+   | LOGICALAND // && Logical AND
+   | LOGICALOR //|| Logical OR
+   ;
+/*
+iterationStatement:
+	DO statement WHILE LPAREN expression RPAREN SEMI
+	| WHILE LPAREN expression RPAREN statement
+	| FOR LPAREN (
+		(expressionNoln)? SEMI (expression)? SEMI (expression)? RPAREN statement
+		| 'var' variableDeclarationListNoln SEMI (expression)? SEMI (expression)? RPAREN statement
+		| leftHandSideExpression 'in' expression RPAREN statement	
+		| 'var' variableDeclarationNoln 'in' expression RPAREN statement
+		)
+	;
+ 			    
+continueStatement:
+	CONTINUE /* [ no line terminator here ]  (identifier)? SEMI
+	;
+
+breakStatement:
+	BREAK /* [ no line terminator here ]  (identifier)? SEMI
+	;
+
+withStatement:
+	WITH LPAREN expression RPAREN statement
+	;
+
+switchStatement:
+	SWITCH LPAREN expression RPAREN caseBlock
+	;
 
 
+*/
 
 /*
 type:
@@ -333,41 +390,10 @@ expressionStatement:
 	/* [lookahead not a member of {{, function}}  expression SMI
 	;
 				    /*
-ifStatement:
-	IF LPAREN expression RPAREN statement ELSE statement
-	| IF LPAREN expression RPAREN statement
-	;
-
-iterationStatement:
-	DO statement WHILE LPAREN expression RPAREN SEMI
-	| WHILE LPAREN expression RPAREN statement
-	| FOR LPAREN (
-		(expressionNoln)? SEMI (expression)? SEMI (expression)? RPAREN statement
-		| 'var' variableDeclarationListNoln SEMI (expression)? SEMI (expression)? RPAREN statement
-		| leftHandSideExpression 'in' expression RPAREN statement	
-		| 'var' variableDeclarationNoln 'in' expression RPAREN statement
-		)
-	;
- 			    
-continueStatement:
-	CONTINUE /* [ no line terminator here ]  (identifier)? SEMI
-	;
-
-breakStatement:
-	BREAK /* [ no line terminator here ]  (identifier)? SEMI
-	;
-
 returnStatement:
 	RETURN /* [no line terminator here]/ (expression)? SEMI
 	;
 
-withStatement:
-	WITH LPAREN expression RPAREN statement
-	;
-
-switchStatement:
-	SWITCH LPAREN expression RPAREN caseBlock
-	;
 
 caseBlock:
 	LBRACE (caseClauses)? RBRACE
