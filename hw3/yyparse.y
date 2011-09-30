@@ -7,10 +7,14 @@
 #define YYERROR_VERBOSE
   extern char* yytext;
   extern int LINENO;
-
+  extern int failed;
+  extern char* FILENAME;
+  
 // bison requires that you supply this function
 void yyerror(const char *msg)
 {
+  failed++;
+  printf("Filename: %s\n", FILENAME);
   printf("ERROR(PARSER): %s, %s\nLine Number: %d\n", msg, yytext, LINENO);
 }
 
@@ -169,7 +173,9 @@ statement:
    | importStatement
    | functionStatement
    //| expressionStatement
+   | forStatement
    | ifStatement
+   | whileStatement
    //   | elseStatement
    //| iterationStatement
    //| continueStatement
@@ -180,6 +186,7 @@ statement:
    //| switchStatement
    //| throwStatement
    //| tryStatement
+   | mathExpression
    | superStatement
    | classStatement 
    | packageStatement
@@ -205,13 +212,18 @@ variableStatement:
     modifier _VAR variableDeclarationList SEMICOLON
     | modifier _VAR variableConstruct assign value SEMICOLON
     | _VAR variableDeclarationList SEMICOLON
-    | _VAR variableConstruct assign value SEMICOLON
+    | _VAR variableConstruct assign value as SEMICOLON
     | modifier _CONST variableDeclarationList SEMICOLON
-    | modifier _CONST  variableConstruct assign value SEMICOLON
+    | modifier _CONST  variableConstruct assign value as SEMICOLON
     | _CONST variableDeclarationList SEMICOLON
-    | _CONST variableConstruct assign value SEMICOLON 
-    | variableConstruct assign value SEMICOLON
+    | _CONST variableConstruct assign value as SEMICOLON 
+    | variableConstruct assign value SEMICOLON   
     ;
+
+as:
+   _AS value
+   | 
+   ;
 
 variableDeclarationList:
    variableConstruct 
@@ -221,8 +233,6 @@ variableDeclarationList:
 variableConstruct:
    value COLON value 
    | value 
-   | variableName LPAREN variableDeclarationList RPAREN //functioncall
-   | variableName LPAREN RPAREN
    ;
 
 variableName:
@@ -240,8 +250,7 @@ functionDeclaration:
    // | modifier _FUNCTION IDENT LPAREN variableDeclarationList RPAREN block
    //   | modifier _FUNCTION IDENT LPAREN variableDeclarationList RPAREN COLON variableConstruct block
    _FUNCTION getterSetter IDENT functionHeader
-   | modifier _FUNCTION getterSetter IDENT functionHeader 
-   
+   | modifier _FUNCTION getterSetter IDENT functionHeader    
    ;
 
 getterSetter:
@@ -273,6 +282,10 @@ value:
    | STRINGLIT
    | variableName
    | objectInitializer
+   | arrayAccessor
+   | _NULL
+   | variableName LPAREN variableDeclarationList RPAREN //functioncall
+   | variableName LPAREN RPAREN
    ;
 
 objectInitializer:
@@ -286,6 +299,7 @@ superStatement:
 returnStatement:
    _RETURN value SEMICOLON
    | _RETURN functionCall SEMICOLON
+   | _RETURN LBRACKET RBRACKET SEMICOLON
    ;
 
 classStatement:
@@ -299,23 +313,30 @@ modifier:
    modifierPrefix modifierSuffix 
    | modifierPrefix 
    | modifierSuffix
-   //  modifierPrefix modifierSuffix _CONST 
-   //| modifierPrefix _CONST
-   //| modifierSuffix _CONST    
    ;
 
 modifierSuffix:
+   suffixKeyword 
+   | suffixKeyword modifierSuffix
+
+modifierPrefix:
+   prefixKeyword
+   | prefixKeyword modifierPrefix
+   ;
+
+prefixKeyword:
+   _PUBLIC
+   | _PRIVATE
+   | _PROTECTED
+   | _OVERRIDE
+   ;
+
+suffixKeyword:
    _DYNAMIC 
    | _FINAL 
    | _NATIVE
    | _STATIC 
    | _GET
-   ;
-
-modifierPrefix:
-   _PUBLIC
-   | _PRIVATE
-   | _PROTECTED
    ;
 
 assign:
@@ -328,8 +349,8 @@ assign:
    ;
 
 ifStatement:
-    _IF LPAREN expression RPAREN statement 
-    | _IF LPAREN expression RPAREN statement elseStatement
+    _IF expression statement 
+    | _IF expression statement elseStatement
     ;
 
 elseStatement:
@@ -337,7 +358,28 @@ elseStatement:
    ;
 
 expression:
-   value logicalOperator value
+   LPAREN variableConstruct logicalOperator expression RPAREN
+   | LPAREN variableConstruct RPAREN
+   | variableConstruct
+   ;
+
+whileStatement:
+   _WHILE expression block
+   ;
+
+forStatement:
+   _FOR LPAREN variableStatement expression SEMICOLON mathExpression RPAREN block
+   | _FOR _EACH LPAREN _VAR variableConstruct _IN value RPAREN block 
+   ;
+
+arrayAccessor:
+   value LBRACKET accessValue RBRACKET
+   | value LBRACKET RBRACKET
+   ;
+
+accessValue:
+   NUMBERLIT
+   | variableName
    ;
 
 logicalOperator:
@@ -354,9 +396,26 @@ logicalOperator:
    | LOGICALAND // && Logical AND
    | LOGICALOR //|| Logical OR
    ;
+
+mathExpression:
+   variableConstruct INCREMENT SEMICOLON
+   | variableConstruct DECREMENT SEMICOLON
+   ;
+
+pemd:
+   MULTIPLY
+   | DIVIDE
+   | MODULO
+   ;
+
+as:
+   PLUS
+   | MINUS
+   ;
+
 /*
 iterationStatement:
-	DO statement WHILE LPAREN expression RPAREN SEMI
+	DO statement WHILE LPAREN expression RPAREN SEMN
 	| WHILE LPAREN expression RPAREN statement
 	| FOR LPAREN (
 		(expressionNoln)? SEMI (expression)? SEMI (expression)? RPAREN statement

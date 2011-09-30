@@ -128,21 +128,14 @@ package com.ts.importing.aspectClasses
 				{
 					deriver.deriveData( dataIndex, importIndex, system );
 				}
-				i++;
+			//	i++;
 			}
 			return dataIndex;
 		}
 		
 		public function buildAspectModel( dataIndex:DataIndex, system:SystemProxy ):AspectProxy
 		{
-			if( adorner )
-			{
-				return adorner.buildAdornerModel( dataIndex, system );
-			}
-			else
-			{
-				return null;
-			}
+			
 		}
 	}
 }
