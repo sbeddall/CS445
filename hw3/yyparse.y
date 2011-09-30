@@ -235,16 +235,32 @@ functionStatement:
    ;
 
 functionDeclaration:
-   _FUNCTION IDENT LPAREN variableDeclarationList RPAREN block
-   | _FUNCTION IDENT LPAREN variableDeclarationList RPAREN COLON variableConstruct block
-   | modifier _FUNCTION IDENT LPAREN variableDeclarationList RPAREN block
-   | modifier _FUNCTION IDENT LPAREN variableDeclarationList RPAREN COLON variableConstruct block
+//_FUNCTION IDENT LPAREN variableDeclarationList RPAREN block
+   //| _FUNCTION IDENT LPAREN variableDeclarationList RPAREN COLON variableConstruct block
+   // | modifier _FUNCTION IDENT LPAREN variableDeclarationList RPAREN block
+   //   | modifier _FUNCTION IDENT LPAREN variableDeclarationList RPAREN COLON variableConstruct block
+   _FUNCTION getterSetter IDENT functionHeader
+   | modifier _FUNCTION getterSetter IDENT functionHeader 
+   
+   ;
+
+getterSetter:
+   _GET
+   | _SET
+   |
    ;
 
 functionCall:
    variableName LPAREN variableDeclarationList RPAREN SEMICOLON
    | variableName LPAREN RPAREN SEMICOLON 
    ;
+
+functionHeader:
+    LPAREN variableDeclarationList RPAREN block
+    | LPAREN variableDeclarationList RPAREN COLON variableConstruct block
+    | LPAREN RPAREN block
+    | LPAREN RPAREN COLON variableConstruct block
+    ;
 
 packageStatement:
    _PACKAGE moduleName block 
@@ -266,7 +282,6 @@ objectInitializer:
 superStatement:
    _SUPER LPAREN value RPAREN SEMICOLON
    ;
-
 
 returnStatement:
    _RETURN value SEMICOLON
@@ -294,6 +309,7 @@ modifierSuffix:
    | _FINAL 
    | _NATIVE
    | _STATIC 
+   | _GET
    ;
 
 modifierPrefix:
