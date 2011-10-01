@@ -180,7 +180,7 @@ statement:
    | continueStatement
    | breakStatement
    | withStatement
-     //| switchStatement
+     //| switchStatement //is this really the last one remaining?
    | throwStatement
    | tryStatement
    | iterationStatement
@@ -319,8 +319,13 @@ expr:
   ;
 
 newObject:
-   _NEW IDENT LPAREN RPAREN optionalVariableType
-   | _NEW IDENT LPAREN valueList RPAREN optionalVariableType
+   _NEW IDENT LPAREN RPAREN optionalVariableType as
+   | _NEW IDENT LPAREN valueList RPAREN optionalVariableType as
+   ;
+
+as:
+   _AS variableName
+   | /*empty*/ 
    ;
 
 functionStatement:
