@@ -172,21 +172,16 @@ statement:
    | variableStatement
    | importStatement
    | functionStatement
-   //| expressionStatement
    | forStatement
    | ifStatement
    | whileStatement
-   //   | elseStatement
-   //| iterationStatement
-   //| continueStatement
-   //| breakStatement
-   //| returnStatement
-   //| withStatement
-   //| labelledStatement
-   //| switchStatement
-   //| throwStatement
-   //| tryStatement
-   | mathExpression
+   | continueStatement
+   | breakStatement
+   | withStatement
+     //| switchStatement
+   | throwStatement
+   | tryStatement
+   | iterationStatement
    | superStatement
    | classStatement 
    | packageStatement
@@ -194,14 +189,14 @@ statement:
    ;
 
 importStatement:
-   _IMPORT moduleName SEMICOLON
+   _IMPORT variableName SEMICOLON
    ;
-
+/*
 moduleName:
     IDENT
     | IDENT ACCESSDOT moduleName
     ;
-
+*/
 block:
      LBRACE RBRACE	
      | LBRACE sourceElements RBRACE
@@ -239,16 +234,30 @@ variableName:
    IDENT
    | IDENT ACCESSDOT variableName
 
+value:
+   _NEW IDENT LPAREN RPAREN
+   | _NEW IDENT LPAREN variableDeclarationList RPAREN
+   | NUMBERLIT
+   | STRINGLIT
+   | variableName
+   | objectInitializer
+   | arrayAccessor
+   | _NULL
+   | variableName LPAREN variableDeclarationList RPAREN //functioncall
+   | variableName LPAREN RPAREN
+   | _THIS
+   | _TRUE
+   | _FALSE
+   //   | variableName assign value 
+   ;
+
+
 functionStatement:
    functionCall
    | functionDeclaration
    ;
 
 functionDeclaration:
-//_FUNCTION IDENT LPAREN variableDeclarationList RPAREN block
-   //| _FUNCTION IDENT LPAREN variableDeclarationList RPAREN COLON variableConstruct block
-   // | modifier _FUNCTION IDENT LPAREN variableDeclarationList RPAREN block
-   //   | modifier _FUNCTION IDENT LPAREN variableDeclarationList RPAREN COLON variableConstruct block
    _FUNCTION getterSetter IDENT functionHeader
    | modifier _FUNCTION getterSetter IDENT functionHeader    
    ;
@@ -272,20 +281,11 @@ functionHeader:
     ;
 
 packageStatement:
-   _PACKAGE moduleName block 
+   _PACKAGE variableName block 
    ;
    
-value:
-   _NEW IDENT LPAREN RPAREN
-   | _NEW IDENT LPAREN variableDeclarationList RPAREN
-   | NUMBERLIT
-   | STRINGLIT
-   | variableName
-   | objectInitializer
-   | arrayAccessor
-   | _NULL
-   | variableName LPAREN variableDeclarationList RPAREN //functioncall
-   | variableName LPAREN RPAREN
+ternaryExpression:
+   expression _TERNARY value COLON value 
    ;
 
 objectInitializer:
@@ -294,6 +294,7 @@ objectInitializer:
 
 superStatement:
    _SUPER LPAREN value RPAREN SEMICOLON
+   | _SUPER LPAREN variableDeclarationList RPAREN SEMICOLON
    ;
 
 returnStatement:
@@ -397,9 +398,16 @@ logicalOperator:
    | LOGICALOR //|| Logical OR
    ;
 
-mathExpression:
+iterationStatement:
    variableConstruct INCREMENT SEMICOLON
    | variableConstruct DECREMENT SEMICOLON
+   ;
+
+mathExpression:
+   variableConstruct INCREMENT
+   | variableConstruct DECREMENT
+   | variableConstruct pemd variableConstruct
+   | variableConstruct as variableConstruct
    ;
 
 pemd:
@@ -413,33 +421,55 @@ as:
    | MINUS
    ;
 
+throwStatement:
+   _THROW value SEMICOLON
+   ;
+
+tryStatement:
+   _TRY statement catch
+   | _TRY statement finally
+   | _TRY statement catch finally
+   ;
+
+catch:
+   _CATCH LPAREN value RPAREN statement
+   ;
+
+finally:
+   _FINALLY statement
+   ;
+
+withStatement:
+   _WITH LPAREN expression RPAREN statement
+   ;
+		    
+continueStatement:
+   _CONTINUE SEMICOLON
+   | _CONTINUE value SEMICOLON
+   ;
+
+breakStatement:
+   _BREAK SEMICOLON
+   | _BREAK value SEMICOLON
+   ;
+
+
+/*switchStatement:
+	_SWITCH LPAREN expression RPAREN caseBlock
+	;*/
 /*
 iterationStatement:
 	DO statement WHILE LPAREN expression RPAREN SEMN
 	| WHILE LPAREN expression RPAREN statement
 	| FOR LPAREN (
-		(expressionNoln)? SEMI (expression)? SEMI (expression)? RPAREN statement
+		( SEMI (expression)? SEMI (expression)? RPAREN statement
 		| 'var' variableDeclarationListNoln SEMI (expression)? SEMI (expression)? RPAREN statement
 		| leftHandSideExpression 'in' expression RPAREN statement	
 		| 'var' variableDeclarationNoln 'in' expression RPAREN statement
 		)
 	;
- 			    
-continueStatement:
-	CONTINUE /* [ no line terminator here ]  (identifier)? SEMI
-	;
+ 	
 
-breakStatement:
-	BREAK /* [ no line terminator here ]  (identifier)? SEMI
-	;
-
-withStatement:
-	WITH LPAREN expression RPAREN statement
-	;
-
-switchStatement:
-	SWITCH LPAREN expression RPAREN caseBlock
-	;
 
 
 */
@@ -494,46 +524,6 @@ labelledStatement:
 	identifier COLON statement
 	;
 
-throwStatement:
-	THROW /* [no line terminator here]  expression SEMI
-	;
-							   /*
-tryStatement:
-	TRY block catch_
-	| TRY block finally_
-	| TRY block catch_ finally_
-	;
-
-catch_:
-	CATCH LPAREN identifier RPAREN block
-	;
-
-finally_:
-	FINALLY block
-	;*/
-
-/* A.5 Functions and Programs */
-/*
-functionDeclaration:
-	'function' identifier LPAREN (formalParameterList)? LBRACE functionBody RBRACE
-	;
-
-functionExpression:
-	'function' (identifier)? LPAREN (formalParameterList)? LBRACE functionBody RBRACE
-	;
-
-formalParameterList:
-	identifier  
-        | formalParameterList COMMA identifier
-	;
-
-formalParameterListTail:
-	COMMA identifier
-	;
-
-functionBody:
-	sourceElements
-	;
 */
 
 

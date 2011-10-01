@@ -122,8 +122,11 @@
 
 [0-9]*['.']?[0-9]* {   return NUMBERLIT; }
 
-"?:" {   return _TERNARY; }
+"?" {   return _TERNARY; }
 
+
+"++" { return INCREMENT; }
+"--" { return DECREMENT; }
 "*=" {   return MULTIPLYEQ; }
 "/=" {   return DIVIDEEQ; }
 "%=" {   return MODULOEQ; }

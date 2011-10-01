@@ -48,8 +48,8 @@ main(int argc, char* argv[]){
   }
 
   double percent = ((double)(total-failed)/(double)total);
-  printf("Parsed %f\% of the tests successfully.\n", percent);
-  printf("Total Passed: %d, Total Failed: %d\n",total-failed, failed);
+  //printf("Parsed %f of the tests successfully.\n", percent);
+  //printf("Total Passed: %d, Total Failed: %d\n",total-failed, failed);
   
   //printYYList(head);
       
