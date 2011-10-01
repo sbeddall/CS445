@@ -301,16 +301,29 @@ value:
    | ternaryExpression
    | _TRUE
    | _FALSE
+   | expression
+   | mathExpression
+   ;
+
+
+arrayAccessor:
+   value LBRACKET accessValue RBRACKET
+   | value LBRACKET RBRACKET
+   ;
+
+accessValue:
+   NUMBERLIT
+   | variableName
    ;
 
 newObject:
    _NEW IDENT LPAREN RPAREN optionalVariableType
-   | _NEW IDENT LPAREN variableDeclarationList RPAREN optionalVariableType
+   | _NEW IDENT LPAREN valueList RPAREN optionalVariableType
    ;
 
 functionStatement:
-   functionCall
-   | functionDeclaration
+   functionCall SEMICOLON 
+   | functionDeclaration 
    ;
 
 functionDeclaration:
@@ -325,8 +338,8 @@ getterSetter:
    ;
 
 functionCall:
-   variableName LPAREN valueList RPAREN SEMICOLON
-   | variableName LPAREN RPAREN SEMICOLON 
+   variableName LPAREN valueList RPAREN
+   | variableName LPAREN RPAREN 
    ;
 
 functionHeader:
@@ -414,28 +427,34 @@ elseStatement:
    ;
 
 expression:
-   LPAREN variableName logicalOperator expression RPAREN
-   | LPAREN variableName RPAREN
-   | variableName
+   LPAREN value logicalOperator expression RPAREN
+   | LPAREN value RPAREN
    ;
 
 whileStatement:
-   _WHILE expression block
+   _WHILE value block
    ;
 
+/*
 forStatement:
-   _FOR LPAREN _VAR IDENT expression SEMICOLON mathExpression RPAREN block
-   | _FOR _EACH LPAREN _VAR variableName _IN value RPAREN block 
+   _FOR LPAREN variableDeclaration mathExpression RPAREN block
+   | _FOR _EACH LPAREN variableDeclaration _IN value RPAREN block 
+   ;
+*/
+forStatement:
+   _FOR LPAREN variableDeclaration SEMICOLON optionalForConditional SEMICOLON optionalForIncrement SEMICOLON
+   | _FOR LPAREN _VAR variableName optionalVariableType _IN value RPAREN
+   | _FOR _EACH LPAREN _VAR variableName optionalVariableType _IN value RPAREN
    ;
 
-arrayAccessor:
-   value LBRACKET accessValue RBRACKET
-   | value LBRACKET RBRACKET
+optionalForConditional:
+   /* empty */
+   | value
    ;
 
-accessValue:
-   NUMBERLIT
-   | variableName
+optionalForIncrement:
+   /* empty */
+   | value
    ;
 
 logicalOperator:
@@ -459,10 +478,13 @@ iterationStatement:
    ;
 
 mathExpression:
-   variableName INCREMENT
-   | variableName DECREMENT
-   | variableName pemd variableName
-   | variableName as variableName
+   value  
+   | mathExpression PLUS mathExpression 
+   | mathExpression MINUS mathExpression
+   | mathExpression MULTIPLY mathExpression
+   | mathExpression DIVIDE mathExpression
+   | mathExpression INCREMENT
+   | mathExpression DECREMENT 
    ;
 
 pemd:
@@ -471,7 +493,7 @@ pemd:
    | MODULO
    ;
 
-as:
+addSubtract:
    PLUS
    | MINUS
    ;
@@ -507,6 +529,9 @@ breakStatement:
    _BREAK SEMICOLON
    | _BREAK value SEMICOLON
    ;
+
+
+
 /*switchStatement:
 	_SWITCH LPAREN expression RPAREN caseBlock
 	;*/
