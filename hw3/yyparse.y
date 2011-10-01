@@ -150,6 +150,8 @@ void yyerror(const char *msg)
 %token OTHER 400
 
 
+%left PLUS MINUX MULTIPLY DIVIDE
+
 %%
 
  //start of grammar
@@ -269,10 +271,6 @@ variableStatement:
     | variableConstruct assign value SEMICOLON   
     ;
 */
-as:
-   _AS value
-   | 
-   ;
 
 /*variableDeclarationList:
    variableConstruct 
@@ -290,31 +288,35 @@ valueList:
 
 value:
    newObject
-   | NUMBERLIT
    | STRINGLIT
-   | variableName
    | objectInitializer
-   | arrayAccessor
    | _NULL
-   | functionCall
    | _THIS
-   | ternaryExpression
    | _TRUE
    | _FALSE
    | expression
-   | mathExpression
+   | expr
    ;
 
-
-arrayAccessor:
-   value LBRACKET accessValue RBRACKET
-   | value LBRACKET RBRACKET
-   ;
-
-accessValue:
+mathValue:
    NUMBERLIT
+   | arrayAccessor
    | variableName
+   | functionCall
+   | ternaryExpression
+   | MINUS mathValue
+   | PLUS  mathValue 
    ;
+
+expr:
+  mathValue
+  | expr PLUS expr 
+  | expr MINUS expr
+  | expr MULTIPLY expr
+  | expr DIVIDE expr
+  | expr INCREMENT
+  | expr DECREMENT 
+  ;
 
 newObject:
    _NEW IDENT LPAREN RPAREN optionalVariableType
@@ -322,8 +324,8 @@ newObject:
    ;
 
 functionStatement:
-   functionCall SEMICOLON 
-   | functionDeclaration 
+   functionCall SEMICOLON
+   | functionDeclaration
    ;
 
 functionDeclaration:
@@ -339,7 +341,7 @@ getterSetter:
 
 functionCall:
    variableName LPAREN valueList RPAREN
-   | variableName LPAREN RPAREN 
+   | variableName LPAREN RPAREN
    ;
 
 functionHeader:
@@ -435,26 +437,30 @@ whileStatement:
    _WHILE value block
    ;
 
-/*
 forStatement:
-   _FOR LPAREN variableDeclaration mathExpression RPAREN block
-   | _FOR _EACH LPAREN variableDeclaration _IN value RPAREN block 
-   ;
-*/
-forStatement:
-   _FOR LPAREN variableDeclaration SEMICOLON optionalForConditional SEMICOLON optionalForIncrement SEMICOLON
-   | _FOR LPAREN _VAR variableName optionalVariableType _IN value RPAREN
-   | _FOR _EACH LPAREN _VAR variableName optionalVariableType _IN value RPAREN
-   ;
+  _FOR LPAREN variableDeclaration SEMICOLON optionalForConditional SEMICOLON optionalForIncrement SEMICOLON
+  | _FOR LPAREN _VAR variableName optionalVariableType _IN value RPAREN
+  | _FOR _EACH LPAREN _VAR variableName optionalVariableType _IN value RPAREN
+  ;
 
 optionalForConditional:
-   /* empty */
-   | value
-   ;
+  /* empty */
+  | mathValue
+  ;
 
 optionalForIncrement:
-   /* empty */
-   | value
+  /* empty */
+  | mathValue
+  ;
+
+arrayAccessor:
+   variableName LBRACKET accessValue RBRACKET
+   | variableName LBRACKET RBRACKET
+   ;
+
+accessValue:
+   NUMBERLIT
+   | variableName
    ;
 
 logicalOperator:
@@ -475,27 +481,6 @@ logicalOperator:
 iterationStatement:
    variableName INCREMENT SEMICOLON
    | variableName DECREMENT SEMICOLON
-   ;
-
-mathExpression:
-   value  
-   | mathExpression PLUS mathExpression 
-   | mathExpression MINUS mathExpression
-   | mathExpression MULTIPLY mathExpression
-   | mathExpression DIVIDE mathExpression
-   | mathExpression INCREMENT
-   | mathExpression DECREMENT 
-   ;
-
-pemd:
-   MULTIPLY
-   | DIVIDE
-   | MODULO
-   ;
-
-addSubtract:
-   PLUS
-   | MINUS
    ;
 
 throwStatement:
@@ -529,9 +514,6 @@ breakStatement:
    _BREAK SEMICOLON
    | _BREAK value SEMICOLON
    ;
-
-
-
 /*switchStatement:
 	_SWITCH LPAREN expression RPAREN caseBlock
 	;*/

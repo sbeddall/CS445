@@ -131,6 +131,13 @@
 "-=" {   return MINUSEQ; }
 "++" {   return INCREMENT; }
 
+"+" { return MULTIPLY; } 
+"-" { return MINUS;  }
+"/" { return DIVIDE; }
+"%" { return MODULO; }
+"*" { return MULTIPLY; }
+
+
 . {  }
 
 %%
