@@ -1,4 +1,13 @@
-var hello;
+
+/* Variable declarations borrowed from the spec */
+const constantVariable = 1;
+const otherConstant    = constantVariable;
+public static var uninitVariable;
+var initVariable1 = 2;
+private var typedVariable : String = 3;
+private protected var oneVar : String, twoVar : Integer;
+
+
 
 import fl.controls.ComboBox;
 import fl.controls.Slider;
@@ -23,6 +32,8 @@ addChild(slider);
 function comboBox_change(evt:Event):void {
     slider.direction = comboBox.selectedItem.label;
 }
+
+{eeee}
 
 dp.addItem({label:SliderDirection.HORIZONTAL}:DataProvider, new DataProvider():int, SliderDirection.Horizontal);
 dp.addItem({label:SliderDirection.VERTICAL});

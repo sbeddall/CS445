@@ -124,14 +124,12 @@
 
 "?" {   return _TERNARY; }
 
-
-"++" { return INCREMENT; }
-"--" { return DECREMENT; }
 "*=" {   return MULTIPLYEQ; }
 "/=" {   return DIVIDEEQ; }
 "%=" {   return MODULOEQ; }
 "+=" {   return PLUSEQ; }
 "-=" {   return MINUSEQ; }
+"++" {   return INCREMENT; }
 
 . {  }
 

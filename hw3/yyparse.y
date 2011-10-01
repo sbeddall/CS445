@@ -169,7 +169,7 @@ sourceElement:
 // statements
 statement:
    block
-   | variableStatement
+   | variableDeclaration
    | importStatement
    | functionStatement
    | forStatement
@@ -186,6 +186,7 @@ statement:
    | classStatement 
    | packageStatement
    | returnStatement
+   | assignStatement
    ;
 
 importStatement:
@@ -198,9 +199,62 @@ moduleName:
     ;
 */
 block:
-     LBRACE RBRACE	
-     | LBRACE sourceElements RBRACE
-     ;
+   LBRACE RBRACE	
+   | LBRACE sourceElements RBRACE
+   | objectInitializer
+   ;
+
+variableDeclaration
+   : variableKind variableDeclarationList SEMICOLON
+   | modifier variableKind variableDeclarationList SEMICOLON
+   ;
+
+variableDeclarationList:
+   variableBinding
+   | variableDeclarationList COMMA variableBinding
+   ;
+    
+variableBinding: 
+   variableName optionalVariableType variableInitialization
+   ;
+
+variableName:
+   IDENT
+   | IDENT ACCESSDOT variableName
+   ;
+
+optionalVariableType
+  : /* empty */
+  | COLON variableName
+  ;
+
+variableKind: 
+   _VAR
+   | _CONST
+   ;
+
+variableInitialization
+  : /* empty */
+  | ASSIGN value
+  ;
+
+assignStatement:
+   variableName assign value SEMICOLON
+   ;
+
+
+/*
+variableDeclaration
+    : modifier _VAR variableDeclarationList SEMICOLON
+    | _VAR variableDeclarationList SEMICOLON
+    | modifier _VAR variableConstruct assign value SEMICOLON
+    | _VAR variableConstruct assign value SEMICOLON
+    | modifier _CONST variableDeclarationList SEMICOLON
+    | _CONST variableDeclarationList SEMICOLON
+    | modifier _CONST variableConstruct assign value as SEMICOLON
+    | _CONST variableConstruct assign value as SEMICOLON
+    ;
+
 
 //Error with this. this will allow a declaration list with leading private static etc
 variableStatement:
@@ -214,43 +268,45 @@ variableStatement:
     | _CONST variableConstruct assign value as SEMICOLON 
     | variableConstruct assign value SEMICOLON   
     ;
-
+*/
 as:
    _AS value
    | 
    ;
 
-variableDeclarationList:
+/*variableDeclarationList:
    variableConstruct 
    | variableConstruct COMMA variableDeclarationList
-   ;
+   ;*/
 
-variableConstruct:
+/*variableConstruct:
    value COLON value 
    | value 
+   ;*/
+valueList:
+   value
+   | valueList COMMA value
    ;
 
-variableName:
-   IDENT
-   | IDENT ACCESSDOT variableName
-
 value:
-   _NEW IDENT LPAREN RPAREN
-   | _NEW IDENT LPAREN variableDeclarationList RPAREN
+   newObject
    | NUMBERLIT
    | STRINGLIT
    | variableName
    | objectInitializer
    | arrayAccessor
    | _NULL
-   | variableName LPAREN variableDeclarationList RPAREN //functioncall
-   | variableName LPAREN RPAREN
+   | functionCall
    | _THIS
+   | ternaryExpression
    | _TRUE
    | _FALSE
-   //   | variableName assign value 
    ;
 
+newObject:
+   _NEW IDENT LPAREN RPAREN optionalVariableType
+   | _NEW IDENT LPAREN variableDeclarationList RPAREN optionalVariableType
+   ;
 
 functionStatement:
    functionCall
@@ -265,19 +321,19 @@ functionDeclaration:
 getterSetter:
    _GET
    | _SET
-   |
+   | /*empty*/
    ;
 
 functionCall:
-   variableName LPAREN variableDeclarationList RPAREN SEMICOLON
+   variableName LPAREN valueList RPAREN SEMICOLON
    | variableName LPAREN RPAREN SEMICOLON 
    ;
 
 functionHeader:
     LPAREN variableDeclarationList RPAREN block
-    | LPAREN variableDeclarationList RPAREN COLON variableConstruct block
+    | LPAREN variableDeclarationList RPAREN COLON variableName block
     | LPAREN RPAREN block
-    | LPAREN RPAREN COLON variableConstruct block
+    | LPAREN RPAREN COLON variableName block
     ;
 
 packageStatement:
@@ -285,16 +341,15 @@ packageStatement:
    ;
    
 ternaryExpression:
-   expression _TERNARY value COLON value 
+   expression _TERNARY value COLON value
    ;
 
 objectInitializer:
-   LBRACE variableDeclarationList RBRACE
+   LBRACE variableDeclarationList RBRACE optionalVariableType
    ;
 
 superStatement:
    _SUPER LPAREN value RPAREN SEMICOLON
-   | _SUPER LPAREN variableDeclarationList RPAREN SEMICOLON
    ;
 
 returnStatement:
@@ -312,7 +367,7 @@ classStatement:
 
 modifier:
    modifierPrefix modifierSuffix 
-   | modifierPrefix 
+   | modifierPrefix
    | modifierSuffix
    ;
 
@@ -359,9 +414,9 @@ elseStatement:
    ;
 
 expression:
-   LPAREN variableConstruct logicalOperator expression RPAREN
-   | LPAREN variableConstruct RPAREN
-   | variableConstruct
+   LPAREN variableName logicalOperator expression RPAREN
+   | LPAREN variableName RPAREN
+   | variableName
    ;
 
 whileStatement:
@@ -369,8 +424,8 @@ whileStatement:
    ;
 
 forStatement:
-   _FOR LPAREN variableStatement expression SEMICOLON mathExpression RPAREN block
-   | _FOR _EACH LPAREN _VAR variableConstruct _IN value RPAREN block 
+   _FOR LPAREN _VAR IDENT expression SEMICOLON mathExpression RPAREN block
+   | _FOR _EACH LPAREN _VAR variableName _IN value RPAREN block 
    ;
 
 arrayAccessor:
@@ -399,15 +454,15 @@ logicalOperator:
    ;
 
 iterationStatement:
-   variableConstruct INCREMENT SEMICOLON
-   | variableConstruct DECREMENT SEMICOLON
+   variableName INCREMENT SEMICOLON
+   | variableName DECREMENT SEMICOLON
    ;
 
 mathExpression:
-   variableConstruct INCREMENT
-   | variableConstruct DECREMENT
-   | variableConstruct pemd variableConstruct
-   | variableConstruct as variableConstruct
+   variableName INCREMENT
+   | variableName DECREMENT
+   | variableName pemd variableName
+   | variableName as variableName
    ;
 
 pemd:
@@ -452,8 +507,6 @@ breakStatement:
    _BREAK SEMICOLON
    | _BREAK value SEMICOLON
    ;
-
-
 /*switchStatement:
 	_SWITCH LPAREN expression RPAREN caseBlock
 	;*/
