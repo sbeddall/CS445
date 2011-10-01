@@ -21,3 +21,6 @@ clean:
 	- rm compiler
 	- rm *~x
 	- rm *.o
+
+tar:
+	tar cf hw2.tar makefile main.c yylex.c structures.c structures.h
