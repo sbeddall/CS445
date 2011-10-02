@@ -169,6 +169,46 @@ void yyerror(const char *msg)
 %type <n> sourceElement
 %type <n> statement
 %type <n> program
+%type <n> objectInitializer
+%type <n> newObject
+%type <n> arrayAccessor
+%type <n> functionCall
+%type <n> ternaryExpression
+%type <n> block 
+%type <n> importStatement 
+%type <n> functionStatement 
+%type <n> forStatement
+%type <n> ifStatement 
+%type <n> whileStatement 
+%type <n> continueStatement 
+%type <n> breakStatement
+%type <n> withStatement 
+%type <n> throwStatement 
+%type <n> tryStatement 
+%type <n> iterationStatement
+%type <n> superStatement
+%type <n> classStatement
+%type <n> packageStatement
+%type <n> returnStatement
+%type <n> assignStatement
+%type <n> getterSetter
+%type <n> valueList
+%type <n> as
+%type <n> functionDeclaration
+%type <n> logicalOperator
+%type <n> accessValue
+%type <n> optionalForIncrement
+%type <n> assign
+%type <n> functionHeader
+
+%type <n> prefixKeyword
+%type <n> suffixKeyword
+%type <n> modifier
+%type <n> modifierPrefix
+%type <n> modifierSuffix
+
+
+
 
 %left PLUS MINUS MULTIPLY DIVIDE
 
@@ -176,7 +216,7 @@ void yyerror(const char *msg)
 
  //start of grammar
 program:  
-sourceElements { traverseTree($1, 0); } //
+   sourceElements { traverseTree($1, 0); } //
    ;
 
 sourceElements:
@@ -190,29 +230,29 @@ sourceElement:
 
 // statements
 statement:
-   block
+   block {$$ = makeNode(NULL, YYDup(), 1, $1);}
    | variableDeclaration {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | importStatement
-   | functionStatement
-   | forStatement
-   | ifStatement
-   | whileStatement
-   | continueStatement
-   | breakStatement
-   | withStatement
+   | importStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | functionStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | forStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | ifStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | whileStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | continueStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | breakStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | withStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
      //| switchStatement //is this really the last one remaining?
-   | throwStatement
-   | tryStatement
-   | iterationStatement
-   | superStatement
-   | classStatement 
-   | packageStatement
-   | returnStatement
-   | assignStatement
+   | throwStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | tryStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | iterationStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | superStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | classStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | packageStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | returnStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | assignStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
    ;
 
 importStatement:
-   _IMPORT variableName SEMICOLON
+   _IMPORT variableName SEMICOLON {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3);}
    ;
 /*
 moduleName:
@@ -221,14 +261,14 @@ moduleName:
     ;
 */
 block:
-   LBRACE RBRACE	
-   | LBRACE sourceElements RBRACE
-   | objectInitializer
+   LBRACE RBRACE {$$ = makeNode(NULL, YYDup(), 2, $1, $2);}
+   | LBRACE sourceElements RBRACE {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3);}
+   | objectInitializer {$$ = makeNode(NULL, YYDup(), 1, $1);}
    ;
 
 variableDeclaration //1 
    : variableKind variableDeclarationList SEMICOLON {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3);}
-//   | modifier variableKind variableDeclarationList SEMICOLON {$$ = makeNode(yytext, YYDup(), 4, $1, $2, $3, $4);}
+   | modifier variableKind variableDeclarationList SEMICOLON {$$ = makeNode(yytext, YYDup(), 4, $1, $2, $3, $4);}
    ; 
 
 variableDeclarationList:
@@ -261,7 +301,7 @@ variableInitialization
    ;
 
 assignStatement:
-   variableName assign value SEMICOLON
+   variableName assign value SEMICOLON {$$ = makeNode(NULL, YYDup(), 4, $1, $2, $3, $4);}
    ;
 
 
@@ -302,55 +342,55 @@ variableStatement:
    | value 
    ;*/
 valueList:
-   value 
-   | valueList COMMA value
+   value {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | valueList COMMA value {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3);}
    ;
 
 value:
-//   newObject
-//   | STRINGLIT
-//   | objectInitializer
-//   | _NULL
-//   | _THIS
-//   | _TRUE
-//   | _FALSE
-//   | expression
+   newObject {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | STRINGLIT {$$ = $1}
+   | objectInitializer {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | _NULL {$$ = $1}
+   | _THIS {$$ = $1}
+   | _TRUE {$$ = $1}
+   | _FALSE {$$ = $1}
+   | expression {$$ = makeNode(NULL, YYDup(), 1, $1);}
    | expr {$$ = makeNode(NULL, YYDup(), 1, $1);}
    ;
 
 mathValue:
    NUMBERLIT {$$ = $1}
-//   | arrayAccessor
-//   | variableName
-//   | functionCall
-//   | ternaryExpression
-//   | MINUS mathValue
-//   | PLUS  mathValue 
+   | arrayAccessor {$$ = makeNode(NULL, YYDup(), 1, $1);} 
+   | variableName {$$ = makeNode(NULL, YYDup(), 1, $1);} 
+   | functionCall {$$ = makeNode(NULL, YYDup(), 1, $1);} 
+   | ternaryExpression {$$ = makeNode(NULL, YYDup(), 1, $1);} 
+   | MINUS mathValue {$$ = makeNode(NULL, YYDup(), 2, $1, $2);} 
+   | PLUS mathValue {$$ = makeNode(NULL, YYDup(), 2, $1, $2);} 
    ;
 
 expr:
    mathValue {$$ = makeNode(NULL, YYDup(), 1, $1); }
-  //  | expr PLUS expr 
-  // | expr MINUS expr
-  // | expr MULTIPLY expr
-  // | expr DIVIDE expr
-  // | expr INCREMENT
-  // | expr DECREMENT 
-  ;
+   | expr PLUS expr {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3); }
+   | expr MINUS expr {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3); } 
+   | expr MULTIPLY expr {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3); }
+   | expr DIVIDE expr {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3); }
+   | expr INCREMENT {$$ = makeNode(NULL, YYDup(), 2, $1, $2); }
+   | expr DECREMENT {$$ = makeNode(NULL, YYDup(), 2, $1, $2); }
+   ;
 
 newObject:
-   _NEW IDENT LPAREN RPAREN optionalVariableType as
+_NEW IDENT LPAREN RPAREN optionalVariableType as {$$ = makeNode(NULL, YYDup(), 6, $1, $2, $3, $4, $5, $6); }
    | _NEW IDENT LPAREN valueList RPAREN optionalVariableType as
    ;
 
 as:
-   _AS variableName
-   | /*empty*/ 
+   _AS variableName {$$ = makeNode(NULL, YYDup(), 2, $1, $2)};
+   | /*empty*/ {$$ = NULL}
    ;
 
 functionStatement:
-   functionCall SEMICOLON
-   | functionDeclaration
+   functionCall SEMICOLON {$$ = makeNode(NULL, YYDup(), 2, $1, $2);}
+   | functionDeclaration {$$ = makeNode(NULL, YYDup(), 1, $1);}
    ;
 
 functionDeclaration:
@@ -359,9 +399,9 @@ functionDeclaration:
    ;
 
 getterSetter:
-   _GET
-   | _SET
-   | /*empty*/
+   _GET {$$=$1}
+   | _SET {$$=$1}
+   | /*empty*/ {$$=NULL}
    ;
 
 functionCall:
@@ -370,14 +410,14 @@ functionCall:
    ;
 
 functionHeader:
-    LPAREN variableDeclarationList RPAREN block
-    | LPAREN variableDeclarationList RPAREN COLON variableName block
-    | LPAREN RPAREN block
-    | LPAREN RPAREN COLON variableName block
-    ;
+   LPAREN variableDeclarationList RPAREN block {$$ = makeNode(NULL, YYDup(), 4, $1, $2, $3, $4);} 
+   | LPAREN variableDeclarationList RPAREN COLON variableName block {$$ = makeNode(NULL, YYDup(), 6, $1, $2, $3, $4, $5, $6);}
+   | LPAREN RPAREN block {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3);}
+   | LPAREN RPAREN COLON variableName block {$$ = makeNode(NULL, YYDup(), 5, $1, $2, $3, $4, $5);}
+   ;
 
 packageStatement:
-   _PACKAGE variableName block 
+   _PACKAGE variableName block {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3);}
    ;
    
 ternaryExpression:
@@ -406,42 +446,42 @@ classStatement:
    ;
 
 modifier:
-   modifierPrefix modifierSuffix 
-   | modifierPrefix
-   | modifierSuffix
+   modifierPrefix modifierSuffix  {$$ = makeNode(NULL, YYDup(), 2, $1, $2);}
+   | modifierPrefix {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | modifierSuffix {$$ = makeNode(NULL, YYDup(), 1, $1);}
    ;
 
 modifierSuffix:
-   suffixKeyword 
-   | suffixKeyword modifierSuffix
+   suffixKeyword {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | suffixKeyword modifierSuffix {$$ = makeNode(NULL, YYDup(), 2, $1, $2);}
 
 modifierPrefix:
-   prefixKeyword
-   | prefixKeyword modifierPrefix
+   prefixKeyword {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | prefixKeyword modifierPrefix {$$ = makeNode(NULL, YYDup(), 2, $1, $2);}
    ;
 
 prefixKeyword:
-   _PUBLIC
-   | _PRIVATE
-   | _PROTECTED
-   | _OVERRIDE
+   _PUBLIC {$$ = $1}
+   | _PRIVATE {$$ = $1}
+   | _PROTECTED {$$ = $1}
+   | _OVERRIDE {$$ = $1}
    ;
 
 suffixKeyword:
-   _DYNAMIC 
-   | _FINAL 
-   | _NATIVE
-   | _STATIC 
-   | _GET
+   _DYNAMIC {$$ = $1} 
+   | _FINAL {$$ = $1} 
+   | _NATIVE {$$ = $1}
+   | _STATIC {$$ = $1} 
+   | _GET {$$ = $1}
    ;
 
 assign:
-   ASSIGN // =
-   | MULTIPLYEQ // *= Multiplication assignment
-   | DIVIDEEQ // /= Division assignment
-   | MODULOEQ // %= Modulo assignment
-   | PLUSEQ // += Addition assignment
-   | MINUSEQ // -= Subtraction assignment  
+   ASSIGN  {$$ = $1}// =
+   | MULTIPLYEQ  {$$ = $1}// *= Multiplication assignment
+   | DIVIDEEQ  {$$ = $1}// /= Division assignment
+   | MODULOEQ  {$$ = $1}// %= Modulo assignment
+   | PLUSEQ  {$$ = $1}// += Addition assignment
+   | MINUSEQ  {$$ = $1}// -= Subtraction assignment  
    ;
 
 ifStatement:
@@ -474,8 +514,8 @@ optionalForConditional:
   ;
 
 optionalForIncrement:
-  /* empty */
-  | mathValue
+  /* empty */ {$$ = NULL}
+  | mathValue {$$ = makeNode(NULL, YYDup(), 1, $1);}
   ;
 
 arrayAccessor:
@@ -484,23 +524,23 @@ arrayAccessor:
    ;
 
 accessValue:
-   NUMBERLIT
-   | variableName
+   NUMBERLIT {$$ = $1}
+   | variableName {$$ = makeNode(NULL, YYDup(), 1, $1);}
    ;
 
-logicalOperator:
-   LESSTHAN //<
-   | GREATERTHAN //>
-   | EQUALSEQUALS //==
-   | STRICTEQUALS //===
-   | STRICTNOTEQ //!==
-   | GTHANEQ // >=
-   | LTHANEQ // <=
-   | NOTEQUAL //!=
-   | NOT //!
-   | NOTEQUALEQUAL 
-   | LOGICALAND // && Logical AND
-   | LOGICALOR //|| Logical OR
+logicalOperator: 
+   LESSTHAN {$$ = $1}
+   | GREATERTHAN {$$ = $1}
+   | EQUALSEQUALS {$$ = $1}
+   | STRICTEQUALS {$$ = $1}
+   | STRICTNOTEQ {$$ = $1}
+   | GTHANEQ {$$ = $1}
+   | LTHANEQ {$$ = $1}
+   | NOTEQUAL {$$ = $1}
+   | NOT {$$ = $1}
+   | NOTEQUALEQUAL {$$ = $1} 
+   | LOGICALAND {$$ = $1}
+   | LOGICALOR {$$ = $1}
    ;
 
 iterationStatement:

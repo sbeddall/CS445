@@ -2,7 +2,7 @@ ec: yyparse.tab.o lex.yy.o main.o structures.o tree.o
 	gcc -o ec lex.yy.o main.o structures.o tree.o yyparse.tab.o
 
 lex.yy.o : lex.yy.c
-	gcc -c lex.yy.c
+	gcc -c -w lex.yy.c
 
 lex.yy.c : yylex.c
 	lex yylex.c
@@ -20,9 +20,7 @@ structures.o : structures.c
 	gcc -c structures.c
 
 tree.o : tree.c
-	gcc -c tree.c
-
-
+	gcc -w -c tree.c
 
 clean: 	
 	- rm yyparse.tab.c
@@ -38,6 +36,7 @@ clean:
 	- rm *~
 	- rm *.output
 	- rm *.dot
+	- rm *.tar
 
 tar: 
 	tar cf hw3.tar makefile main.c yylex.c structures.c structures.h yyparse.y tree.c tree.h test	
