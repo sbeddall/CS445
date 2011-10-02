@@ -8,10 +8,10 @@ lex.yy.c : yylex.c
 	lex yylex.c
 
 yyparse.tab.o : yyparse.tab.c
-	gcc -c yyparse.tab.c
+	gcc -w -c yyparse.tab.c
 
 yyparse.tab.c : yyparse.y
-	bison -d -t -v -g yyparse.y
+	bison -d -t -v  yyparse.y
 
 main.o : main.c
 	gcc -c main.c

@@ -2,6 +2,7 @@
   #include <stdio.h>
   #include <stdlib.h>
   #include "structures.h"
+  #include "tree.h"
   #include "yyparse.tab.h"
   //#include "defines.h" 
   extern token* YYTOKEN;
@@ -31,11 +32,11 @@
  
 \n { LINENO++; } 
 
-"break" { eval(_BREAK);  return _BREAK; }
+"break" { eval(_BREAK); return _BREAK; }
 "case" {  eval(_CASE); return _CASE; }
 "catch" { eval(_CATCH);  return _CATCH; } 
 "class" { eval(_CLASS);  return _CLASS; }
-"const" { eval(_CONST);  return _CONST; }
+"const" { eval(_CONST); yylval.n = makeNode(yytext, YYDup(), 0); return _CONST; }
 "continue" { eval(_CONTINUE);  return _CONTINUE; }
 "default" { eval(_DEFAULT);  return _DEFAULT; }
 "do" { eval(_DO);  return _DO; }
@@ -61,7 +62,7 @@
 "to" { eval(_TO);  return _TO; }
 "try" { eval(_TRY);  return _TRY; }
 "use" { eval(_USE);  return _USE; }
-"var" { eval(_VAR);  return _VAR; }
+"var" { eval(_VAR); yylval.n = makeNode(yytext, YYDup(), 0); return _VAR; }
 "while" { eval(_WHILE);  return _WHILE; }
 "with" { eval(_WITH);  return _WITH; }  
 "each" { eval(_EACH);  return _EACH; }
@@ -86,9 +87,9 @@
 "instanceof"  { eval(_INSTANCEOF);  return _INSTANCEOF; } 
 "is"  { eval(_IS);  return _IS; } 
 
-[a-zA-Z_][a-zA-Z0-9_]* { eval(IDENT);  return IDENT;}
+[a-zA-Z_][a-zA-Z0-9_]* { eval(IDENT); yylval.n = makeNode(yytext, YYDup(), 0); return IDENT;}
 
-\. { eval(ACCESSDOT); return ACCESSDOT; }
+\. { eval(ACCESSDOT); yylval.n = makeNode(yytext, YYDup(), 0); return ACCESSDOT; }
 \, { eval(COMMA); return COMMA;}
 \[ { eval(LBRACKET);  return LBRACKET; }
 \] { eval(RBRACKET);  return RBRACKET; }
@@ -96,7 +97,7 @@
 \) { eval(RPAREN);  return RPAREN; }
 "{" { eval(LBRACE);  return LBRACE; }
 "}" { eval(RBRACE);  return RBRACE; }
-";" { eval(SEMICOLON);  return SEMICOLON; }
+";" { eval(SEMICOLON); yylval.n = makeNode(yytext, YYDup(), 0); return SEMICOLON; }
 
 \".+\"|\'.+\' { eval(STRINGLIT);  return STRINGLIT; }
 
@@ -104,7 +105,7 @@
 
 \: { eval(COLON);  return COLON; }
 
-\= { eval(ASSIGN);  return ASSIGN; }
+\= { eval(ASSIGN); yylval.n = makeNode(yytext, YYDup(),0);  return ASSIGN; }
   
   \< { eval(LESSTHAN);  return LESSTHAN; }
 \> { eval(GREATERTHAN);  return GREATERTHAN; }
@@ -120,7 +121,7 @@
 
 "//".* { }
 
-[0-9]*['.']?[0-9]* { eval(NUMBERLIT);  return NUMBERLIT; }
+[0-9]*['.']?[0-9]* { eval(NUMBERLIT);  yylval.n = makeNode(yytext, YYDup(), 0); return NUMBERLIT; }
 
 "?" { eval(_TERNARY);  return _TERNARY; }
 

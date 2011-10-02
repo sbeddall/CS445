@@ -12,11 +12,13 @@ typedef struct list {
 
 typedef struct node {
   int nchildren; 
-  int rule;
+  char* text;
   token* tok;
   struct node** children;
 } node;
 
-node* newNode(int rule, token* tok, int nchildren, ...);
+node* newNode(char* text, token* tok, int nchildren, ...);
+void traverseTree(node* head, int level);
+
 
 #endif

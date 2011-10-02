@@ -28,154 +28,170 @@ void yyerror(const char *msg)
   struct node* n;
 }
 
-%token <node*> _BREAK 261 
-%token <node*> _CASE 363  
-%token <node*> _CATCH 262  
-%token <node*> _CLASS 263 
-%token <node*>  _CONST 264 
-%token <node*>  _CONTINUE 265 
-%token <node*>  _DEFAULT 266 
-%token <node*>  _DO 362  
-%token <node*>  _ELSE 267  
-%token <node*>  _EXTENDS 268 
-%token <node*>  _FINALLY 270 
-%token <node*>  _FOR 271 
-%token <node*>  _FUNCTION 272 
-%token <node*>  _IF 273 
-%token <node*>  _IMPLEMENTS 274
-%token <node*>  _IMPORT 275 
-%token <node*>  _INTERFACE 276 
-%token <node*>  _INTERNAL 277 
-%token <node*>  _NULL 278 
-%token <node*>  _PACKAGE 279 
-%token <node*>  _PRIVATE 280 
-%token <node*>  _PROTECTED 281 
-%token <node*>  _PUBLIC 282 
-%token <node*>  _RETURN 283
-%token <node*>  _SUPER 284 
-%token <node*>  _SWITCH 285 
-%token <node*>  _THIS 286 
-%token <node*>  _THROW 287
-%token <node*>  _TO 288 
-%token <node*>  _TRY 289 
-%token <node*>  _USE 290 
-%token <node*>  _VAR 291 
-%token <node*>  _WHILE 292
-%token <node*>  _WITH 293 
+%token <n> _BREAK 261 
+%token <n> _CASE 363  
+%token <n> _CATCH 262  
+%token <n> _CLASS 263 
+%token <n>  _CONST 264 
+%token <n>  _CONTINUE 265 
+%token <n>  _DEFAULT 266 
+%token <n>  _DO 362  
+%token <n>  _ELSE 267  
+%token <n>  _EXTENDS 268 
+%token <n>  _FINALLY 270 
+%token <n>  _FOR 271 
+%token <n>  _FUNCTION 272 
+%token <n>  _IF 273 
+%token <n>  _IMPLEMENTS 274
+%token <n>  _IMPORT 275 
+%token <n>  _INTERFACE 276 
+%token <n>  _INTERNAL 277 
+%token <n>  _NULL 278 
+%token <n>  _PACKAGE 279 
+%token <n>  _PRIVATE 280 
+%token <n>  _PROTECTED 281 
+%token <n>  _PUBLIC 282 
+%token <n>  _RETURN 283
+%token <n>  _SUPER 284 
+%token <n>  _SWITCH 285 
+%token <n>  _THIS 286 
+%token <n>  _THROW 287
+%token <n>  _TO 288 
+%token <n>  _TRY 289 
+%token <n>  _USE 290 
+%token <n>  _VAR 291 
+%token <n>  _WHILE 292
+%token <n>  _WITH 293 
   
 //SYNTACTICAL KEYWORDS
-%token <node*>  _EACH 294
-%token <node*>  _GET 295 
-%token <node*>  _SET 296 
-%token <node*>  _NAMESPACE 297
-%token <node*>  _INCLUDE 298
-%token <node*>  _DYNAMIC 299
-%token <node*>  _FINAL 300 
-%token <node*>  _NATIVE 301
-%token <node*>  _OVERRIDE 302
-%token <node*>  _STATIC 303  
+%token <n>  _EACH 294
+%token <n>  _GET 295 
+%token <n>  _SET 296 
+%token <n>  _NAMESPACE 297
+%token <n>  _INCLUDE 298
+%token <n>  _DYNAMIC 299
+%token <n>  _FINAL 300 
+%token <n>  _NATIVE 301
+%token <n>  _OVERRIDE 302
+%token <n>  _STATIC 303  
 //SYNTACTICAL ELEMENTS
 //punctuation
-%token <node*>  LPAREN 304
-%token <node*>  RPAREN 305 
-%token <node*>  LBRACE 306
-%token <node*>  RBRACE 307 
-%token <node*>  LBRACKET 308
-%token <node*>  RBRACKET 309
-%token <node*>  SEMICOLON 310
-%token <node*>  QUOTES 311
-%token <node*>  COMMA 312
-%token <node*>  COLON 313
+%token <n>  LPAREN 304
+%token <n>  RPAREN 305 
+%token <n>  LBRACE 306
+%token <n>  RBRACE 307 
+%token <n>  LBRACKET 308
+%token <n>  RBRACKET 309
+%token <n>  SEMICOLON 310
+%token <n>  QUOTES 311
+%token <n>  COMMA 312
+%token <n>  COLON 313
 //operators
-%token <node*>  PLUS 314// +
-%token <node*>  MINUS 315// -
-%token <node*>  MULTIPLY 316// *
-%token <node*>  DIVIDE 317// /
-%token <node*>  MODULO 318// %
-%token <node*>  LESSTHAN 319//<
-%token <node*>  GREATERTHAN 320//>
-%token <node*>  EQUALSEQUALS 321//==
-%token <node*>  STRICTEQUALS 322//===
-%token <node*>  STRICTNOTEQ 323//!==
-%token <node*>  GTHANEQ 324// >=
-%token <node*>  LTHANEQ 325// <=
-%token <node*>  NOTEQUAL 326//!=
-%token <node*>  NOT 327//!
-%token <node*>  NOTEQUALEQUAL 328
-%token <node*>  LOGICALAND 329// && Logical AND
-%token <node*>  LOGICALOR 330//|| Logical OR
+%token <n>  PLUS 314// +
+%token <n>  MINUS 315// -
+%token <n>  MULTIPLY 316// *
+%token <n>  DIVIDE 317// /
+%token <n>  MODULO 318// %
+%token <n>  LESSTHAN 319//<
+%token <n>  GREATERTHAN 320//>
+%token <n>  EQUALSEQUALS 321//==
+%token <n>  STRICTEQUALS 322//===
+%token <n>  STRICTNOTEQ 323//!==
+%token <n>  GTHANEQ 324// >=
+%token <n>  LTHANEQ 325// <=
+%token <n>  NOTEQUAL 326//!=
+%token <n>  NOT 327//!
+%token <n>  NOTEQUALEQUAL 328
+%token <n>  LOGICALAND 329// && Logical AND
+%token <n>  LOGICALOR 330//|| Logical OR
   
 //BOOLEANS
-%token <node*>  _TRUE 334 
-%token <node*>  _FALSE 335
+%token <n>  _TRUE 334 
+%token <n>  _FALSE 335
   
 //OPERATORS
 //initialization
-%token <node*>  ARRAY 336//[] Initializes an array
-%token <node*>  OBJECT 337//{x:y} Initializes an object
-%token <node*>  FUNCTION 338//f(x) Calls a function
-%token <node*>  ACCESSDOT 339//x.y 
- //%token <node*>  ACCESSBRACKET 340//x[y] Accesses a property
-%token <node*>  INCREMENT 341//++
-%token <node*>  DECREMENT 342//--	
+%token <n>  ARRAY 336//[] Initializes an array
+%token <n>  OBJECT 337//{x:y} Initializes an object
+%token <n>  FUNCTION 338//f(x) Calls a function
+%token <n>  ACCESSDOT 339//x.y 
+ //%token <n>  ACCESSBRACKET 340//x[y] Accesses a property
+%token <n>  INCREMENT 341//++
+%token <n>  DECREMENT 342//--	
   
 //OBJECT COMMANDS
-%token <node*>  _NEW 343//new Calls a constructor
-%token <node*>  _DELETE 344//delete Deletes a property
-%token <node*>  _TYPEOF 345//typeof Returns type information
-%token <node*>  _AS 347//as Checks data type
-%token <node*>  _IN 348//in Checks for object properties
-%token <node*>  _INSTANCEOF 349//instanceof Checks prototype chain
-%token <node*>  _IS 350//is Checks data type
+%token <n>  _NEW 343//new Calls a constructor
+%token <n>  _DELETE 344//delete Deletes a property
+%token <n>  _TYPEOF 345//typeof Returns type information
+%token <n>  _AS 347//as Checks data type
+%token <n>  _IN 348//in Checks for object properties
+%token <n>  _INSTANCEOF 349//instanceof Checks prototype chain
+%token <n>  _IS 350//is Checks data type
   
 //what is this? punctuation?
-%token <node*>  _TERNARY 351// ?:
+%token <n>  _TERNARY 351// ?:
   
 //ASSIGNMENT
-%token <node*>  ASSIGN 352//=
-%token <node*>  MULTIPLYEQ 353// *= Multiplication assignment
-%token <node*>  DIVIDEEQ 354// /= Division assignment
-%token <node*>  MODULOEQ 355// %= Modulo assignment
-%token <node*>  PLUSEQ 356// += Addition assignment
-%token <node*>  MINUSEQ 357// -= Subtraction assignment  
+%token <n>  ASSIGN 352//=
+%token <n>  MULTIPLYEQ 353// *= Multiplication assignment
+%token <n>  DIVIDEEQ 354// /= Division assignment
+%token <n>  MODULOEQ 355// %= Modulo assignment
+%token <n>  PLUSEQ 356// += Addition assignment
+%token <n>  MINUSEQ 357// -= Subtraction assignment  
   
 //TYPES not already covered
-%token <node*>  _UINT 359
-%token <node*>  _INT 360
-%token <node*>  _BOOLEAN 361
-%token <node*>  _STRING 331
-%token <node*>  _NUMBER 332
- //%token <node*>  _VOID 346//returns undefined value
-%token <node*>  STRINGLIT
-%token <node*>  NUMBERLIT
+%token <n>  _UINT 359
+%token <n>  _INT 360
+%token <n>  _BOOLEAN 361
+%token <n>  _STRING 331
+%token <n>  _NUMBER 332
+ //%token <n>  _VOID 346//returns undefined value
+%token <n>  STRINGLIT
+%token <n>  NUMBERLIT
   
 //misc 
-%token <node*>  IDENT 358
-%token <node*>  OTHER 400
+%token <n>  IDENT 358
+%token <n>  OTHER 400
 
 
-%left PLUS MINUX MULTIPLY DIVIDE
+%type <n> variableName
+%type <n> variableBinding
+%type <n> variableDeclarationList
+%type <n> variableDeclaration
+%type <n> optionalVariableType
+%type <n> variableInitialization
+%type <n> variableKind
+%type <n> value
+%type <n> mathValue
+%type <n> expr
+%type <n> expression
+%type <n> sourceElements
+%type <n> sourceElement
+%type <n> statement
+%type <n> program
+
+%left PLUS MINUS MULTIPLY DIVIDE
 
 %%
 
  //start of grammar
 program:  
-    sourceElements
-    ;
+sourceElements { traverseTree($1, 0); } //
+   ;
 
 sourceElements:
-    sourceElement
-    | sourceElement sourceElements    
-    ;
+   sourceElement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | sourceElement sourceElements {$$ = makeNode(NULL, YYDup(), 2, $1, $2); }    
+   ;
 
 sourceElement:
-    statement    
-    ;
+   statement {$$ = makeNode(NULL, YYDup(), 1, $1);}    
+   ;
 
 // statements
 statement:
    block
-   | variableDeclaration
+   | variableDeclaration {$$ = makeNode(NULL, YYDup(), 1, $1);}
    | importStatement
    | functionStatement
    | forStatement
@@ -210,39 +226,39 @@ block:
    | objectInitializer
    ;
 
-variableDeclaration
-   : variableKind variableDeclarationList SEMICOLON
-   | modifier variableKind variableDeclarationList SEMICOLON
-   ;
+variableDeclaration //1 
+   : variableKind variableDeclarationList SEMICOLON {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3);}
+//   | modifier variableKind variableDeclarationList SEMICOLON {$$ = makeNode(yytext, YYDup(), 4, $1, $2, $3, $4);}
+   ; 
 
 variableDeclarationList:
-   variableBinding
-   | variableDeclarationList COMMA variableBinding
+   variableBinding {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | variableDeclarationList COMMA variableBinding {$$ = makeNode(NULL, YYDup(), 3, $1, makeNode(",", YYDup(), 0), $3);} 
    ;
     
 variableBinding: 
-   variableName optionalVariableType variableInitialization
+   variableName optionalVariableType variableInitialization {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3);}
    ;
 
 variableName:
-   IDENT
-   | IDENT ACCESSDOT variableName
+   IDENT {$$ = $1 }
+   | IDENT ACCESSDOT variableName {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3);}
    ;
 
 optionalVariableType
-  : /* empty */
-  | COLON variableName
-  ;
+   : /* empty */ {$$ = NULL;}
+   | COLON variableName {$$ = makeNode(NULL, YYDup(), 2, $1, $2); }
+   ;
 
-variableKind: 
-   _VAR
-   | _CONST
+variableKind
+   : _VAR { $$ = $1 }
+   | _CONST {$$ = $1} 
    ;
 
 variableInitialization
-  : /* empty */
-  | ASSIGN value
-  ;
+   : /* empty */ {$$ = NULL;}
+   | ASSIGN value {$$ = makeNode(NULL, YYDup(), 2, $1, $2);}
+   ;
 
 assignStatement:
    variableName assign value SEMICOLON
@@ -286,40 +302,40 @@ variableStatement:
    | value 
    ;*/
 valueList:
-   value
+   value 
    | valueList COMMA value
    ;
 
 value:
-   newObject
-   | STRINGLIT
-   | objectInitializer
-   | _NULL
-   | _THIS
-   | _TRUE
-   | _FALSE
-   | expression
-   | expr
+//   newObject
+//   | STRINGLIT
+//   | objectInitializer
+//   | _NULL
+//   | _THIS
+//   | _TRUE
+//   | _FALSE
+//   | expression
+   | expr {$$ = makeNode(NULL, YYDup(), 1, $1);}
    ;
 
 mathValue:
-   NUMBERLIT
-   | arrayAccessor
-   | variableName
-   | functionCall
-   | ternaryExpression
-   | MINUS mathValue
-   | PLUS  mathValue 
+   NUMBERLIT {$$ = $1}
+//   | arrayAccessor
+//   | variableName
+//   | functionCall
+//   | ternaryExpression
+//   | MINUS mathValue
+//   | PLUS  mathValue 
    ;
 
 expr:
-  mathValue
-  | expr PLUS expr 
-  | expr MINUS expr
-  | expr MULTIPLY expr
-  | expr DIVIDE expr
-  | expr INCREMENT
-  | expr DECREMENT 
+   mathValue {$$ = makeNode(NULL, YYDup(), 1, $1); }
+  //  | expr PLUS expr 
+  // | expr MINUS expr
+  // | expr MULTIPLY expr
+  // | expr DIVIDE expr
+  // | expr INCREMENT
+  // | expr DECREMENT 
   ;
 
 newObject:
