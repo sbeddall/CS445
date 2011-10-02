@@ -27,29 +27,29 @@ node* makeNode(char* text, token* tok, int nchildren, ...){
 }
 
 void traverseTree(node* head, int level){
-  int n = head->nchildren;
-  
-
-  int j = 0;
-  for(j; j < level; j++){
-    printf(" ");
-  }
-  if(head->text != NULL){
-    printf("%s", head->text);
-    printf("\n");
-  }
-  int i;
-  for(i = 0; i < n; i++){
+  if(head != NULL){
+    int n = head->nchildren;
     
-    if(head->children[i]==NULL){
-      //printf("Kid's NULL. \n");
+    
+    int j = 0;
+    for(j; j < level; j++){
+      printf(" ");
     }
-    else{
-      traverseTree(head->children[i], level++);
+    if(head->text != NULL){
+      printf("%s", head->text);
+      printf("\n");
+    }
+    int i;
+    for(i = 0; i < n; i++){
+      
+      if(head->children[i]==NULL){
+	//printf("Kid's NULL. \n");
+      }
+      else{
+	traverseTree(head->children[i], level++);
+      }
     }
   }
-
-
 }
 
 
