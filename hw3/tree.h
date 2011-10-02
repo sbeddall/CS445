@@ -2,18 +2,21 @@
 #define TREE_H
 #include <stdlib.h>
 #include <stdio.h>
+#include "structures.h"
+#include <stdarg.h>
 
-typedef struct easylist {
-  struct treenode* content;
-  struct easylist* next;
+typedef struct list {
+  struct node* content;
+  struct list* next;
 } list;
 
-typedef struct treenode {
-  short nchildren; 
-  short label;
-  struct easylist* children;
-} tree;
+typedef struct node {
+  int nchildren; 
+  int rule;
+  token* tok;
+  struct node** children;
+} node;
 
-tree* makeNode(short label);
+node* newNode(int rule, token* tok, int nchildren, ...);
 
 #endif

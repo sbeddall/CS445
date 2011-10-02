@@ -5,7 +5,7 @@
 
 int LINENO;
 char* FILENAME;
-token* YYTOKEN;
+tkn* YYTOKEN;
 extern FILE* yyin;
 int failed;
 

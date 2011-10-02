@@ -1,14 +1,17 @@
 #include "tree.h"
 
-tree* makeNode(short label){
-  tree* new = (tree*) malloc(sizeof( tree ));
+node* makeNode(int label, token* tok, int nchildren, ...){
+  node* new = (node*) malloc(sizeof( node ));
   
-  new->label = label;
-  new->nchildren = 0;
-  
-  new->children = NULL;
+  new->rule = label;
+  new->nchildren = nchildren;
+  new->tok = tok;
+
+  new->children = (node**)malloc(sizeof(node*) * nchildren);
   
   return new;
 }
+
+
 
 

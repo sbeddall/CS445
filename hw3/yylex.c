@@ -31,111 +31,111 @@
  
 \n { LINENO++; } 
 
-"break" {   return _BREAK; }
-"case" {   return _CASE; }
-"catch" {   return _CATCH; } 
-"class" {   return _CLASS; }
-"const" {   return _CONST; }
-"continue" {   return _CONTINUE; }
-"default" {   return _DEFAULT; }
-"do" {   return _DO; }
-"else" {   return _ELSE; } 
-"extends" {   return _EXTENDS; }
-"finally" {   return _FINALLY; }
-"for" {   return _FOR; }
-"function" {   return _FUNCTION; }
-"if" {   return _IF; }
-"implements" {   return _IMPLEMENTS; }
-"import" {  return _IMPORT; }
-"interface" {   return _INTERFACE; }
-"null"|"NULL" {   return _NULL; }
-"package" {    return _PACKAGE; }
-"private" {   return _PRIVATE; }
-"protected" {   return _PROTECTED; }
-"public" {   return _PUBLIC; }
-"return" {  return _RETURN; }
-"super" {   return _SUPER; }
-"switch" {   return _SWITCH; }
-"this" {   return _THIS; }
-"throw" {   return _THROW; }
-"to" {   return _TO; }
-"try" {   return _TRY; }
-"use" {   return _USE; }
-"var" {   return _VAR; }
-"while" {   return _WHILE; }
-"with" {   return _WITH; }  
-"each" {   return _EACH; }
-"get" {   return _GET; }
-"set" {   return _SET; }
-"namespace" {   return _NAMESPACE; }
-"dynamic" {   return _DYNAMIC; }
-"final" {   return _FINAL; }
-"native" {   return _NATIVE; }
-"override" {   return _OVERRIDE; }
-"static" {   return _STATIC; }
+"break" { eval(_BREAK);  return _BREAK; }
+"case" {  eval(_CASE); return _CASE; }
+"catch" { eval(_CATCH);  return _CATCH; } 
+"class" { eval(_CLASS);  return _CLASS; }
+"const" { eval(_CONST);  return _CONST; }
+"continue" { eval(_CONTINUE);  return _CONTINUE; }
+"default" { eval(_DEFAULT);  return _DEFAULT; }
+"do" { eval(_DO);  return _DO; }
+"else" { eval(_ELSE);  return _ELSE; } 
+"extends" { eval(_EXTENDS);  return _EXTENDS; }
+"finally" { eval(_FINALLY);  return _FINALLY; }
+"for" { eval(_FOR);  return _FOR; }
+"function" { eval(_FUNCTION);  return _FUNCTION; }
+"if" { eval(_IF);  return _IF; }
+"implements" { eval(_IMPLEMENTS);  return _IMPLEMENTS; }
+"import" { eval(_IMPORT);  return _IMPORT; }
+"interface" { eval(_INTERFACE);  return _INTERFACE; }
+"null"|"NULL" { eval(_NULL);  return _NULL; }
+"package" { eval(_PACKAGE);   return _PACKAGE; }
+"private" { eval(_PRIVATE);  return _PRIVATE; }
+"protected" { eval(_PROTECTED);  return _PROTECTED; }
+"public" { eval(_PUBLIC);  return _PUBLIC; }
+"return" { eval(_RETURN);  return _RETURN; }
+"super" { eval(_SUPER);  return _SUPER; }
+"switch" { eval(_SWITCH);  return _SWITCH; }
+"this" { eval(_THIS);  return _THIS; }
+"throw" { eval(_THROW);  return _THROW; }
+"to" { eval(_TO);  return _TO; }
+"try" { eval(_TRY);  return _TRY; }
+"use" { eval(_USE);  return _USE; }
+"var" { eval(_VAR);  return _VAR; }
+"while" { eval(_WHILE);  return _WHILE; }
+"with" { eval(_WITH);  return _WITH; }  
+"each" { eval(_EACH);  return _EACH; }
+"get" { eval(_GET);  return _GET; }
+"set" { eval(_SET);  return _SET; }
+"namespace" { eval(_NAMESPACE);  return _NAMESPACE; }
+"dynamic" { eval(_DYNAMIC);  return _DYNAMIC; }
+"final" { eval(_FINAL);  return _FINAL; }
+"native" { eval(_NATIVE);  return _NATIVE; }
+"override" { eval(_OVERRIDE);  return _OVERRIDE; }
+"static" { eval(_STATIC);  return _STATIC; }
 
 
-"internal" {   return _INTERNAL; }
-"include" {   return _INCLUDE; }
+"internal" { eval(_INTERNAL);  return _INTERNAL; }
+"include" { eval(_INCLUDE);  return _INCLUDE; }
 
-"new" {   return _NEW; }
-"delete" {   return _DELETE; }
-"typeof" {    return _TYPEOF; }
-"as"  {   return _AS; }
-"in"  {   return _IN; }
-"instanceof"  {   return _INSTANCEOF; } 
-"is"  {   return _IS; } 
+"new" { eval(_NEW);  return _NEW; }
+"delete" { eval(_DELETE);  return _DELETE; }
+"typeof" { eval(_TYPEOF);  return _TYPEOF; }
+"as"  { eval(_AS);  return _AS; }
+"in"  { eval(_IN);  return _IN; }
+"instanceof"  { eval(_INSTANCEOF);  return _INSTANCEOF; } 
+"is"  { eval(_IS);  return _IS; } 
 
-[a-zA-Z_][a-zA-Z0-9_]* {   return IDENT;}
+[a-zA-Z_][a-zA-Z0-9_]* { eval(IDENT);  return IDENT;}
 
-\. { return ACCESSDOT; }
-\, { return COMMA;}
-\[ {   return LBRACKET; }
-\] {    return RBRACKET; }
-\( {   return LPAREN;}
-\) {   return RPAREN; }
-"{" {   return LBRACE; }
-"}" {   return RBRACE; }
-";" {   return SEMICOLON; }
+\. { eval(ACCESSDOT); return ACCESSDOT; }
+\, { eval(COMMA); return COMMA;}
+\[ { eval(LBRACKET);  return LBRACKET; }
+\] { eval(RBRACKET);  return RBRACKET; }
+\( { eval(LPAREN);  return LPAREN;}
+\) { eval(RPAREN);  return RPAREN; }
+"{" { eval(LBRACE);  return LBRACE; }
+"}" { eval(RBRACE);  return RBRACE; }
+";" { eval(SEMICOLON);  return SEMICOLON; }
 
-\".+\"|\'.+\' {   return STRINGLIT; }
+\".+\"|\'.+\' { eval(STRINGLIT);  return STRINGLIT; }
 
-\" {   return QUOTES; }
+\" { eval(QUOTES);  return QUOTES; }
 
-\: {   return COLON; }
+\: { eval(COLON);  return COLON; }
 
-\= {   return ASSIGN; }
+\= { eval(ASSIGN);  return ASSIGN; }
   
-\< {   return LESSTHAN; }
-\> {   return GREATERTHAN; }
-"==" {   return EQUALSEQUALS; }
-"===" {   return STRICTEQUALS; }
-"!==" {   return STRICTNOTEQ; }
-">=" {   return GTHANEQ; }
-"<=" {   return LTHANEQ; }
-"!=" {   return NOTEQUAL; }
-\! {   return NOT; }
-"&&" {   return LOGICALAND; }
-"||" {   return LOGICALOR; }
+  \< { eval(LESSTHAN);  return LESSTHAN; }
+\> { eval(GREATERTHAN);  return GREATERTHAN; }
+"==" { eval(EQUALSEQUALS);  return EQUALSEQUALS; }
+"===" { eval(STRICTEQUALS);  return STRICTEQUALS; }
+"!==" { eval(STRICTNOTEQ);  return STRICTNOTEQ; }
+">=" { eval(GTHANEQ);  return GTHANEQ; }
+"<=" { eval(LTHANEQ);  return LTHANEQ; }
+"!=" { eval(NOTEQUAL);  return NOTEQUAL; }
+\! { eval(NOT);  return NOT; }
+"&&" { eval(LOGICALAND);  return LOGICALAND; }
+"||" { eval(LOGICALOR);  return LOGICALOR; }
 
 "//".* { }
 
-[0-9]*['.']?[0-9]* {   return NUMBERLIT; }
+[0-9]*['.']?[0-9]* { eval(NUMBERLIT);  return NUMBERLIT; }
 
-"?" {   return _TERNARY; }
+"?" { eval(_TERNARY);  return _TERNARY; }
 
-"*=" {   return MULTIPLYEQ; }
-"/=" {   return DIVIDEEQ; }
-"%=" {   return MODULOEQ; }
-"+=" {   return PLUSEQ; }
-"-=" {   return MINUSEQ; }
-"++" {   return INCREMENT; }
+"*=" { eval(MULTIPLYEQ);  return MULTIPLYEQ; }
+"/=" { eval(DIVIDEEQ);  return DIVIDEEQ; }
+"%=" { eval(MODULOEQ);  return MODULOEQ; }
+"+=" { eval(PLUSEQ);  return PLUSEQ; }
+"-=" { eval(MINUSEQ);  return MINUSEQ; }
+"++" { eval(INCREMENT);  return INCREMENT; }
 
-"+" { return MULTIPLY; } 
-"-" { return MINUS;  }
-"/" { return DIVIDE; }
-"%" { return MODULO; }
-"*" { return MULTIPLY; }
+"+" { eval(MULTIPLY); return MULTIPLY; } 
+"-" { eval(MINUS); return MINUS;  }
+"/" { eval(DIVIDE); return DIVIDE; }
+"%" { eval(MODULO); return MODULO; }
+"*" { eval(MULTIPLY); return MULTIPLY; }
 
 
 . {  }

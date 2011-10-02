@@ -1,7 +1,8 @@
 %{
 #include "tree.h"
 #include "structures.h"
-
+#include <stdlib.h>
+#include <stdio.h>
 
 // better error reporting
 #define YYERROR_VERBOSE
@@ -9,8 +10,10 @@
   extern int LINENO;
   extern int failed;
   extern char* FILENAME;
+
+  extern token* YYTOKEN;
   
-// bison requires that you supply this function
+  // bison requires that you supply this function
 void yyerror(const char *msg)
 {
   failed++;
@@ -22,132 +25,133 @@ void yyerror(const char *msg)
 
 
 %union {
-  int var;  
- }
-%token _BREAK 261 
-%token _CASE 363  
-%token _CATCH 262  
-%token _CLASS 263 
-%token _CONST 264 
-%token _CONTINUE 265 
-%token _DEFAULT 266 
-%token _DO 362  
-%token _ELSE 267  
-%token _EXTENDS 268 
-%token _FINALLY 270 
-%token _FOR 271 
-%token _FUNCTION 272 
-%token _IF 273 
-%token _IMPLEMENTS 274
-%token _IMPORT 275 
-%token _INTERFACE 276 
-%token _INTERNAL 277 
-%token _NULL 278 
-%token _PACKAGE 279 
-%token _PRIVATE 280 
-%token _PROTECTED 281 
-%token _PUBLIC 282 
-%token _RETURN 283
-%token _SUPER 284 
-%token _SWITCH 285 
-%token _THIS 286 
-%token _THROW 287
-%token _TO 288 
-%token _TRY 289 
-%token _USE 290 
-%token _VAR 291 
-%token _WHILE 292
-%token _WITH 293 
+  struct node* n;
+}
+
+%token <node*> _BREAK 261 
+%token <node*> _CASE 363  
+%token <node*> _CATCH 262  
+%token <node*> _CLASS 263 
+%token <node*>  _CONST 264 
+%token <node*>  _CONTINUE 265 
+%token <node*>  _DEFAULT 266 
+%token <node*>  _DO 362  
+%token <node*>  _ELSE 267  
+%token <node*>  _EXTENDS 268 
+%token <node*>  _FINALLY 270 
+%token <node*>  _FOR 271 
+%token <node*>  _FUNCTION 272 
+%token <node*>  _IF 273 
+%token <node*>  _IMPLEMENTS 274
+%token <node*>  _IMPORT 275 
+%token <node*>  _INTERFACE 276 
+%token <node*>  _INTERNAL 277 
+%token <node*>  _NULL 278 
+%token <node*>  _PACKAGE 279 
+%token <node*>  _PRIVATE 280 
+%token <node*>  _PROTECTED 281 
+%token <node*>  _PUBLIC 282 
+%token <node*>  _RETURN 283
+%token <node*>  _SUPER 284 
+%token <node*>  _SWITCH 285 
+%token <node*>  _THIS 286 
+%token <node*>  _THROW 287
+%token <node*>  _TO 288 
+%token <node*>  _TRY 289 
+%token <node*>  _USE 290 
+%token <node*>  _VAR 291 
+%token <node*>  _WHILE 292
+%token <node*>  _WITH 293 
   
 //SYNTACTICAL KEYWORDS
-%token _EACH 294
-%token _GET 295 
-%token _SET 296 
-%token _NAMESPACE 297
-%token _INCLUDE 298
-%token _DYNAMIC 299
-%token _FINAL 300 
-%token _NATIVE 301
-%token _OVERRIDE 302
-%token _STATIC 303  
+%token <node*>  _EACH 294
+%token <node*>  _GET 295 
+%token <node*>  _SET 296 
+%token <node*>  _NAMESPACE 297
+%token <node*>  _INCLUDE 298
+%token <node*>  _DYNAMIC 299
+%token <node*>  _FINAL 300 
+%token <node*>  _NATIVE 301
+%token <node*>  _OVERRIDE 302
+%token <node*>  _STATIC 303  
 //SYNTACTICAL ELEMENTS
 //punctuation
-%token LPAREN 304
-%token RPAREN 305 
-%token LBRACE 306
-%token RBRACE 307 
-%token LBRACKET 308
-%token RBRACKET 309
-%token SEMICOLON 310
-%token QUOTES 311
-%token COMMA 312
-%token COLON 313
+%token <node*>  LPAREN 304
+%token <node*>  RPAREN 305 
+%token <node*>  LBRACE 306
+%token <node*>  RBRACE 307 
+%token <node*>  LBRACKET 308
+%token <node*>  RBRACKET 309
+%token <node*>  SEMICOLON 310
+%token <node*>  QUOTES 311
+%token <node*>  COMMA 312
+%token <node*>  COLON 313
 //operators
-%token PLUS 314// +
-%token MINUS 315// -
-%token MULTIPLY 316// *
-%token DIVIDE 317// /
-%token MODULO 318// %
-%token LESSTHAN 319//<
-%token GREATERTHAN 320//>
-%token EQUALSEQUALS 321//==
-%token STRICTEQUALS 322//===
-%token STRICTNOTEQ 323//!==
-%token GTHANEQ 324// >=
-%token LTHANEQ 325// <=
-%token NOTEQUAL 326//!=
-%token NOT 327//!
-%token NOTEQUALEQUAL 328
-%token LOGICALAND 329// && Logical AND
-%token LOGICALOR 330//|| Logical OR
+%token <node*>  PLUS 314// +
+%token <node*>  MINUS 315// -
+%token <node*>  MULTIPLY 316// *
+%token <node*>  DIVIDE 317// /
+%token <node*>  MODULO 318// %
+%token <node*>  LESSTHAN 319//<
+%token <node*>  GREATERTHAN 320//>
+%token <node*>  EQUALSEQUALS 321//==
+%token <node*>  STRICTEQUALS 322//===
+%token <node*>  STRICTNOTEQ 323//!==
+%token <node*>  GTHANEQ 324// >=
+%token <node*>  LTHANEQ 325// <=
+%token <node*>  NOTEQUAL 326//!=
+%token <node*>  NOT 327//!
+%token <node*>  NOTEQUALEQUAL 328
+%token <node*>  LOGICALAND 329// && Logical AND
+%token <node*>  LOGICALOR 330//|| Logical OR
   
 //BOOLEANS
-%token _TRUE 334 
-%token _FALSE 335
+%token <node*>  _TRUE 334 
+%token <node*>  _FALSE 335
   
 //OPERATORS
 //initialization
-%token ARRAY 336//[] Initializes an array
-%token OBJECT 337//{x:y} Initializes an object
-%token FUNCTION 338//f(x) Calls a function
-%token ACCESSDOT 339//x.y 
- //%token ACCESSBRACKET 340//x[y] Accesses a property
-%token INCREMENT 341//++
-%token DECREMENT 342//--	
+%token <node*>  ARRAY 336//[] Initializes an array
+%token <node*>  OBJECT 337//{x:y} Initializes an object
+%token <node*>  FUNCTION 338//f(x) Calls a function
+%token <node*>  ACCESSDOT 339//x.y 
+ //%token <node*>  ACCESSBRACKET 340//x[y] Accesses a property
+%token <node*>  INCREMENT 341//++
+%token <node*>  DECREMENT 342//--	
   
 //OBJECT COMMANDS
-%token _NEW 343//new Calls a constructor
-%token _DELETE 344//delete Deletes a property
-%token _TYPEOF 345//typeof Returns type information
-%token _AS 347//as Checks data type
-%token _IN 348//in Checks for object properties
-%token _INSTANCEOF 349//instanceof Checks prototype chain
-%token _IS 350//is Checks data type
+%token <node*>  _NEW 343//new Calls a constructor
+%token <node*>  _DELETE 344//delete Deletes a property
+%token <node*>  _TYPEOF 345//typeof Returns type information
+%token <node*>  _AS 347//as Checks data type
+%token <node*>  _IN 348//in Checks for object properties
+%token <node*>  _INSTANCEOF 349//instanceof Checks prototype chain
+%token <node*>  _IS 350//is Checks data type
   
 //what is this? punctuation?
-%token _TERNARY 351// ?:
+%token <node*>  _TERNARY 351// ?:
   
 //ASSIGNMENT
-%token ASSIGN 352//=
-%token MULTIPLYEQ 353// *= Multiplication assignment
-%token DIVIDEEQ 354// /= Division assignment
-%token MODULOEQ 355// %= Modulo assignment
-%token PLUSEQ 356// += Addition assignment
-%token MINUSEQ 357// -= Subtraction assignment  
+%token <node*>  ASSIGN 352//=
+%token <node*>  MULTIPLYEQ 353// *= Multiplication assignment
+%token <node*>  DIVIDEEQ 354// /= Division assignment
+%token <node*>  MODULOEQ 355// %= Modulo assignment
+%token <node*>  PLUSEQ 356// += Addition assignment
+%token <node*>  MINUSEQ 357// -= Subtraction assignment  
   
 //TYPES not already covered
-%token _UINT 359
-%token _INT 360
-%token _BOOLEAN 361
-%token _STRING 331
-%token _NUMBER 332
- //%token _VOID 346//returns undefined value
-%token STRINGLIT
-%token NUMBERLIT
+%token <node*>  _UINT 359
+%token <node*>  _INT 360
+%token <node*>  _BOOLEAN 361
+%token <node*>  _STRING 331
+%token <node*>  _NUMBER 332
+ //%token <node*>  _VOID 346//returns undefined value
+%token <node*>  STRINGLIT
+%token <node*>  NUMBERLIT
   
 //misc 
-%token IDENT 358
-%token OTHER 400
+%token <node*>  IDENT 358
+%token <node*>  OTHER 400
 
 
 %left PLUS MINUX MULTIPLY DIVIDE
@@ -519,6 +523,7 @@ breakStatement:
    _BREAK SEMICOLON
    | _BREAK value SEMICOLON
    ;
+
 /*switchStatement:
 	_SWITCH LPAREN expression RPAREN caseBlock
 	;*/
