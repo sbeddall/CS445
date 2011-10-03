@@ -29,7 +29,7 @@ node* makeNode(char* text, token* tok, int nchildren, ...){
 void traverseTree(node* head, int level){
   if(head != NULL){
     int n = head->nchildren;
-    if( level > 0 && head->text == NULL) level--;
+    // if( level > 0 && head->text == NULL) level--;
     
     int j = 0;
     for(j; j < level; j++){
