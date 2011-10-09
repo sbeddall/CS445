@@ -20,6 +20,11 @@ struct field {
   struct ctype *elemtype;
 }
   
-struct symbol_table { 
-}
+typedef struct symbol_table { 
+  struct symbol_table* parent;
+  int nSymbols;
+  field fields[50];
+} symbol_table;
+
+struct 
 #endif

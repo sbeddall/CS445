@@ -14,6 +14,6 @@ typedef struct node {
 
 node* newNode(char* text, token* tok, int nchildren, ...);
 void traverseTree(node* head, int level);
-
+void verboseTraverseTree(node* head, int level);
 
 #endif

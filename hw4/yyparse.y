@@ -222,35 +222,35 @@ sourceElements { $$ = $1; traverseTree($1, 0); } //
    ;
 
 sourceElements:
-   sourceElement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   sourceElement {$$ = $1}
    | sourceElement sourceElements {$$ = makeNode(NULL, YYDup(), 2, $1, $2); }    
    ;
 
 sourceElement:
-   statement {$$ = makeNode(NULL, YYDup(), 1, $1);}    
+   statement {$$ = $1}    
    ;
 
 // statements
 statement:
-   block {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | variableDeclaration {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | importStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | functionStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | forStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | ifStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | whileStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | continueStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | breakStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | withStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   block {$$ = $1}
+   | variableDeclaration {$$ = $1}
+   | importStatement {$$ = $1}
+   | functionStatement {$$ = $1}
+   | forStatement {$$ = $1}
+   | ifStatement {$$ = $1}
+   | whileStatement {$$ = $1}
+   | continueStatement {$$ = $1}
+   | breakStatement {$$ = $1}
+   | withStatement {$$ = $1}
      //| switchStatement //is this really the last one remaining?
-   | throwStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | tryStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | iterationStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | superStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | classStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | packageStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | returnStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | assignStatement {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | throwStatement {$$ = $1}
+   | tryStatement {$$ = $1}
+   | iterationStatement {$$ = $1}
+   | superStatement {$$ = $1}
+   | classStatement {$$ = $1}
+   | packageStatement {$$ = $1}
+   | returnStatement {$$ = $1}
+   | assignStatement {$$ = $1}
    ;
 
 importStatement:
@@ -265,7 +265,7 @@ moduleName:
 block:
    LBRACE RBRACE {$$ = makeNode(NULL, YYDup(), 2, $1, $2);}
    | LBRACE sourceElements RBRACE {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3);}
-   | objectInitializer {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | objectInitializer {$$ = $1}
    ;
 
 variableDeclaration //1 
@@ -274,7 +274,7 @@ variableDeclaration //1
    ; 
 
 variableDeclarationList:
-   variableBinding {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   variableBinding {$$ = $1}
    | variableDeclarationList COMMA variableBinding {$$ = makeNode(NULL, YYDup(), 3, $1, makeNode(",", YYDup(), 0), $3);} 
    ;
     
@@ -306,72 +306,35 @@ assignStatement:
    variableName assign value SEMICOLON {$$ = makeNode(NULL, YYDup(), 4, $1, $2, $3, $4);}
    ;
 
-
-/*
-variableDeclaration
-    : modifier _VAR variableDeclarationList SEMICOLON
-    | _VAR variableDeclarationList SEMICOLON
-    | modifier _VAR variableConstruct assign value SEMICOLON
-    | _VAR variableConstruct assign value SEMICOLON
-    | modifier _CONST variableDeclarationList SEMICOLON
-    | _CONST variableDeclarationList SEMICOLON
-    | modifier _CONST variableConstruct assign value as SEMICOLON
-    | _CONST variableConstruct assign value as SEMICOLON
-    ;
-
-
-//Error with this. this will allow a declaration list with leading private static etc
-variableStatement:
-    modifier _VAR variableDeclarationList SEMICOLON
-    | modifier _VAR variableConstruct assign value SEMICOLON
-    | _VAR variableDeclarationList SEMICOLON
-    | _VAR variableConstruct assign value as SEMICOLON
-    | modifier _CONST variableDeclarationList SEMICOLON
-    | modifier _CONST  variableConstruct assign value as SEMICOLON
-    | _CONST variableDeclarationList SEMICOLON
-    | _CONST variableConstruct assign value as SEMICOLON 
-    | variableConstruct assign value SEMICOLON   
-    ;
-*/
-
-/*variableDeclarationList:
-   variableConstruct 
-   | variableConstruct COMMA variableDeclarationList
-   ;*/
-
-/*variableConstruct:
-   value COLON value 
-   | value 
-   ;*/
 valueList:
-   value {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   value {$$ = $1}
    | valueList COMMA value {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3);}
    ;
 
 value:
-   newObject {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   newObject {$$ = $1}
    | STRINGLIT {$$ = $1}
-   | objectInitializer {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | objectInitializer {$$ = $1}
    | _NULL {$$ = $1}
    | _THIS {$$ = $1}
    | _TRUE {$$ = $1}
    | _FALSE {$$ = $1}
-   | expression {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | expr {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | expression {$$ = $1}
+   | expr {$$ = $1}
    ;
 
 mathValue:
    NUMBERLIT {$$ = $1}
-   | arrayAccessor {$$ = makeNode(NULL, YYDup(), 1, $1);} 
-   | variableName {$$ = makeNode(NULL, YYDup(), 1, $1);} 
-   | functionCall {$$ = makeNode(NULL, YYDup(), 1, $1);} 
-   | ternaryExpression {$$ = makeNode(NULL, YYDup(), 1, $1);} 
+   | arrayAccessor {$$ = $1} 
+   | variableName {$$ = $1} 
+   | functionCall {$$ = $1} 
+   | ternaryExpression {$$ = $1} 
    | MINUS mathValue {$$ = makeNode(NULL, YYDup(), 2, $1, $2);} 
    | PLUS mathValue {$$ = makeNode(NULL, YYDup(), 2, $1, $2);} 
    ;
 
 expr:
-   mathValue {$$ = makeNode(NULL, YYDup(), 1, $1); }
+   mathValue {$$ = $1 }
    | expr PLUS expr {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3); }
    | expr MINUS expr {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3); } 
    | expr MULTIPLY expr {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3); }
@@ -392,7 +355,7 @@ as:
 
 functionStatement:
    functionCall SEMICOLON {$$ = makeNode(NULL, YYDup(), 2, $1, $2);}
-   | functionDeclaration {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | functionDeclaration {$$ = $1}
    ;
 
 functionDeclaration:
@@ -449,16 +412,16 @@ classStatement:
 
 modifier:
    modifierPrefix modifierSuffix  {$$ = makeNode(NULL, YYDup(), 2, $1, $2);}
-   | modifierPrefix {$$ = makeNode(NULL, YYDup(), 1, $1);}
-   | modifierSuffix {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | modifierPrefix {$$ = $1}
+   | modifierSuffix {$$ = $1}
    ;
 
 modifierSuffix:
-   suffixKeyword {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   suffixKeyword {$$ = $1}
    | suffixKeyword modifierSuffix {$$ = makeNode(NULL, YYDup(), 2, $1, $2);}
 
 modifierPrefix:
-   prefixKeyword {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   prefixKeyword {$$ = $1}
    | prefixKeyword modifierPrefix {$$ = makeNode(NULL, YYDup(), 2, $1, $2);}
    ;
 
@@ -512,12 +475,12 @@ forStatement:
 
 optionalForConditional:
   /* empty */ {$$ = NULL}
-  | mathValue {$$ = makeNode(NULL, YYDup(), 1, $1);}
+  | mathValue {$$ = $1}
   ;
 
 optionalForIncrement:
   /* empty */ {$$ = NULL}
-  | mathValue {$$ = makeNode(NULL, YYDup(), 1, $1);}
+  | mathValue {$$ = $1}
   ;
 
 arrayAccessor:
@@ -527,7 +490,7 @@ arrayAccessor:
 
 accessValue:
    NUMBERLIT {$$ = $1}
-   | variableName {$$ = makeNode(NULL, YYDup(), 1, $1);}
+   | variableName {$$ = $1}
    ;
 
 logicalOperator: 
