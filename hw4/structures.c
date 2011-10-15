@@ -134,6 +134,21 @@ token* YYDup(){
   return new;
 }
 
+//string comparison
+int compareStrings(char* first, char* second){
+  //step through to compare until we hit the end of the first string
+  char* iterator = first;
+  int i = 0;
+  while(*iterator){
+    if(*iterator != second[i]) return 0;  
+    iterator++;
+    i++;
+  }
+  if(second[i] != '\0') return 0; 
+  
+  
+  return 1;
+}
 
 
 //populating YYToken

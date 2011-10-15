@@ -3,6 +3,7 @@
 #include "structures.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "symboltable.h"
 
 // better error reporting
 #define YYERROR_VERBOSE
@@ -10,8 +11,11 @@
   extern int LINENO;
   extern int failed;
   extern char* FILENAME;
-
+  
   extern token* YYTOKEN;
+  
+  extern symbol_table* global_table;
+
   
   // bison requires that you supply this function
 void yyerror(const char *msg)
@@ -218,7 +222,7 @@ void yyerror(const char *msg)
 
  //start of grammar
 program:  
-sourceElements { $$ = $1; traverseTree($1, 0); } //
+sourceElements { $$ = makeNode(NULL, global_table, YYDup(), 1, $1); traverseTree($1, NULL,0); } //
    ;
 
 sourceElements:

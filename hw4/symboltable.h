@@ -1,7 +1,8 @@
 #ifndef SYMBOL_TABLE
 #define SYMBOL_TABLE
-struct c_type {
-  int base_type;    /* 1 = int, 2=float, ... */
+
+/*struct c_type {
+  int base_type;    // 1 = int, 2=float, ... 
   union {
     struct array {
       int size;
@@ -14,11 +15,13 @@ struct c_type {
     } s;
   } u;
 }
-  
-struct field {
+*/ 
+
+typedef struct field {
   char *name;
-  struct ctype *elemtype;
-}
+  int type;
+  //struct ctype *elemtype;
+} field;
   
 typedef struct symbol_table { 
   struct symbol_table* parent;
@@ -26,5 +29,8 @@ typedef struct symbol_table {
   field fields[50];
 } symbol_table;
 
-struct 
+symbol_table* makeTable(symbol_table* parent);
+int findIdent(symbol_table* table);
+
+
 #endif

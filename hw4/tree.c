@@ -26,8 +26,9 @@ node* makeNode(char* text, token* tok, int nchildren, ...){
   return new;
 }
 
-void traverseTree(node* head, int level){
+void traverseTree(node* head, node* parent_node, int level){
   if(head != NULL){
+    if(head->parent != NULL) head->parent = parent_node->parent; 
     int n = head->nchildren;
     // if( level > 0 && head->text == NULL) level--;
     

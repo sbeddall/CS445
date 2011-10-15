@@ -2,17 +2,20 @@
 #include <stdlib.h>
 #include "structures.h"
 #include <string.h>
+#include "symboltable.h"
 
 int LINENO;
 char* FILENAME;
 token* YYTOKEN;
 extern FILE* yyin;
 int failed;
+symbol_table* global_table;
 
 main(int argc, char* argv[]){
   failed = 0;
   LINENO = 1;
   YYTOKEN = (token*)malloc(sizeof(token));
+  global_table = makeTable(NULL);
   
   //  token_item* head = (token_item*)malloc(sizeof(token_item));
   //head->t = 0;
