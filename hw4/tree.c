@@ -29,8 +29,8 @@ node* makeNode(char* text, symbol_table* parent, token* tok, int nchildren, ...)
 }
 */
 
-node* makeNode(char* text, symbol_table* parent, token* tok, int nchildren, ...){
-
+node* makeNode(char* text, token* tok, int nchildren, ...){
+  
   node* new = (node*) malloc(sizeof( node ));
 
   if(text != NULL) new->text = strdup(text);

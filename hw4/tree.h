@@ -14,8 +14,8 @@ typedef struct node {
 } node;
 
 //  symbol_table* parent;
-node* makeNode(char* text,symbol_table* parent, token* tok, int nchildren, ...);
-//node* makeNode(char* text, token* tok, int nchildren, ...);
+//node* makeNode(char* text,symbol_table* parent, token* tok, int nchildren, ...);
+node* makeNode(char* text, token* tok, int nchildren, ...);
 void traverseTree(node* head, node* parent_node, int level);
 void verboseTraverseTree(node* head, int level);
 
