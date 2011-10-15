@@ -10,12 +10,13 @@ typedef struct node {
   int nchildren; 
   char* text;
   token* tok;
-  symbol_table* parent;
   struct node** children;
 } node;
 
+//  symbol_table* parent;
 node* makeNode(char* text,symbol_table* parent, token* tok, int nchildren, ...);
-void traverseTree(node* head, node* parent, int level);
+//node* makeNode(char* text, token* tok, int nchildren, ...);
+void traverseTree(node* head, node* parent_node, int level);
 void verboseTraverseTree(node* head, int level);
 
 #endif

@@ -1,14 +1,43 @@
 #include "tree.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "symboltable.h"
 
-node* makeNode(char* text, token* tok, int nchildren, ...){
+/*
+node* makeNode(char* text, symbol_table* parent, token* tok, int nchildren, ...){
   node* new = (node*) malloc(sizeof( node ));
-  
   if(text != NULL) new->text = strdup(text);
   new->nchildren = nchildren;
   new->tok = tok;
+  // new->parent = parent;
+    
+  new->children = 0;
+  if(nchildren > 0){
+    new->children = (node**)malloc(sizeof(node*) * nchildren);
+    
+    int i;
+    va_list va;
+    
+    va_start(va,nchildren);
+    for(i = 0; i<nchildren; i++){
+      new->children[i] = va_arg(va, node*);
+    }
+    va_end(va);
+  }
+  
+  return new;
+}
+*/
 
+node* makeNode(char* text, symbol_table* parent, token* tok, int nchildren, ...){
+
+  node* new = (node*) malloc(sizeof( node ));
+
+  if(text != NULL) new->text = strdup(text);
+  new->nchildren = nchildren;
+  new->tok = tok;
+  // new->parent = parent;
+    
   new->children = 0;
   if(nchildren > 0){
     new->children = (node**)malloc(sizeof(node*) * nchildren);
@@ -28,7 +57,7 @@ node* makeNode(char* text, token* tok, int nchildren, ...){
 
 void traverseTree(node* head, node* parent_node, int level){
   if(head != NULL){
-    if(head->parent != NULL) head->parent = parent_node->parent; 
+    //if(head->parent != NULL) head->parent = parent_node->parent; 
     int n = head->nchildren;
     // if( level > 0 && head->text == NULL) level--;
     
@@ -64,7 +93,7 @@ void traverseTree(node* head, node* parent_node, int level){
       }
       else{
 	//printf("Child Memory Location %p\n", head->children[i]);
-	traverseTree(head->children[i], level++);
+	traverseTree(head->children[i], head, level++);
       }
     }
     
