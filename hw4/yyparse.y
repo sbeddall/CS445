@@ -274,7 +274,7 @@ block:
 
 variableDeclaration //1 
    : variableKind variableDeclarationList SEMICOLON {$$ = makeNode(NULL, YYDup(), 3, $1, $2, $3);}
-   | modifier variableKind variableDeclarationList SEMICOLON {$$ = makeNode(yytext, YYDup(), 4, $1, $2, $3, $4);}
+   | modifier variableKind variableDeclarationList SEMICOLON {$$ = makeNode(NULL, YYDup(), 4, $1, $2, $3, $4);}
    ; 
 
 variableDeclarationList:
