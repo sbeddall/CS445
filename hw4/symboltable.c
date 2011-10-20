@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "structures.h"
+#include <string.h>
 
 symbol_table* makeTable(symbol_table* parent){
   symbol_table* new = (symbol_table*)malloc(sizeof(symbol_table));
@@ -33,9 +34,12 @@ int findIdent(symbol_table* table, char* ident){
   return 0;
 }
 
-int addSymbol(symbol_table* table, char* ident, int type){
+int addSymbol(symbol_table* table, char* ident, int type){  
+  field* lol = (field*)malloc(sizeof(field));
   
+  lol->name = strdup(ident);
+  lol->type = type;
   
+  table->fields[table->nSymbols-1] = *lol; 
 }
-
 

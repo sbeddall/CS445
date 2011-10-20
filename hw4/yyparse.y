@@ -268,7 +268,7 @@ Modulename:
 */
 block:
    LBRACE RBRACE {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);}
-   | LBRACE sourceElements RBRACE {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+| LBRACE sourceElements RBRACE {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 3, $1, $2, $3);}
    | objectInitializer {$$ = $1}
    ;
 
@@ -363,8 +363,8 @@ functionStatement:
    ;
 
 functionDeclaration:
-   _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(NULL, NULL, YYDup(), 4, $1, $2, $3, $4); }
-   | modifier _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(NULL, NULL, YYDup(), 5, $1, $2, $3, $4, $5);}    
+   _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 4, $1, $2, $3, $4); }
+   | modifier _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 5, $1, $2, $3, $4, $5);}    
    ;
 
 getterSetter:
@@ -408,10 +408,10 @@ returnStatement:
    ;
 
 classStatement:
-   _CLASS IDENT block {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
-   | modifier _CLASS IDENT block {$$ = makeNode(NULL, NULL, YYDup(), 4, $1, $2, $3, $4);}
-   | _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(NULL, NULL, YYDup(), 5, $1, $2, $3, $4, $5);}
-   | modifier _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(NULL, NULL, YYDup(), 6, $1, $2, $3, $4, $5, $6);}
+   _CLASS IDENT block {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 3, $1, $2, $3);}
+   | modifier _CLASS IDENT block {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 4, $1, $2, $3, $4);}
+   | _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 5, $1, $2, $3, $4, $5);}
+   | modifier _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 6, $1, $2, $3, $4, $5, $6);}
    ;
 
 modifier:

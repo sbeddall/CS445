@@ -101,6 +101,8 @@ void traverseTree(node* head, node* parent_node, int level){
 }
 
 
+
+
 void verboseTraverseTree(node* head, int level){
   if(head != NULL){
     int i;
