@@ -222,12 +222,12 @@ void yyerror(const char *msg)
 
  //start of grammar
 program:  
-sourceElements { $$ = makeNode(NULL, NULL, YYDup(), 1, $1); traverseTree($1, NULL, 0); } //
+   sourceElements { $$ = makeNode(500, global_table, NULL, 1, $1); printf("Global Symbol Table: %p\n", &global_table); yysemantics($1); } //
    ;
 
 sourceElements:
    sourceElement {$$ = $1}
-   | sourceElement sourceElements {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2); }    
+   | sourceElement sourceElements {$$ = makeNode(501, NULL, NULL, 2, $1, $2); }    
    ;
 
 sourceElement:
@@ -258,7 +258,7 @@ statement:
    ;
 
 importStatement:
-   _IMPORT variableName SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   _IMPORT variableName SEMICOLON {$$ = makeNode(502, NULL, NULL, 3, $1, $2, $3);}
    ;
 /*
 Modulename:
@@ -267,33 +267,33 @@ Modulename:
     ;
 */
 block:
-   LBRACE RBRACE {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);}
-| LBRACE sourceElements RBRACE {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 3, $1, $2, $3);}
+   LBRACE RBRACE {$$ = makeNode(503, NULL, NULL, 2, $1, $2);}
+   | LBRACE sourceElements RBRACE {$$ = makeNode(503, makeTable(NULL), NULL, 3, $1, $2, $3);}
    | objectInitializer {$$ = $1}
    ;
 
 variableDeclaration //1 
-   : variableKind variableDeclarationList SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
-   | modifier variableKind variableDeclarationList SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 4, $1, $2, $3, $4);}
+   : variableKind variableDeclarationList SEMICOLON {$$ = makeNode(504, NULL, NULL, 3, $1, $2, $3);}
+   | modifier variableKind variableDeclarationList SEMICOLON {$$ = makeNode(504, NULL, NULL, 4, $1, $2, $3, $4);}
    ; 
 
 variableDeclarationList:
    variableBinding {$$ = $1}
-   | variableDeclarationList COMMA variableBinding {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);} 
+   | variableDeclarationList COMMA variableBinding {$$ = makeNode(505, NULL, NULL, 3, $1, $2, $3);} 
    ;
     
 variableBinding: 
-   variableName optionalVariableType variableInitialization {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   variableName optionalVariableType variableInitialization {$$ = makeNode(506, NULL, NULL, 3, $1, $2, $3);}
    ;
 
 variableName:
    IDENT {$$ = $1 }
-   | IDENT ACCESSDOT variableName {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   | IDENT ACCESSDOT variableName {$$ = makeNode(507, NULL, NULL, 3, $1, $2, $3);}
    ;
 
 optionalVariableType
    : /* empty */ {$$ = NULL;}
-   | COLON variableName {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2); }
+   | COLON variableName {$$ = makeNode(508, NULL, NULL, 2, $1, $2); }
    ;
 
 variableKind
@@ -303,16 +303,16 @@ variableKind
 
 variableInitialization
    : /* empty */ {$$ = NULL;}
-   | ASSIGN value {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);}
+   | ASSIGN value {$$ = makeNode(509, NULL, NULL, 2, $1, $2);}
    ;
 
 assignStatement:
-   variableName assign value SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 4, $1, $2, $3, $4);}
+   variableName assign value SEMICOLON {$$ = makeNode(510, NULL, NULL, 4, $1, $2, $3, $4);}
    ;
 
 valueList:
    value {$$ = $1}
-   | valueList COMMA value {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   | valueList COMMA value {$$ = makeNode(511, NULL, NULL, 3, $1, $2, $3);}
    ;
 
 value:
@@ -333,38 +333,38 @@ mathValue:
    | variableName {$$ = $1} 
    | functionCall {$$ = $1} 
    | ternaryExpression {$$ = $1} 
-   | MINUS mathValue {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);} 
-   | PLUS mathValue {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);} 
+   | MINUS mathValue {$$ = makeNode(512, NULL, NULL, 2, $1, $2);} 
+   | PLUS mathValue {$$ = makeNode(512, NULL, NULL, 2, $1, $2);} 
    ;
 
 expr:
    mathValue {$$ = $1 }
-   | expr PLUS expr {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3); }
-   | expr MINUS expr {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3); } 
-   | expr MULTIPLY expr {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3); }
-   | expr DIVIDE expr {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3); }
-   | expr INCREMENT {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2); }
-   | expr DECREMENT {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2); }
+   | expr PLUS expr {$$ = makeNode(513, NULL, NULL, 3, $1, $2, $3); }
+   | expr MINUS expr {$$ = makeNode(513, NULL, NULL, 3, $1, $2, $3); } 
+   | expr MULTIPLY expr {$$ = makeNode(513, NULL, NULL, 3, $1, $2, $3); }
+   | expr DIVIDE expr {$$ = makeNode(513, NULL, NULL, 3, $1, $2, $3); }
+   | expr INCREMENT {$$ = makeNode(513, NULL, NULL, 2, $1, $2); }
+   | expr DECREMENT {$$ = makeNode(513, NULL, NULL, 2, $1, $2); }
    ;
 
 newObject:
-   _NEW IDENT LPAREN RPAREN optionalVariableType as {$$ = makeNode(NULL, NULL, YYDup(), 6, $1, $2, $3, $4, $5, $6); }
-   | _NEW IDENT LPAREN valueList RPAREN optionalVariableType as  {$$ = makeNode(NULL, NULL, YYDup(), 7, $1, $2, $3, $4, $5, $6, $7); }
+   _NEW IDENT LPAREN RPAREN optionalVariableType as {$$ = makeNode(514, NULL, NULL, 6, $1, $2, $3, $4, $5, $6); }
+   | _NEW IDENT LPAREN valueList RPAREN optionalVariableType as  {$$ = makeNode(514, NULL, NULL, 7, $1, $2, $3, $4, $5, $6, $7); }
    ;
 
 as:
-   _AS variableName {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2)};
+   _AS variableName {$$ = makeNode(515, NULL, NULL, 2, $1, $2)};
    | /*empty*/ {$$ = NULL}
    ;
 
 functionStatement:
-   functionCall SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);}
+   functionCall SEMICOLON {$$ = makeNode(516, NULL, NULL, 2, $1, $2);}
    | functionDeclaration {$$ = $1}
    ;
 
 functionDeclaration:
-   _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 4, $1, $2, $3, $4); }
-   | modifier _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 5, $1, $2, $3, $4, $5);}    
+   _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(517, makeTable(NULL), NULL, 4, $1, $2, $3, $4); }
+   | modifier _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(517, makeTable(NULL), NULL, 5, $1, $2, $3, $4, $5);}    
    ;
 
 getterSetter:
@@ -374,59 +374,59 @@ getterSetter:
    ;
 
 functionCall:
-   variableName LPAREN valueList RPAREN  {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
-   | variableName LPAREN RPAREN  {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   variableName LPAREN valueList RPAREN  {$$ = makeNode(518, NULL, NULL, 3, $1, $2, $3);}
+   | variableName LPAREN RPAREN  {$$ = makeNode(518, NULL, NULL, 3, $1, $2, $3);}
    ;
 
 functionHeader:
-   LPAREN variableDeclarationList RPAREN block {$$ = makeNode(NULL, NULL, YYDup(), 4, $1, $2, $3, $4);} 
-   | LPAREN variableDeclarationList RPAREN COLON variableName block {$$ = makeNode(NULL, NULL, YYDup(), 6, $1, $2, $3, $4, $5, $6);}
-   | LPAREN RPAREN block {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
-   | LPAREN RPAREN COLON variableName block {$$ = makeNode(NULL, NULL, YYDup(), 5, $1, $2, $3, $4, $5);}
+   LPAREN variableDeclarationList RPAREN block {$$ = makeNode(519, NULL, NULL, 4, $1, $2, $3, $4);} 
+   | LPAREN variableDeclarationList RPAREN COLON variableName block {$$ = makeNode(520, NULL, NULL, 6, $1, $2, $3, $4, $5, $6);}
+   | LPAREN RPAREN block {$$ = makeNode(521, NULL, NULL, 3, $1, $2, $3);}
+   | LPAREN RPAREN COLON variableName block {$$ = makeNode(522, NULL, NULL, 5, $1, $2, $3, $4, $5);}
    ;
 
 packageStatement:
-   _PACKAGE variableName block {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   _PACKAGE variableName block {$$ = makeNode(523, NULL, NULL, 3, $1, $2, $3);}
    ;
    
 ternaryExpression:
-   expression _TERNARY value COLON value {$$ = makeNode(NULL, NULL, YYDup(), 5, $1, $2, $3, $4, $5);}
+   expression _TERNARY value COLON value {$$ = makeNode(523, NULL, NULL, 5, $1, $2, $3, $4, $5);}
    ;
 
 objectInitializer:
-   LBRACE variableDeclarationList RBRACE optionalVariableType {$$ = makeNode(NULL, NULL, YYDup(), 4, $1, $2, $3, $4);} 
+   LBRACE variableDeclarationList RBRACE optionalVariableType {$$ = makeNode(524, NULL, NULL, 4, $1, $2, $3, $4);} 
    ;
 
 superStatement:
-   _SUPER LPAREN value RPAREN SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 5, $1, $2, $3, $4, $5);}
+   _SUPER LPAREN value RPAREN SEMICOLON {$$ = makeNode(525, NULL, NULL, 5, $1, $2, $3, $4, $5);}
    ;
 
 returnStatement:
-   _RETURN value SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
-   | _RETURN functionCall SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
-   | _RETURN LBRACKET RBRACKET SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 4, $1, $2, $3, $4);}
+   _RETURN value SEMICOLON {$$ = makeNode(526, NULL, NULL, 3, $1, $2, $3);}
+   | _RETURN functionCall SEMICOLON {$$ = makeNode(526, NULL, NULL, 3, $1, $2, $3);}
+   | _RETURN LBRACKET RBRACKET SEMICOLON {$$ = makeNode(526, NULL, NULL, 4, $1, $2, $3, $4);}
    ;
 
 classStatement:
-   _CLASS IDENT block {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 3, $1, $2, $3);}
-   | modifier _CLASS IDENT block {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 4, $1, $2, $3, $4);}
-   | _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 5, $1, $2, $3, $4, $5);}
-   | modifier _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(NULL, makeTable(NULL), YYDup(), 6, $1, $2, $3, $4, $5, $6);}
+   _CLASS IDENT block {$$ = makeNode(527, makeTable(NULL), NULL, 3, $1, $2, $3);}
+   | modifier _CLASS IDENT block {$$ = makeNode(527, makeTable(NULL), NULL, 4, $1, $2, $3, $4);}
+   | _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(527, makeTable(NULL), NULL, 5, $1, $2, $3, $4, $5);}
+   | modifier _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(527, makeTable(NULL), NULL, 6, $1, $2, $3, $4, $5, $6);}
    ;
 
 modifier:
-   modifierPrefix modifierSuffix  {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);}
+   modifierPrefix modifierSuffix  {$$ = makeNode(528, NULL, NULL, 2, $1, $2);}
    | modifierPrefix {$$ = $1}
    | modifierSuffix {$$ = $1}
    ;
 
 modifierSuffix:
    suffixKeyword {$$ = $1}
-   | suffixKeyword modifierSuffix {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);}
+   | suffixKeyword modifierSuffix {$$ = makeNode(529, NULL, NULL, 2, $1, $2);}
 
 modifierPrefix:
    prefixKeyword {$$ = $1}
-   | prefixKeyword modifierPrefix {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);}
+   | prefixKeyword modifierPrefix {$$ = makeNode(530, NULL, NULL, 2, $1, $2);}
    ;
 
 prefixKeyword:
@@ -454,27 +454,27 @@ assign:
    ;
 
 ifStatement:
-   _IF expression statement {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
-   | _IF expression statement elseStatement {$$ = makeNode(NULL, NULL, YYDup(), 4, $1, $2, $3, $4);}
+   _IF expression statement {$$ = makeNode(531, NULL, NULL, 3, $1, $2, $3);}
+   | _IF expression statement elseStatement {$$ = makeNode(531, NULL, NULL, 4, $1, $2, $3, $4);}
    ;
 
 elseStatement:
-   _ELSE statement {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);}
+   _ELSE statement {$$ = makeNode(532, NULL, NULL, 2, $1, $2);}
    ;
 
 expression:
-   LPAREN value logicalOperator expression RPAREN {$$ = makeNode(NULL, NULL, YYDup(), 5, $1, $2, $3, $4, $5);}
-   | LPAREN value RPAREN {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   LPAREN value logicalOperator expression RPAREN {$$ = makeNode(533, NULL, NULL, 5, $1, $2, $3, $4, $5);}
+   | LPAREN value RPAREN {$$ = makeNode(533, NULL, NULL, 3, $1, $2, $3);}
    ;
 
 whileStatement:
-   _WHILE value block {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   _WHILE value block {$$ = makeNode(534, NULL, NULL, 3, $1, $2, $3);}
    ;
 
 forStatement:
-   _FOR LPAREN variableDeclaration SEMICOLON optionalForConditional SEMICOLON optionalForIncrement SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 8, $1, $2, $3, $4, $5,$6, $7, $8);}
-   | _FOR LPAREN _VAR variableName optionalVariableType _IN value RPAREN {$$ = makeNode(NULL, NULL, YYDup(), 8, $1, $2, $3, $4, $5,$6, $7, $8);}
-   | _FOR _EACH LPAREN _VAR variableName optionalVariableType _IN value RPAREN {$$ = makeNode(NULL, NULL, YYDup(), 9, $1, $2, $3, $4, $5,$6, $7, $8, $9);}
+   _FOR LPAREN variableDeclaration SEMICOLON optionalForConditional SEMICOLON optionalForIncrement SEMICOLON {$$ = makeNode(535, NULL, NULL, 8, $1, $2, $3, $4, $5,$6, $7, $8);}
+   | _FOR LPAREN _VAR variableName optionalVariableType _IN value RPAREN {$$ = makeNode(535, NULL, NULL, 8, $1, $2, $3, $4, $5,$6, $7, $8);}
+   | _FOR _EACH LPAREN _VAR variableName optionalVariableType _IN value RPAREN {$$ = makeNode(535, NULL, NULL, 9, $1, $2, $3, $4, $5,$6, $7, $8, $9);}
    ;
 
 optionalForConditional:
@@ -488,8 +488,8 @@ optionalForIncrement:
   ;
 
 arrayAccessor:
-   variableName LBRACKET accessValue RBRACKET {$$ = makeNode(NULL, NULL, YYDup(), 4, $1, $2, $3, $4);}
-   | variableName LBRACKET RBRACKET {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   variableName LBRACKET accessValue RBRACKET {$$ = makeNode(536, NULL, NULL, 4, $1, $2, $3, $4);}
+   | variableName LBRACKET RBRACKET {$$ = makeNode(536, NULL, NULL, 3, $1, $2, $3);}
    ;
 
 accessValue:
@@ -513,40 +513,40 @@ logicalOperator:
    ;
 
 iterationStatement:
-   variableName INCREMENT SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
-   | variableName DECREMENT SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   variableName INCREMENT SEMICOLON {$$ = makeNode(537, NULL, NULL, 3, $1, $2, $3);}
+   | variableName DECREMENT SEMICOLON {$$ = makeNode(537, NULL, NULL, 3, $1, $2, $3);}
    ;
 
 throwStatement:
-   _THROW value SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   _THROW value SEMICOLON {$$ = makeNode(538, NULL, NULL, 3, $1, $2, $3);}
    ;
 
 tryStatement:
-   _TRY statement catch {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
-   | _TRY statement finally {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
-   | _TRY statement catch finally {$$ = makeNode(NULL, NULL, YYDup(), 4, $1, $2, $3, $4);}
+   _TRY statement catch {$$ = makeNode(539, NULL, NULL, 3, $1, $2, $3);}
+   | _TRY statement finally {$$ = makeNode(539, NULL, NULL, 3, $1, $2, $3);}
+   | _TRY statement catch finally {$$ = makeNode(539, NULL, NULL, 4, $1, $2, $3, $4);}
    ;
 
 catch:
-   _CATCH LPAREN value RPAREN statement {$$ = makeNode(NULL, NULL, YYDup(), 5, $1, $2, $3, $4, $5);}
+   _CATCH LPAREN value RPAREN statement {$$ = makeNode(540, NULL, NULL, 5, $1, $2, $3, $4, $5);}
    ;
 
 finally:
-   _FINALLY statement {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);}
+   _FINALLY statement {$$ = makeNode(541, NULL, NULL, 2, $1, $2);}
    ;
 
 withStatement:
-   _WITH LPAREN expression RPAREN statement {$$ = makeNode(NULL, NULL, YYDup(), 5, $1, $2, $3, $4, $5);}
+   _WITH LPAREN expression RPAREN statement {$$ = makeNode(542, NULL, NULL, 5, $1, $2, $3, $4, $5);}
    ;
 		    
 continueStatement:
-   _CONTINUE SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);}
-   | _CONTINUE value SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   _CONTINUE SEMICOLON {$$ = makeNode(543, NULL, NULL, 2, $1, $2);}
+   | _CONTINUE value SEMICOLON {$$ = makeNode(543, NULL, NULL, 3, $1, $2, $3);}
    ;
 
 breakStatement: 
-   _BREAK SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 2, $1, $2);}
-   | _BREAK value SEMICOLON {$$ = makeNode(NULL, NULL, YYDup(), 3, $1, $2, $3);}
+   _BREAK SEMICOLON {$$ = makeNode(544, NULL, NULL, 2, $1, $2);}
+   | _BREAK value SEMICOLON {$$ = makeNode(544, NULL, NULL, 3, $1, $2, $3);}
    ;
 
 /*

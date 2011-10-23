@@ -8,6 +8,8 @@ private var typedVariable : String = 3;
 private protected var oneVar : String, twoVar : Integer;
 
 
+initVariable1 = 1 + 2;
+
 
 import fl.controls.ComboBox;
 import fl.controls.Slider;
