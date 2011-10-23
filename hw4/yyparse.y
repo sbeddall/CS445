@@ -222,7 +222,7 @@ void yyerror(const char *msg)
 
  //start of grammar
 program:  
-   sourceElements { $$ = makeNode(500, global_table, NULL, 1, $1); printf("Global Symbol Table: %p\n", &global_table); yysemantics($1); } //
+   sourceElements { $$ = makeNode(500, global_table, NULL, 1, $1); printf("Global Symbol Table: %p\n", global_table); yysemantics($1); } //
    ;
 
 sourceElements:

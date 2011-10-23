@@ -10,7 +10,7 @@ node* makeNode(int label, symbol_table* parent, token* tok, int nchildren, ...){
   
   node* new = (node*) malloc(sizeof( node ));
   
-  new->parent = parent;
+  new->table = parent;
   new->label = label;
   new->nchildren = nchildren;
   new->tok = tok;
@@ -45,13 +45,13 @@ void yysemantics(node* head){
 void buildSymbolTables(node* head, node* parent_node){
   if(head != NULL){
     //get the symbol tables organized
-    if(head->parent == NULL){
+    if(head->table == NULL){
       if(parent_node != NULL)
-	head->parent = parent_node->parent; 
+	head->table = parent_node->table; 
     }
     else {
       if(parent_node != NULL)
-	head->parent->parent = parent_node->parent;
+	head->table->parent = parent_node->table;
     }
     
     
@@ -76,7 +76,7 @@ void traverseTree(node* head, node* parent_node, int level){
     
     //general information about the node
     printf("Label: %d -- ", head->label);
-    printf("Symbol Table Pointer: %p\n", &(head->parent));
+    printf("Symbol Table Pointer: %p\n", (head->table));
     
     
     
@@ -89,7 +89,7 @@ void traverseTree(node* head, node* parent_node, int level){
 	//printf("Mem:%p,%s", head, head->text);
 	printf("%s ", head->tok->text);
 	printf("%d", head->label);
-	printf(" Symbol Table Pointer: %p", &(head->parent));
+	printf(" Symbol Table Pointer: %p", (head->table));
 	printf("\n");
       }
       else{

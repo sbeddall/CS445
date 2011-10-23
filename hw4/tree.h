@@ -10,7 +10,7 @@ typedef struct node {
   int nchildren; 
   int label;
   token* tok;
-  symbol_table *parent;
+  symbol_table *table;
   struct node** children;
 } node;
 
