@@ -12,6 +12,7 @@ node* makeNode(int label, symbol_table* parent, token* tok, int nchildren, ...){
   
   new->table = parent;
   new->label = label;
+  new->baseType = 0;
   new->nchildren = nchildren;
   new->tok = tok;
   // new->parent = parent;
@@ -53,7 +54,12 @@ void buildSymbolTables(node* head, node* parent_node){
       if(parent_node != NULL)
 	head->table->parent = parent_node->table;
     }
+      
     
+    switch( head->label ) {
+
+      
+    }
     
     int n = head->nchildren;      
     int i;
@@ -63,9 +69,25 @@ void buildSymbolTables(node* head, node* parent_node){
       else{
 	buildSymbolTables(head->children[i], head);
       }
-    }
-    
+    }   
   }
+}
+  
+void findVariablesAndAdd(node* var){
+  if(head != NULL){
+    
+    
+    int n = var->nchildren;      
+    int i;
+    for(i = 0; i < n; i++){      
+      if(var->children[i]==NULL){
+	//do nothing
+      }
+      else{
+	findVariablesAndAdd(head->children[i]);
+      }
+    }
+  } 
 }
 
 
@@ -77,8 +99,6 @@ void traverseTree(node* head, node* parent_node, int level){
     //general information about the node
     printf("Label: %d -- ", head->label);
     printf("Symbol Table Pointer: %p\n", (head->table));
-    
-    
     
     int j = 0;
     for(j; j < level; j++){

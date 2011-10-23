@@ -18,6 +18,17 @@
 
   
 //"void" {    return _VOID; }
+/*
+"uint" { eval(_UINT); yylval.n = makeNode(_UINT, NULL, YYDup(), 0); return _UINT; }
+"int" { eval(_INT); yylval.n = makeNode(_INT, NULL, YYDup(), 0); return _INT; }
+"Boolean" { eval(_BOOLEAN); yylval.n = makeNode(_BOOLEAN, NULL, YYDup(), 0); return _BOOLEAN; }
+"Number" { eval(_NUMBER); yylval.n = makeNode(_NUMBER, NULL, YYDup(), 0); return _NUMBER; }
+"String" { eval(_STRING); yylval.n = makeNode(_STRING, NULL, YYDup(), 0); return _STRING; }
+"void" { eval(_VOID); yylval.n = makeNode(_VOID, NULL, YYDup(), 0); return _VOID; }
+
+
+ */
+
 %}
 
 %x C_COMMENT
@@ -50,7 +61,7 @@
 "implements" { eval(_IMPLEMENTS); yylval.n = makeNode(_IMPLEMENTS, NULL,  YYDup(), 0);  return _IMPLEMENTS; }
 "import" { eval(_IMPORT);  yylval.n = makeNode(_IMPORT, NULL,  YYDup(), 0); return _IMPORT; }
 "interface" { eval(_INTERFACE);  yylval.n = makeNode(_INTERFACE, NULL,  YYDup(), 0); return _INTERFACE; }
-"null"|"NULL" { eval(_NULL);  yylval.n = makeNode(_NULL, NULL,  YYDup(), 0); return _NULL; }
+"null"|"NULL"|"Null" { eval(_NULL);  yylval.n = makeNode(_NULL, NULL,  YYDup(), 0); return _NULL; }
 "package" { eval(_PACKAGE);  yylval.n = makeNode(_PACKAGE, NULL,  YYDup(), 0);  return _PACKAGE; }
 "private" { eval(_PRIVATE);  yylval.n = makeNode(_PRIVATE, NULL,  YYDup(), 0); return _PRIVATE; }
 "protected" { eval(_PROTECTED);  yylval.n = makeNode(_PROTECTED, NULL,  YYDup(), 0); return _PROTECTED; }

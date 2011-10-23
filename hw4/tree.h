@@ -6,11 +6,13 @@
 #include <stdarg.h>
 #include "symboltable.h"
 
+
 typedef struct node {
   int nchildren; 
   int label;
+  int baseType;
   token* tok;
-  symbol_table *table;
+  symbol_table* table;
   struct node** children;
 } node;
 
@@ -19,6 +21,7 @@ typedef struct node {
 node* makeNode(int label, symbol_table* parent,  token* tok, int nchildren, ...);
 void yysemantics(node* head);
 void buildSymbolTables(node* head, node* parent_node);
+void findVariablesAndAdd(node* var);
 void traverseTree(node* head,node* parent_node, int level);
 void verboseTraverseTree(node* head, int level);
 
