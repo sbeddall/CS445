@@ -11,7 +11,7 @@
   extern int LINENO;
   extern int failed;
   extern char* FILENAME;
-  
+  extern node* head;
   extern token* YYTOKEN;
   
   extern symbol_table* global_table;
@@ -222,7 +222,7 @@ void yyerror(const char *msg)
 
  //start of grammar
 program:  
-   sourceElements { $$ = makeNode(500, global_table, NULL, 1, $1); printf("Global Symbol Table: %p\n", global_table); yysemantics($1); } //
+sourceElements { $$ = makeNode(500, global_table, NULL, 1, $1); head = $$; } //
    ;
 
 sourceElements:
