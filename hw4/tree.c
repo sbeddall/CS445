@@ -42,7 +42,7 @@ void yysemantics(node* head){
   //treePrint
   traverseTree(head,NULL,0);
 
-  //printTable(head->table);
+  printTable(head->table);
 
 }
 

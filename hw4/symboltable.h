@@ -24,7 +24,7 @@ typedef struct field {
   char *name;
   int type;
   struct node* token;
-  int flags[10]; 
+  // int flags[10]; 
   /*
     
     0 var 
@@ -45,7 +45,7 @@ typedef struct field {
 typedef struct symbol_table { 
   struct symbol_table* parent;
   int nSymbols;
-  field fields[50];
+  field** fields;
 } symbol_table;
 
 symbol_table* makeTable(symbol_table* parent);

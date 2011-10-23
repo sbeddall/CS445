@@ -7,7 +7,9 @@
 
 symbol_table* makeTable(symbol_table* parent){
   symbol_table* new = (symbol_table*)malloc(sizeof(symbol_table));
+  new->fields = (field**)malloc(sizeof(field)*50);
   new->nSymbols = 0;
+  
   if(parent != NULL){
     new->parent = parent;
   }  
@@ -17,7 +19,7 @@ symbol_table* makeTable(symbol_table* parent){
 int findIdentLocally(symbol_table* table, char* ident){
   int i = 0;
   for( i; i < table->nSymbols; i++){
-    if(compareStrings(ident, table->fields[i].name)) return 1;
+    if(compareStrings(ident, table->fields[i]->name)) return 1;
   }
   
   return 0;
@@ -41,8 +43,10 @@ int addSymbol(symbol_table* table, char* ident, int type, struct node* token){
   lol->name = strdup(ident);
   lol->type = type;
   lol->token = token;
+  table->nSymbols++;
+  int n = table->nSymbols-1;
 
-  table->fields[table->nSymbols-1] = *lol; 
+  table->fields[n] = lol; 
 }
 
 void printTable(symbol_table* table){
@@ -50,7 +54,7 @@ void printTable(symbol_table* table){
   
   int i = 0;
   for( i; i < table->nSymbols; i++ ){
-    printf("Ident: %s\n", table->fields[i].name);
+    printf("Ident: %s\n", table->fields[i]->name);
   }
 }
 

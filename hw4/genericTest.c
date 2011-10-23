@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "structures.h"
+#include "symboltable.h"
+#include "tree.h"
 
 int LINENO;
 token* YYTOKEN;
@@ -21,7 +23,19 @@ int main(){
   char* first = "hello";
   char* second = "hello";
 
+  
+
   printf("%d\n", compareStrings(first, second));
+  
+  symbol_table* global = makeTable(NULL);
+  
+  int goddamnit = addSymbol(global, "hello", 0, NULL);
+  
+  
+  
+  printTable(global);
+
+  
   
   
   return 0;
