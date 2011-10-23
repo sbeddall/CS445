@@ -20,8 +20,9 @@ typedef struct node {
 //node* makeNode(char* text,symbol_table* parent, token* tok, int nchildren, ...);
 node* makeNode(int label, symbol_table* parent,  token* tok, int nchildren, ...);
 void yysemantics(node* head);
+void populateSymbolTables(node* head, node* parent_node);
 void buildSymbolTables(node* head, node* parent_node);
-void findVariablesAndAdd(node* var);
+void variableHandler(node* var, node* parent_node);
 void traverseTree(node* head,node* parent_node, int level);
 void verboseTraverseTree(node* head, int level);
 

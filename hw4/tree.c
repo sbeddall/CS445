@@ -37,9 +37,13 @@ node* makeNode(int label, symbol_table* parent, token* tok, int nchildren, ...){
 void yysemantics(node* head){  
   //build the symbol tables
   buildSymbolTables(head, NULL);
+  populateSymbolTables(head, NULL);
   
   //treePrint
   traverseTree(head,NULL,0);
+
+  //printTable(head->table);
+
 }
 
 
@@ -54,12 +58,6 @@ void buildSymbolTables(node* head, node* parent_node){
       if(parent_node != NULL)
 	head->table->parent = parent_node->table;
     }
-      
-    
-    switch( head->label ) {
-
-      
-    }
     
     int n = head->nchildren;      
     int i;
@@ -72,10 +70,53 @@ void buildSymbolTables(node* head, node* parent_node){
     }   
   }
 }
-  
-void findVariablesAndAdd(node* var){
-  if(head != NULL){
+
     
+  
+void populateSymbolTables(node* head, node* parent_node){
+  if(head != NULL){
+    switch( head->label ) {
+    case _VAR:
+      variableHandler(parent_node,NULL);
+      break; 
+      
+    case _CONST:
+      variableHandler(parent_node, NULL);
+      break;
+      
+      
+    default:
+      break;
+    }
+    
+    int n = head->nchildren;      
+    int i;
+    for(i = 0; i < n; i++){      
+      if(head->children[i]==NULL){
+      }
+      else{
+	populateSymbolTables(head->children[i], head);
+      }
+    }   
+  }
+}
+
+
+
+void variableHandler(node* var, node* parent_node){
+  
+  if(var != NULL){
+    switch( var->label ){
+    case IDENT:
+      if(findIdentLocally(var->table, var->tok->text) == 0){
+	addSymbol(var->table, var->tok->text, -1, var);
+      }
+      else printf("The Symbol with: \"%s\" as text is already present!", var->tok->text);
+      break;
+      
+    default:
+      break;
+    }
     
     int n = var->nchildren;      
     int i;
@@ -84,7 +125,7 @@ void findVariablesAndAdd(node* var){
 	//do nothing
       }
       else{
-	findVariablesAndAdd(head->children[i]);
+	variableHandler(var->children[i], var);
       }
     }
   } 

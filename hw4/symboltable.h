@@ -18,6 +18,8 @@
 }
 */ 
 
+
+
 typedef struct field {
   char *name;
   int type;
@@ -50,6 +52,8 @@ symbol_table* makeTable(symbol_table* parent);
 
 int findIdentLocally(symbol_table* table, char* ident); //no recursion up
 int findIdent(symbol_table* table, char* ident); //searches up
-int addSymbol(symbol_table* table, char* ident, int type);
+int addSymbol(symbol_table* table, char* ident, int type, struct node* token);
+
+void printTable(symbol_table* table);
 
 #endif

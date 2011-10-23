@@ -4,6 +4,7 @@
 #include "structures.h"
 #include <string.h>
 
+
 symbol_table* makeTable(symbol_table* parent){
   symbol_table* new = (symbol_table*)malloc(sizeof(symbol_table));
   new->nSymbols = 0;
@@ -34,12 +35,31 @@ int findIdent(symbol_table* table, char* ident){
   return 0;
 }
 
-int addSymbol(symbol_table* table, char* ident, int type){  
+int addSymbol(symbol_table* table, char* ident, int type, struct node* token){  
   field* lol = (field*)malloc(sizeof(field));
   
   lol->name = strdup(ident);
   lol->type = type;
-  
+  lol->token = token;
+
   table->fields[table->nSymbols-1] = *lol; 
 }
 
+void printTable(symbol_table* table){
+  printf("Printing Table: %p\n", table);
+  
+  int i = 0;
+  for( i; i < table->nSymbols; i++ ){
+    printf("Ident: %s\n", table->fields[i].name);
+  }
+}
+
+void printTableHierarchy(symbol_table* table){
+  symbol_table* iterator = table;
+
+  while(iterator->parent != NULL){
+    printTable(iterator);
+    iterator = iterator->parent;
+  }
+  printTable(iterator);
+}
