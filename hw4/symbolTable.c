@@ -26,6 +26,7 @@ int findIdentLocally(symbolTable* table, char* ident){
 }
 
 int findIdent(symbolTable* table, char* ident){
+  
   symbolTable* iterator = table;
   
   while(iterator){

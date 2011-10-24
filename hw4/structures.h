@@ -49,4 +49,8 @@ void addStringToYYToken(char* yytext);
 void populateYYGlobals();
 void ISval(int category, char* yytext);
 
+
+//error printer
+void printError(char* errorText, struct node* head);
+
 #endif

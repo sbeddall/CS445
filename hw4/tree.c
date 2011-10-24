@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include "symbolTable.h"
 #include "yyparse.tab.h"
-
+#include "enums.h"
+#include "structures.h"
 
 //WORKHORSE. HO!
 node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
@@ -40,9 +41,9 @@ void yysemantics(node* head){
   populateSymbolTables(head, NULL);
   
   //treePrint
-  traverseTree(head,NULL,0);
+  //traverseTree(head,NULL,0);
 
-  printTable(head->table);
+    printTable(head->table);
 
 }
 
@@ -76,60 +77,73 @@ void buildSymbolTables(node* head, node* parent_node){
 void populateSymbolTables(node* head, node* parent_node){
   if(head != NULL){
     switch( head->label ) {
-    case _VAR:
-      variableHandler(parent_node,NULL);
-      break; 
+    case variableDeclaration:
+      variableHandler(head,NULL);
+      break;  
       
-    case _CONST:
-      variableHandler(parent_node, NULL);
+    case functionDeclaration:
+      
       break;
-      
-      
+
+    case IDENT:
+      if(!findIdent(head->table, head->tok->text)) printError("Use of an ident: %s  without declaring!", head);
+      break;
+
     default:
-      break;
+      {
+	int n = head->nchildren;      
+	int i;
+	for(i = 0; i < n; i++){      
+	  if(head->children[i]==NULL){
+	  }
+	  else{
+	    populateSymbolTables(head->children[i], head);
+	  }
+	}
+	break;
+      }
     }
-    
-    int n = head->nchildren;      
-    int i;
-    for(i = 0; i < n; i++){      
-      if(head->children[i]==NULL){
-      }
-      else{
-	populateSymbolTables(head->children[i], head);
-      }
-    }   
   }
 }
 
 
 
-void variableHandler(node* var, node* parent_node){
-  
+void variableHandler(node* var, node* parent_node){  
   if(var != NULL){
     switch( var->label ){
+     
+    case variableInitialization:
+      //this will become more complex. For now, check for just an IDENT
+      //check all the way down
+      checkIdentsInInitialization( var );
+      break;
+      
     case IDENT:
+      
       if(findIdentLocally(var->table, var->tok->text) == 0){
 	addSymbol(var->table, var->tok->text, -1, var);
       }
-      else printf("The Symbol with: \"%s\" as text is already present!", var->tok->text);
+      else printError("Variable already present", var);
       break;
-      
-    default:
-      break;
-    }
-    
-    int n = var->nchildren;      
-    int i;
-    for(i = 0; i < n; i++){      
-      if(var->children[i]==NULL){
-	//do nothing
-      }
-      else{
-	variableHandler(var->children[i], var);
+	 
+    default: 
+      { 
+	int n = var->nchildren;      
+	int i;
+	for(i = 0; i < n; i++){      
+	  if(var->children[i]==NULL){
+	    //do nothing
+	  }
+	  else{
+	    variableHandler(var->children[i], var);
+	  } 
+	}    
+	break;
       }
     }
   } 
 }
+
 
 
 void traverseTree(node* head, node* parent_node, int level){
@@ -185,36 +199,48 @@ void traverseTree(node* head, node* parent_node, int level){
   }
 }
 
-
-
-
-
-/*
-void verboseTraverseTree(node* head, int level){
-  if(head != NULL){
-    int i;
-    int n = head->nchildren;
-    if(head->text != NULL){
-      printf("%s", head->text);
-      printf("\n");
+void checkIdentsInInitialization(node* head){
+  if( head != NULL ){
+    printf("Checking IDENTS!\n");
+    if(head->label = IDENT){
+      if(findIdent(head->table, head->tok->text) == 0)
+	printError("Use of an ident: %s  without declaring!", head);
     }
     
-    
-    
+    int n = head->nchildren;
+    int i;
+    for(i = 0; i < n; i++){      
+      if(head->children[i]==NULL);
+      else 
+	checkIdentsInInitialization( head->children[i] );
+    }
+  }
+}
+
+
+//not sure this will actually work
+node* miniTraverse( node* head, int label ){
+  if( head != NULL ){
+    if(head->label == label)
+      return head;
+    int n = head->nchildren;
+    int i;
     for(i = 0; i < n; i++){      
       if(head->children[i]==NULL){
 	//printf("Kid's NULL. \n");
       }
       else{
-	printf("Level %d children: \n", n);
-	printf("%s\n", head->children[i]->text);
-	//traverseTree(head->children[i], level++);
+	//printf("Child Memory Location %p\n", head->children[i]);
+	return miniTraverse( head->children[i], label );;
       }
     }
-    
   }
+  return NULL;
 }
-*/
+
+
+
+
 
 
 

@@ -1,5 +1,6 @@
 #include "structures.h"
 #include <string.h>
+#include "tree.h"
 
 extern token* YYTOKEN;
 extern int LINENO;
@@ -191,4 +192,11 @@ void ISval(int category, char* yytext){
   default:
     break;
   }
+}
+
+void printError(char* errorText, struct node* head){
+  printf("%s: %s\n", errorText, head->tok->text);
+  printf("\tNode label: %d\n", head->label);
+  printf("\tLine Number: %d\n", head->tok->lineno);
+  printf("\tSymbol Table: %p\n\n", head->table); 
 }

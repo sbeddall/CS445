@@ -24,6 +24,7 @@ void populateSymbolTables(node* head, node* parent_node);
 void buildSymbolTables(node* head, node* parent_node);
 void variableHandler(node* var, node* parent_node);
 void traverseTree(node* head,node* parent_node, int level);
-void verboseTraverseTree(node* head, int level);
+void checkIdentsInInitialization(node* head);
+node* miniTraverse( node* head, int label );
 
 #endif
