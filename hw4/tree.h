@@ -12,7 +12,7 @@ typedef struct node {
   int label;
   int baseType;
   token* tok;
-  symbolTable* table;
+  struct symbolTable* table;
   struct node** children;
 } node;
 

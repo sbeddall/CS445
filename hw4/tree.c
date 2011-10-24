@@ -43,7 +43,7 @@ void yysemantics(node* head){
   //treePrint
   //traverseTree(head,NULL,0);
 
-    printTable(head->table);
+  printTable(head->table);
 
 }
 
@@ -115,7 +115,7 @@ void variableHandler(node* var, node* parent_node){
     case variableInitialization:
       //this will become more complex. For now, check for just an IDENT
       //check all the way down
-      checkIdentsInInitialization( var );
+      //      checkIdentsInInitialization( var );
       break;
       
     case IDENT:

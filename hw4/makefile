@@ -2,13 +2,13 @@ ec: yyparse.tab.o lex.yy.o main.o structures.o tree.o symbolTable.o
 	gcc  -o ec lex.yy.o main.o structures.o tree.o yyparse.tab.o symbolTable.c 
 
 lex.yy.o : lex.yy.c
-	gcc  -c -w lex.yy.c
+	gcc  -c  lex.yy.c
 
 lex.yy.c : yylex.c
 	lex yylex.c
 
 yyparse.tab.o : yyparse.tab.c
-	gcc  -w -c yyparse.tab.c
+	gcc -c yyparse.tab.c
 
 yyparse.tab.c : yyparse.y
 	bison -d -t -v  yyparse.y
@@ -20,7 +20,7 @@ structures.o : structures.c
 	gcc  -c structures.c
 
 tree.o : tree.c
-	gcc  -w -c tree.c
+	gcc  -c tree.c
 
 symboltable.o : symbolTable.c
 	gcc -c symbolTable.c
