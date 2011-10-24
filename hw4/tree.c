@@ -41,10 +41,9 @@ void yysemantics(node* head){
   populateSymbolTables(head, NULL);
   
   //treePrint
-  //traverseTree(head,NULL,0);
+  //  traverseTree(head,NULL,0);
 
   printTable(head->table);
-
 }
 
 
@@ -84,11 +83,11 @@ void populateSymbolTables(node* head, node* parent_node){
     case functionDeclaration:
       
       break;
-
+      
     case IDENT:
-      if(!findIdent(head->table, head->tok->text)) printError("Use of an ident: %s  without declaring!", head);
+      if(!findIdent(head->table, head->tok->text)) printError("Use of an ident without declaring", head);
       break;
-
+      
     default:
       {
 	int n = head->nchildren;      
@@ -115,11 +114,10 @@ void variableHandler(node* var, node* parent_node){
     case variableInitialization:
       //this will become more complex. For now, check for just an IDENT
       //check all the way down
-      //      checkIdentsInInitialization( var );
+      checkIdentsInInitialization( var );
       break;
       
     case IDENT:
-      
       if(findIdentLocally(var->table, var->tok->text) == 0){
 	addSymbol(var->table, var->tok->text, -1, var);
       }
@@ -144,6 +142,47 @@ void variableHandler(node* var, node* parent_node){
   } 
 }
 
+
+
+void checkIdentsInInitialization(node* head){
+  if( head != NULL ){
+    if(head->label == IDENT){
+      if(head->tok->text != NULL){
+	if(findIdent(head->table, head->tok->text) == 0)
+	  printError("Use of an ident without declaring", head);
+      }
+    }
+    
+    int n = head->nchildren;
+    int i;
+    for(i = 0; i < n; i++){      
+      if(head->children[i]==NULL);
+      else 
+	checkIdentsInInitialization( head->children[i] );
+    }
+  }
+}
+
+
+//not sure this will actually work
+node* miniTraverse( node* head, int label ){
+  if( head != NULL ){
+    if(head->label == label)
+      return head;
+    int n = head->nchildren;
+    int i;
+    for(i = 0; i < n; i++){      
+      if(head->children[i]==NULL){
+	//printf("Kid's NULL. \n");
+      }
+      else{
+	//printf("Child Memory Location %p\n", head->children[i]);
+	return miniTraverse( head->children[i], label );;
+      }
+    }
+  }
+  return NULL;
+}
 
 
 void traverseTree(node* head, node* parent_node, int level){
@@ -198,46 +237,6 @@ void traverseTree(node* head, node* parent_node, int level){
     
   }
 }
-
-void checkIdentsInInitialization(node* head){
-  if( head != NULL ){
-    printf("Checking IDENTS!\n");
-    if(head->label = IDENT){
-      if(findIdent(head->table, head->tok->text) == 0)
-	printError("Use of an ident: %s  without declaring!", head);
-    }
-    
-    int n = head->nchildren;
-    int i;
-    for(i = 0; i < n; i++){      
-      if(head->children[i]==NULL);
-      else 
-	checkIdentsInInitialization( head->children[i] );
-    }
-  }
-}
-
-
-//not sure this will actually work
-node* miniTraverse( node* head, int label ){
-  if( head != NULL ){
-    if(head->label == label)
-      return head;
-    int n = head->nchildren;
-    int i;
-    for(i = 0; i < n; i++){      
-      if(head->children[i]==NULL){
-	//printf("Kid's NULL. \n");
-      }
-      else{
-	//printf("Child Memory Location %p\n", head->children[i]);
-	return miniTraverse( head->children[i], label );;
-      }
-    }
-  }
-  return NULL;
-}
-
 
 
 

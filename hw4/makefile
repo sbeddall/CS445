@@ -1,29 +1,29 @@
 ec: yyparse.tab.o lex.yy.o main.o structures.o tree.o symbolTable.o
-	gcc  -o ec lex.yy.o main.o structures.o tree.o yyparse.tab.o symbolTable.c 
+	gcc -ggdb -o ec lex.yy.o main.o structures.o tree.o yyparse.tab.o symbolTable.c 
 
 lex.yy.o : lex.yy.c
-	gcc  -c  lex.yy.c
+	gcc -ggdb -c  lex.yy.c
 
 lex.yy.c : yylex.c
 	lex yylex.c
 
 yyparse.tab.o : yyparse.tab.c
-	gcc -c yyparse.tab.c
+	gcc -ggdb -c yyparse.tab.c
 
 yyparse.tab.c : yyparse.y
-	bison -d -t -v  yyparse.y
+	bison -ggdb -d -t -v  yyparse.y
 
 main.o : main.c
-	gcc  -c main.c
+	gcc -ggdb -c main.c
 
 structures.o : structures.c
-	gcc  -c structures.c
+	gcc -ggdb  -c structures.c
 
 tree.o : tree.c
-	gcc  -c tree.c
+	gcc -ggdb -c tree.c
 
 symboltable.o : symbolTable.c
-	gcc -c symbolTable.c
+	gcc -ggdb -c symbolTable.c
 
 
 clean: 	
