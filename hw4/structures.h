@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "symboltable.h"
+#include "symbolTable.h"
 
 //token construct
 typedef struct tokenitem {

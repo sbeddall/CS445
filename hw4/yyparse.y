@@ -3,7 +3,7 @@
 #include "structures.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include "symboltable.h"
+#include "symbolTable.h"
 #include "enums.h"
 
 // better error reporting
@@ -15,7 +15,7 @@
   extern node* head;
   extern token* YYTOKEN;
   
-  extern symbol_table* global_table;
+  extern symbolTable* global_table;
 
   
   // bison requires that you supply this function

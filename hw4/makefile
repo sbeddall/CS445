@@ -1,5 +1,5 @@
-ec: yyparse.tab.o lex.yy.o main.o structures.o tree.o symboltable.o
-	gcc  -o ec lex.yy.o main.o structures.o tree.o yyparse.tab.o symboltable.c 
+ec: yyparse.tab.o lex.yy.o main.o structures.o tree.o symbolTable.o
+	gcc  -o ec lex.yy.o main.o structures.o tree.o yyparse.tab.o symbolTable.c 
 
 lex.yy.o : lex.yy.c
 	gcc  -c -w lex.yy.c
@@ -22,8 +22,8 @@ structures.o : structures.c
 tree.o : tree.c
 	gcc  -w -c tree.c
 
-symboltable.o : symboltable.c
-	gcc -c symboltable.c
+symboltable.o : symbolTable.c
+	gcc -c symbolTable.c
 
 
 clean: 	

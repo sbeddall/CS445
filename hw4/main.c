@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "structures.h"
 #include <string.h>
-#include "symboltable.h"
+#include "symbolTable.h"
 #include "tree.h"
 
 int LINENO;
@@ -10,7 +10,7 @@ char* FILENAME;
 token* YYTOKEN;
 extern FILE* yyin;
 int failed;
-symbol_table* global_table;
+symbolTable* global_table;
 node* head;
 
 main(int argc, char* argv[]){

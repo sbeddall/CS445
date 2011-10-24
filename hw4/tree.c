@@ -1,12 +1,12 @@
 #include "tree.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include "symboltable.h"
+#include "symbolTable.h"
 #include "yyparse.tab.h"
 
 
 //WORKHORSE. HO!
-node* makeNode(int label, symbol_table* parent, token* tok, int nchildren, ...){
+node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   
   node* new = (node*) malloc(sizeof( node ));
   
