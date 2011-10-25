@@ -380,8 +380,8 @@ functionStatement:
    ;
 
 functionDeclaration:
-_FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(functionDeclaration, makeTable(NULL), NULL, 4, $1, $2, $3, $4); }
-   | modifier _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(functionDeclaration, makeTable(NULL), NULL, 5, $1, $2, $3, $4, $5);}    
+_FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(functionDeclaration, NULL, NULL, 4, $1, $2, $3, $4); }
+   | modifier _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(functionDeclaration, NULL, NULL, 5, $1, $2, $3, $4, $5);}    
    ;
 
 getterSetter:
@@ -425,10 +425,10 @@ returnStatement:
    ;
 
 classStatement:
-   _CLASS IDENT block {$$ = makeNode(classStatement, makeTable(NULL), NULL, 3, $1, $2, $3);}
-   | modifier _CLASS IDENT block {$$ = makeNode(classStatement, makeTable(NULL), NULL, 4, $1, $2, $3, $4);}
-   | _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(classStatement, makeTable(NULL), NULL, 5, $1, $2, $3, $4, $5);}
-   | modifier _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(classStatement, makeTable(NULL), NULL, 6, $1, $2, $3, $4, $5, $6);}
+   _CLASS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 3, $1, $2, $3);}
+   | modifier _CLASS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 4, $1, $2, $3, $4);}
+   | _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 5, $1, $2, $3, $4, $5);}
+   | modifier _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 6, $1, $2, $3, $4, $5, $6);}
    ;
 
 modifier:

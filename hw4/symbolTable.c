@@ -38,6 +38,8 @@ int findIdent(symbolTable* table, char* ident){
   return 0;
 }
 
+//THIS MAY POINT TO THE RELEVANT NODE. NOT NECESSARILY THE IDENT NODE ITSELF
+//Example: 
 int addSymbol(symbolTable* table, char* ident, int type, struct node* token){  
   field* lol = (field*)malloc(sizeof(field));
   
