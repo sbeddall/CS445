@@ -10,6 +10,7 @@ typedef struct variableDataPack {
     protectedFlag, 
     overrideFlag,
     nativeFlag, 
+    
 } variableDataPack;
 
 typdef struct functionDataPack {

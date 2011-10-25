@@ -2,11 +2,12 @@
 var x, y, z = 2;
 
 var x = z;
+var x:String, Z:Number;
+
 
 
 function awesome(){
-	 
-return 0;
+
 }
 
 

@@ -88,10 +88,15 @@ void populateSymbolTables( node* head, node* parent_node ){
     case functionCall:
       
       break;
-            
+      
     case classStatement:
       
       break;
+      
+    case expression:
+      
+      break;
+      
       
     case IDENT:
       if( !findIdent( head->table, head->tok->text ) ) printError( "Use of an ident without declaring", head );
@@ -118,7 +123,7 @@ void functionHandler( node* var, node* parent_node ){
   if( var != NULL ){
     switch( var->label ){
     case IDENT:
-      if( !findIdent( var->table, var->tok->text ) ) 
+      if( !findIdentLocally( var->table, var->tok->text ) ) 
 	addSymbol( var->table, var->tok->text, -1 , parent_node );
       else 
 	printError( "Redeclaration of IDENT", var );
@@ -139,7 +144,6 @@ void functionHandler( node* var, node* parent_node ){
 	break;
       }
     }
-    
   }
 }
 
@@ -147,7 +151,24 @@ void variableHandler(node* var, node* parent_node){
   if(var != NULL){
     switch( var->label ){
       
-    case variableInitialization:
+    case variableBinding:
+      {
+	//replace this with a parseVariableName to actually delve through symbol tables
+	if( var->children[0] != NULL && var->children[0]->label == IDENT)
+	  if( !findIdentLocally( var->children[0]->table, var->children[0]->tok->text ) )
+	    addSymbol(var->children[0]->table, var->children[0]->tok->text, -1, var->children[0]);
+	  else printError("Redeclaration of IDENT", var->children[0]);
+	;
+	if( var->children[1] != NULL)
+	  //type information population!
+	  ;
+	if( var->children[2] != NULL && var->children[2]->label == variableInitialization) //
+	  checkIdentsInInitialization
+	    ;
+      }
+      break;
+      
+      /*case variableInitialization:
       //this will become more complex. For now, check for just an IDENT
       //check all the way down
       checkIdentsInInitialization( var );
@@ -155,11 +176,12 @@ void variableHandler(node* var, node* parent_node){
       
     case IDENT:
       if(findIdentLocally(var->table, var->tok->text) == 0){
+	
 	addSymbol(var->table, var->tok->text, -1, var);
       }
       else printError("Redeclaration of IDENT", var);
       break;
-      
+      */      
     default: 
       { 
 	int n = var->nchildren;      
@@ -178,8 +200,9 @@ void variableHandler(node* var, node* parent_node){
   } 
 }
 
-void classHandler(node* var, node* parent_node){
-  
+
+void parseVariableName(node* var, node* parent_node){
+
 }
 
 void checkIdentsInInitialization(node* head){
@@ -202,6 +225,12 @@ void checkIdentsInInitialization(node* head){
 }
 
 
+
+void classHandler(node* var, node* parent_node){
+  
+}
+
+
 //not sure this will actually work
 node* miniTraverse( node* head, int label ){
   if( head != NULL ){
@@ -221,6 +250,7 @@ node* miniTraverse( node* head, int label ){
   }
   return NULL;
 }
+
 
 
 void traverseTree(node* head, node* parent_node, int level){
