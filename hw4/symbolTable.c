@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "structures.h"
 #include <string.h>
-
+#include "tree.h"
 
 symbolTable* makeTable(symbolTable* parent){
   symbolTable* new = (symbolTable*)malloc(sizeof(symbolTable));
@@ -58,7 +58,8 @@ void printTable(symbolTable* table){
   int i = 0;
   for( i; i < table->nSymbols; i++ ){
     if(table->fields[i]->name != NULL)
-      printf("Ident: %s\n", table->fields[i]->name);
+      printf( "Ident: %s : Type: %s\n", table->fields[i]->name, table->fields[i]->token->nodeType );
+    
   }
 }
 

@@ -111,7 +111,7 @@
 "}" { eval(RBRACE);  yylval.n = makeNode(RBRACE, NULL,  YYDup(), 0); return RBRACE; }
 ";" { eval(SEMICOLON); yylval.n = makeNode(SEMICOLON, NULL,  YYDup(), 0); return SEMICOLON; }
 
-\".+\"|\'.+\' { eval(STRINGLIT); yylval.n = makeNode(STRINGLIT, NULL,  YYDup(), 0);  return STRINGLIT; }
+\".+\"|\'.+\' { eval(STRINGLIT); yylval.n = makeNode(STRINGLIT, NULL,  YYDup(), 0);  yylval.n->nodeType = strdup("String"); return STRINGLIT; }
 
 \" { eval(QUOTES);  yylval.n = makeNode(QUOTES, NULL,  YYDup(), 0); return QUOTES; }
 
@@ -133,7 +133,7 @@
 
 "//".* { }
 
-[0-9]*['.']?[0-9]* { eval(NUMBERLIT);  yylval.n = makeNode(NUMBERLIT, NULL,  YYDup(), 0); return NUMBERLIT; }
+[0-9]*['.']?[0-9]* { eval(NUMBERLIT);  yylval.n = makeNode(NUMBERLIT, NULL,  YYDup(), 0); yylval.n->nodeType = strdup("Number"); return NUMBERLIT; }
 
 "?" { eval(_TERNARY);  yylval.n = makeNode(_TERNARY, NULL,  YYDup(), 0); return _TERNARY; }
 

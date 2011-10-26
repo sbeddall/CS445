@@ -2,28 +2,27 @@
 #define DATAPACKS
 
 typedef struct variableDataPack {
-  int publicFlag, 
-    constFlag, 
-    varFlag, 
-    publicFlag, 
-    privateFlag, 
-    protectedFlag, 
-    overrideFlag,
-    nativeFlag, 
-    
+  int publicFlag;
+  int constFlag; 
+  int varFlag;
+  int privateFlag;
+  int protectedFlag; 
+  int overrideFlag;
+  int nativeFlag;
 } variableDataPack;
 
-typdef struct functionDataPack {
+typedef struct functionDataPack {
   int publicFlag, 
     constFlag, 
     varFlag, 
-    publicFlag, 
     privateFlag, 
     protectedFlag, 
     overrideFlag, 
     nativeFlag, 
     numArguments;
 } functionDataPack;
+
+variableDataPack* initializeDataPack();
 
 
 #endif

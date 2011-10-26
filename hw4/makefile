@@ -1,5 +1,5 @@
-ec: yyparse.tab.o lex.yy.o main.o structures.o tree.o symbolTable.o
-	gcc -ggdb -o ec lex.yy.o main.o structures.o tree.o yyparse.tab.o symbolTable.c 
+ec: yyparse.tab.o lex.yy.o main.o structures.o tree.o symbolTable.o dataPacks.o
+	gcc -ggdb -o ec lex.yy.o main.o structures.o tree.o yyparse.tab.o symbolTable.o dataPacks.o 
 
 lex.yy.o : lex.yy.c
 	gcc -ggdb -c  lex.yy.c
@@ -25,6 +25,8 @@ tree.o : tree.c
 symboltable.o : symbolTable.c
 	gcc -ggdb -c symbolTable.c
 
+dataPacks.o : dataPacks.c
+	gcc -ggdb -c dataPacks.c
 
 clean: 	
 	- rm yyparse.tab.c

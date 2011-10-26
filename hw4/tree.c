@@ -4,7 +4,9 @@
 #include "symbolTable.h"
 #include "yyparse.tab.h"
 #include "enums.h"
+#include "dataPacks.h"
 #include "structures.h"
+#include <string.h>
 
 //WORKHORSE. HO!
 node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
@@ -13,10 +15,11 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   
   new->table = parent;
   new->label = label;
-  new->baseType = 0;
+  // new->baseType = 0;
   new->nchildren = nchildren;
   new->tok = tok;
-  // new->parent = parent;
+  new->nodeType = strdup("void");
+// new->parent = parent;
     
   new->children = 0;
   if(nchildren > 0){
@@ -78,7 +81,7 @@ void populateSymbolTables( node* head, node* parent_node ){
     switch( head->label ) {
    
     case variableDeclaration:
-      variableHandler( head, parent_node );
+      variableHandler( head, parent_node, NULL );
       break;  
       
     case functionDeclaration:
@@ -93,6 +96,10 @@ void populateSymbolTables( node* head, node* parent_node ){
       
       break;
       
+    case assignStatement:
+      assignmentHandler( head, parent_node );
+
+
     case expression:
       
       break;
@@ -147,24 +154,59 @@ void functionHandler( node* var, node* parent_node ){
   }
 }
 
-void variableHandler(node* var, node* parent_node){  
+void variableHandler(node* var, node* parent_node, variableDataPack* data ){  
   if(var != NULL){
+    if( data == NULL) data = initializeDataPack();
     switch( var->label ){
       
+    case _VAR:
+      data->varFlag = 1;
+      break;
+
+    case _CONST:
+      data->constFlag = 1;
+      break;
+      
+    case _PUBLIC:
+      data->publicFlag = 1;
+      break;
+      
+    case _PRIVATE:
+      data->publicFlag = 1;
+      break;
+
+    case _PROTECTED:
+      data->protectedFlag = 1;
+      break;
+      
+    case _OVERRIDE:
+      data->overrideFlag = 1;
+      break;
+
+    case _NATIVE:
+      data->nativeFlag = 1;
+      break;
+
     case variableBinding:
       {
+	if( var->children[1] != NULL ){
+	  var->children[1]->nodeType = getOptionalNodeType( var->children[1] );  
+	  var->nodeType = strdup( var->children[1]->nodeType );
+	}
+	//type information population!
 	//replace this with a parseVariableName to actually delve through symbol tables
-	if( var->children[0] != NULL && var->children[0]->label == IDENT)
+	//right now it only handles IDENTS
+	if( var->children[0] != NULL && var->children[0]->label == IDENT ){
+	  var->children[0]->nodeType = strdup(var->nodeType); 
 	  if( !findIdentLocally( var->children[0]->table, var->children[0]->tok->text ) )
-	    addSymbol(var->children[0]->table, var->children[0]->tok->text, -1, var->children[0]);
-	  else printError("Redeclaration of IDENT", var->children[0]);
-	;
-	if( var->children[1] != NULL)
-	  //type information population!
-	  ;
-	if( var->children[2] != NULL && var->children[2]->label == variableInitialization) //
-	  checkIdentsInInitialization
-	    ;
+	    addSymbol( var->children[0]->table, var->children[0]->tok->text, -1, var->children[0] );
+	  else printError( "Redeclaration of IDENT", var->children[0] );
+	}
+	
+	//variable Initialization. Typecheck here is required as well.
+	if( var->children[2] != NULL && var->children[2]->label == variableInitialization ){ //
+	  checkIdentsInInitialization( var->children[2] );
+	}
       }
       break;
       
@@ -191,7 +233,7 @@ void variableHandler(node* var, node* parent_node){
 	    //do nothing
 	  }
 	  else{
-	    variableHandler(var->children[i], var);
+	    variableHandler(var->children[i], var, data);
 	  } 
 	}    
 	break;
@@ -199,7 +241,6 @@ void variableHandler(node* var, node* parent_node){
     }
   } 
 }
-
 
 void parseVariableName(node* var, node* parent_node){
 
@@ -225,8 +266,12 @@ void checkIdentsInInitialization(node* head){
 }
 
 
+void assignmentHandler( node* var, node* parent_node){
 
-void classHandler(node* var, node* parent_node){
+}
+
+
+void classHandler( node* var, node* parent_node ){
   
 }
 
@@ -251,7 +296,13 @@ node* miniTraverse( node* head, int label ){
   return NULL;
 }
 
-
+char* getOptionalNodeType( node* var ){
+  if( var->label == optionalVariableType ){
+    if( var->children[1]->label == IDENT )
+      return strdup( var->children[1]->tok->text );
+  }
+  else return strdup("Object");
+}
 
 void traverseTree(node* head, node* parent_node, int level){
   if(head != NULL){

@@ -5,15 +5,15 @@
 #include "structures.h"
 #include <stdarg.h>
 #include "symbolTable.h"
-
+#include "dataPacks.h"
 
 typedef struct node {
   int nchildren; 
   int label;
-  int baseType;
   token* tok;
   struct symbolTable* table;
   struct node** children;
+  char* nodeType;
 } node;
 
 //  symbolTable* parent;
@@ -23,11 +23,14 @@ void yysemantics(node* head);
 void populateSymbolTables(node* head, node* parent_node);
 void buildSymbolTables(node* head, node* parent_node);
 void functionHandler(node* var, node* parent_node);
-void variableHandler(node* var, node* parent_node);
+void variableHandler(node* var, node* parent_node, variableDataPack* data);
 void checkIdentsInInitialization(node* head);
 void parseVariableName(node* var, node* parent_node);
+void assignmentHandler( node* var, node* parent_node );
 void classHandler(node* var, node* parent_node);
+char* getOptionalNodeType( node* var );
 void traverseTree(node* head,node* parent_node, int level);
+
 node* miniTraverse( node* head, int label );
 
 #endif

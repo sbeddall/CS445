@@ -1,7 +1,6 @@
 #ifndef SYMBOLTABLE
 #define SYMBOLTABLE
 
-
 /*struct c_type {
   int base_type;    // 1 = int, 2=float, ... 
   union {
@@ -24,7 +23,7 @@ typedef struct field {
   char *name;
   int type;
   struct node* token;
-  // int flags[10]; 
+  int flags[10]; 
   /*
     
     0 var 
