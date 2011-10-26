@@ -1,5 +1,6 @@
 #ifndef SYMBOLTABLE
 #define SYMBOLTABLE
+#include "dataPacks.h"
 
 /*struct c_type {
   int base_type;    // 1 = int, 2=float, ... 
@@ -23,7 +24,7 @@ typedef struct field {
   char *name;
   int type;
   struct node* token;
-  int flags[10]; 
+  int* flags; 
   /*
     
     0 var 
@@ -51,7 +52,9 @@ symbolTable* makeTable(symbolTable* parent);
 
 int findIdentLocally(symbolTable* table, char* ident); //no recursion up
 int findIdent(symbolTable* table, char* ident); //searches up
-int addSymbol(symbolTable* table, char* ident, int type, struct node* token);
+int addSymbol(symbolTable* table, char* ident, int type, struct node* token, struct variableDataPack* flags);
+int* updateFlagsFromData( variableDataPack* data );
+struct node* getSymbolNode( symbolTable* table, char* ident);
 
 void printTable(symbolTable* table);
 

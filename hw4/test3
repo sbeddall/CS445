@@ -1,19 +1,9 @@
-var x: Int;
 
+var z: String = "hello!";
 
-var x, y, z = 2;
+var z: String = 2;
 
-var x = z;
-var x:String, Z:Number;
+var Y:Int = z;
 
-
-
-function awesome(){
-
-}
-
-
-function awesome(){
-
-return 0;
-}
+//var z:String = 2;
+    

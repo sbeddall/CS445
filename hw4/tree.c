@@ -46,7 +46,7 @@ void yysemantics(node* head){
   //treePrint
   //  traverseTree(head,NULL,0);
 
-  printTable(head->table);
+  //printTable(head->table);
 }
 
 
@@ -131,7 +131,7 @@ void functionHandler( node* var, node* parent_node ){
     switch( var->label ){
     case IDENT:
       if( !findIdentLocally( var->table, var->tok->text ) ) 
-	addSymbol( var->table, var->tok->text, -1 , parent_node );
+	addSymbol( var->table, var->tok->text, -1 , parent_node, NULL );
       else 
 	printError( "Redeclaration of IDENT", var );
       break;
@@ -172,7 +172,7 @@ void variableHandler(node* var, node* parent_node, variableDataPack* data ){
       break;
       
     case _PRIVATE:
-      data->publicFlag = 1;
+      data->privateFlag = 1;
       break;
 
     case _PROTECTED:
@@ -186,7 +186,7 @@ void variableHandler(node* var, node* parent_node, variableDataPack* data ){
     case _NATIVE:
       data->nativeFlag = 1;
       break;
-
+      
     case variableBinding:
       {
 	if( var->children[1] != NULL ){
@@ -197,15 +197,19 @@ void variableHandler(node* var, node* parent_node, variableDataPack* data ){
 	//replace this with a parseVariableName to actually delve through symbol tables
 	//right now it only handles IDENTS
 	if( var->children[0] != NULL && var->children[0]->label == IDENT ){
+
 	  var->children[0]->nodeType = strdup(var->nodeType); 
+	  
 	  if( !findIdentLocally( var->children[0]->table, var->children[0]->tok->text ) )
-	    addSymbol( var->children[0]->table, var->children[0]->tok->text, -1, var->children[0] );
+	    addSymbol( var->children[0]->table, var->children[0]->tok->text, -1, var->children[0], data );
+	  
 	  else printError( "Redeclaration of IDENT", var->children[0] );
 	}
 	
 	//variable Initialization. Typecheck here is required as well.
 	if( var->children[2] != NULL && var->children[2]->label == variableInitialization ){ //
-	  checkIdentsInInitialization( var->children[2] );
+	  var->children[2]->nodeType = strdup( var->nodeType );
+	  checkIdentsInInitialization( var->children[2], var );
 	}
       }
       break;
@@ -246,21 +250,43 @@ void parseVariableName(node* var, node* parent_node){
 
 }
 
-void checkIdentsInInitialization(node* head){
+void checkIdentsInInitialization(node* head, node* root){
   if( head != NULL ){
-    if(head->label == IDENT){
-      if(head->tok->text != NULL){
-	if(findIdent(head->table, head->tok->text) == 0)
-	  printError("Use of an ident without declaring", head);
+    switch( head->label ){
+    case IDENT:
+      { 
+	if(head->tok->text != NULL){
+	  if( !findIdent(head->table, head->tok->text) )
+	    printError("Use of an ident without declaring", head);
+	  else {
+	    //check type information
+   	    if( !compareTypes( getSymbolNode( head->table, head->tok->text ) , root ) ){
+	      // printf("Troubleshooting. Why? Root: %s, Being assigned: %s\n", root->nodeType, getSymbolNode( head->table, head->tok->text )->nodeType );
+	      printError("Mismatching Types of the two Idents", head);
+	    }
+	  }
+	}
+      } 
+      break;
+    case NUMBERLIT:
+      if( !compareTypes( head, root ) ){
+	//	printf("Troubleshooting. Why? Root: %s, Being assigned: %s\n", root->nodeType, head->nodeType );
+	printError("Mismatching Types, I am a Number", head);
       }
+      break;
+      
+    case STRINGLIT:
+      if( !compareTypes( head, root ) )
+	printError("Mismatching Types, I am a String", head);
+      break;
+	  
     }
-    
     int n = head->nchildren;
     int i;
     for(i = 0; i < n; i++){      
       if(head->children[i]==NULL);
       else 
-	checkIdentsInInitialization( head->children[i] );
+	checkIdentsInInitialization( head->children[i] , root );
     }
   }
 }
@@ -274,7 +300,16 @@ void assignmentHandler( node* var, node* parent_node){
 void classHandler( node* var, node* parent_node ){
   
 }
-
+ 
+int compareTypes( node* var, node* parent_node ){
+  if( compareStrings( parent_node->nodeType, "void"))
+    return 1;
+  if( !compareStrings( parent_node->nodeType, var->nodeType ) ) {
+    
+    return 0;
+  }
+  return 1;
+}
 
 //not sure this will actually work
 node* miniTraverse( node* head, int label ){
