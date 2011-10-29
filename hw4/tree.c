@@ -97,9 +97,14 @@ void populateSymbolTables( node* head, node* parent_node ){
       break;
       
     case assignStatement:
-      assignmentHandler( head, parent_node );
-
-
+      {
+	//printf("Assign statement. Nodetype is %s", head->children[0]->nodeType );
+	head->nodeType = strdup( getSymbolNode( head->children[0]->table, head->children[0]->tok->text )->nodeType );
+	//This needs to grab the symbol type.
+	assignmentHandler( head, head );
+	break;
+      }
+      
     case expression:
       
       break;
@@ -197,8 +202,10 @@ void variableHandler(node* var, node* parent_node, variableDataPack* data ){
 	//replace this with a parseVariableName to actually delve through symbol tables
 	//right now it only handles IDENTS
 	if( var->children[0] != NULL && var->children[0]->label == IDENT ){
-
+	  
+	  
 	  var->children[0]->nodeType = strdup(var->nodeType); 
+	  printf("Ok, my type of %s is %s\n",var->children[0]->tok->text, var->children[0]->nodeType); 
 	  
 	  if( !findIdentLocally( var->children[0]->table, var->children[0]->tok->text ) )
 	    addSymbol( var->children[0]->table, var->children[0]->tok->text, -1, var->children[0], data );
@@ -220,7 +227,7 @@ void variableHandler(node* var, node* parent_node, variableDataPack* data ){
       checkIdentsInInitialization( var );
       break;
       
-    case IDENT:
+      case IDENT:
       if(findIdentLocally(var->table, var->tok->text) == 0){
 	
 	addSymbol(var->table, var->tok->text, -1, var);
@@ -246,6 +253,10 @@ void variableHandler(node* var, node* parent_node, variableDataPack* data ){
   } 
 }
 
+void evaluateExpression(node* var, node* parent_node){
+
+}
+
 void parseVariableName(node* var, node* parent_node){
 
 }
@@ -261,7 +272,6 @@ void checkIdentsInInitialization(node* head, node* root){
 	  else {
 	    //check type information
    	    if( !compareTypes( getSymbolNode( head->table, head->tok->text ) , root ) ){
-	      // printf("Troubleshooting. Why? Root: %s, Being assigned: %s\n", root->nodeType, getSymbolNode( head->table, head->tok->text )->nodeType );
 	      printError("Mismatching Types of the two Idents", head);
 	    }
 	  }
@@ -270,7 +280,6 @@ void checkIdentsInInitialization(node* head, node* root){
       break;
     case NUMBERLIT:
       if( !compareTypes( head, root ) ){
-	//	printf("Troubleshooting. Why? Root: %s, Being assigned: %s\n", root->nodeType, head->nodeType );
 	printError("Mismatching Types, I am a Number", head);
       }
       break;
@@ -292,8 +301,43 @@ void checkIdentsInInitialization(node* head, node* root){
 }
 
 
-void assignmentHandler( node* var, node* parent_node){
-
+void assignmentHandler( node* var, node* root){
+  if( var != NULL ){
+    switch( var->label ){
+    case IDENT:
+      { 
+	if(var->tok->text != NULL){
+	  if( !findIdent(var->table, var->tok->text) )
+	    printError("Use of an ident without declaring", var);
+	  else {
+	    //check type information
+   	    if( !compareTypes( getSymbolNode( var->table, var->tok->text ) , root ) ){
+	      printError("Mismatching Types of the two Idents", var);
+	    }
+	  }
+	}
+      } 
+      break;
+    case NUMBERLIT:
+      if( !compareTypes( var, root ) ){
+	printError("Mismatching Types, I am a Number", var);
+      }
+      break;
+      
+    case STRINGLIT:
+      if( !compareTypes( var, root ) )
+	printError("Mismatching Types, I am a String", var);
+      break;
+      
+    }
+    int n = var->nchildren;
+    int i;
+    for(i = 0; i < n; i++){      
+      if(var->children[i]==NULL);
+      else 
+	assignmentHandler( var->children[i] , root );
+    }
+  }
 }
 
 
@@ -305,7 +349,6 @@ int compareTypes( node* var, node* parent_node ){
   if( compareStrings( parent_node->nodeType, "void"))
     return 1;
   if( !compareStrings( parent_node->nodeType, var->nodeType ) ) {
-    
     return 0;
   }
   return 1;

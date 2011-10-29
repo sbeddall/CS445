@@ -5,5 +5,8 @@ var z: String = 2;
 
 var Y:Int = z;
 
-//var z:String = 2;
+var z:String = 2;
     
+var x:Number = 2;
+
+x = z;
