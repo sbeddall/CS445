@@ -47,13 +47,13 @@
 "break" { eval(_BREAK);  yylval.n = makeNode(_BREAK, NULL,  YYDup(), 0); return _BREAK; }
 "case" {  eval(_CASE);  yylval.n = makeNode(_CASE, NULL,  YYDup(), 0); return _CASE; }
 "catch" { eval(_CATCH);  yylval.n = makeNode(_CATCH, NULL,  YYDup(), 0);  return _CATCH; } 
-"class" | "Class" { eval(_CLASS);   yylval.n = makeNode(_CLASS, NULL,  YYDup(), 0); return _CLASS; }
+"class"|"Class" { eval(_CLASS); yylval.n = makeNode(_CLASS, NULL,  YYDup(), 0); return _CLASS; }
 "const" { eval(_CONST); yylval.n = makeNode(_CONST, NULL,  YYDup(), 0); return _CONST; }
 "continue" { eval(_CONTINUE);  yylval.n = makeNode(_CONTINUE, NULL,  YYDup(), 0);  return _CONTINUE; }
 "default" { eval(_DEFAULT);  yylval.n = makeNode(_DEFAULT, NULL,  YYDup(), 0); return _DEFAULT; }
 "do" { eval(_DO);  yylval.n = makeNode(_DO, NULL,  YYDup(), 0); return _DO; }
 "else" { eval(_ELSE);  yylval.n = makeNode(_ELSE, NULL,  YYDup(), 0); return _ELSE; } 
-"extends" { eval(_EXTENDS);  yylval.n = makeNode(_EXTENDS, NULL,  YYDup(), 0); return _EXTENDS; }
+"extends"|"Extends" { eval(_EXTENDS);  yylval.n = makeNode(_EXTENDS, NULL,  YYDup(), 0); return _EXTENDS; }
 "finally" { eval(_FINALLY);  yylval.n = makeNode(_FINALLY, NULL,  YYDup(), 0); return _FINALLY; }
 "for" { eval(_FOR);  yylval.n = makeNode(_FOR, NULL,  YYDup(), 0); return _FOR; }
 "function" { eval(_FUNCTION);  yylval.n = makeNode(_FUNCTION, NULL,  YYDup(), 0); return _FUNCTION; }
@@ -132,7 +132,6 @@
 "||" { eval(LOGICALOR);  yylval.n = makeNode(LOGICALOR, NULL,  YYDup(), 0); return LOGICALOR; }
 
 "//".* { }
-
 [0-9]*['.']?[0-9]* { eval(NUMBERLIT);  yylval.n = makeNode(NUMBERLIT, NULL,  YYDup(), 0); yylval.n->nodeType = strdup("Number"); return NUMBERLIT; }
 
 "?" { eval(_TERNARY);  yylval.n = makeNode(_TERNARY, NULL,  YYDup(), 0); return _TERNARY; }

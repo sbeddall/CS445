@@ -44,8 +44,8 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
 
 void yysemantics(node* head){  
   //build the symbol tables
-  //buildSymbolTables(head, NULL);
-  //  populateSymbolTables(head, NULL);
+  buildSymbolTables(head, NULL);
+   populateSymbolTables(head, NULL);
   
   //treePrint
   //  traverseTree(head,NULL,0);
@@ -346,8 +346,8 @@ void classHandler( node* var, node* parent_node ){
     int i = 0;
     for( i; i < n; i++ ){
       if(var->children[i]->label == IDENT){
-	if( !findIdentLocally( var->children[0]->table, var->children[0]->tok->text ) )
-	  addSymbol( var->children[0]->table, var->children[0]->tok->text, 3, var->children[0], NULL );
+	if( !findIdentLocally( var->children[i]->table, var->children[i]->tok->text ) )
+	  addSymbol( var->children[i]->table, var->children[i]->tok->text, 3, var->children[i], NULL );
 	else 
 	  printError( "Redeclaration of Class definition", var->children[i] );
  

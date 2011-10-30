@@ -65,7 +65,7 @@ void printTable(symbolTable* table){
   int i = 0;
   for( i; i < table->nSymbols; i++ ){
     if(table->fields[i]->name != NULL){
-      printf( "Ident: %s : Type: %s\n", table->fields[i]->name, table->fields[i]->token->nodeType );
+      printf( "Ident: %s : Type: %s : Base Type: %d\n", table->fields[i]->name, table->fields[i]->token->nodeType, table->fields[i]->baseType );
       /*if(table->fields[i]->flags != NULL){
 	int j = 0;
 	printf("\tFlags active\n");
