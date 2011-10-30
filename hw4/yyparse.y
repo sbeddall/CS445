@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "symbolTable.h"
 #include "enums.h"
+#include <string.h>
 
 // better error reporting
 #define YYERROR_VERBOSE
@@ -289,7 +290,8 @@ variableDeclarationList:
    ;
     
 variableBinding: 
-   variableName optionalVariableType variableInitialization {$$ = makeNode(variableBinding, NULL, NULL, 3, $1, $2, $3);}
+   variableName optionalVariableType variableInitialization {$$ = makeNode(variableBinding, NULL, NULL, 3, $1, $2, $3); $$->nodeType = strdup( getOptionalNodeType( $2) );
+   $1->nodeType = strdup( getOptionalNodeType( $2) ); $3->nodeType = strdup( getOptionalNodeType( $2) ); $2->nodeType = strdup( getOptionalNodeType( $2) );}
    ;
 
 variableName:
@@ -380,7 +382,7 @@ functionStatement:
    ;
 
 functionDeclaration:
-_FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(functionDeclaration, NULL, NULL, 4, $1, $2, $3, $4); }
+   _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(functionDeclaration, NULL, NULL, 4, $1, $2, $3, $4); }
    | modifier _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(functionDeclaration, NULL, NULL, 5, $1, $2, $3, $4, $5);}    
    ;
 
@@ -399,7 +401,7 @@ functionHeader:
    LPAREN variableDeclarationList RPAREN block {$$ = makeNode(functionHeader, NULL, NULL, 4, $1, $2, $3, $4);} 
    | LPAREN variableDeclarationList RPAREN COLON variableName block {$$ = makeNode(functionHeader, NULL, NULL, 6, $1, $2, $3, $4, $5, $6);}
    | LPAREN RPAREN block {$$ = makeNode(functionHeader, NULL, NULL, 3, $1, $2, $3);}
-   | LPAREN RPAREN COLON variableName block {$$ = makeNode(functionHeader, NULL, NULL, 5, $1, $2, $3, $4, $5);}
+   | LPAREN RPAREN COLON variableName block {$$ = makeNode(functionHeader, NULL, NULL, 5, $1, $2, $3, $4, $5); }
    ;
 
 packageStatement:
@@ -425,10 +427,10 @@ returnStatement:
    ;
 
 classStatement:
-   _CLASS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 3, $1, $2, $3);}
-   | modifier _CLASS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 4, $1, $2, $3, $4);}
-   | _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 5, $1, $2, $3, $4, $5);}
-   | modifier _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 6, $1, $2, $3, $4, $5, $6);}
+   _CLASS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 3, $1, $2, $3); $1->targetScope = $2->table;}
+   | modifier _CLASS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 4, $1, $2, $3, $4); $3->targetScope = $4->table; }
+   | _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 5, $1, $2, $3, $4, $5); $2->targetScope = $5->table; }
+   | modifier _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 6, $1, $2, $3, $4, $5, $6); $3->targetScope = $6->table;}
    ;
 
 modifier:

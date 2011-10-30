@@ -19,6 +19,10 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   new->nchildren = nchildren;
   new->tok = tok;
   new->nodeType = strdup("void");
+  if( new->targetScope != NULL ){
+    new->targetScope = NULL;
+  }
+  
 // new->parent = parent;
     
   new->children = 0;
@@ -86,6 +90,7 @@ void populateSymbolTables( node* head, node* parent_node ){
       
     case functionDeclaration:
       functionHandler( head, parent_node );
+
       break;
       
     case functionCall:
@@ -93,15 +98,18 @@ void populateSymbolTables( node* head, node* parent_node ){
       break;
       
     case classStatement:
-      
+      classHandler( head, parent_node );
       break;
       
     case assignStatement:
       {
-	//printf("Assign statement. Nodetype is %s", head->children[0]->nodeType );
-	head->nodeType = strdup( getSymbolNode( head->children[0]->table, head->children[0]->tok->text )->nodeType );
+	if( findIdent( head->table, head->children[0]->tok->text ) ){
+	  head->nodeType = strdup( getSymbolNode( head->children[0]->table, head->children[0]->tok->text )->nodeType );
+	  assignmentHandler( head, head );
+	}
+	else
+	  printError("Assigning to a non-existent variable", head->children[0]);
 	//This needs to grab the symbol type.
-	assignmentHandler( head, head );
 	break;
       }
       
@@ -131,12 +139,13 @@ void populateSymbolTables( node* head, node* parent_node ){
   }
 }
 
+//this only needs to handle the initiation. not the block
 void functionHandler( node* var, node* parent_node ){
   if( var != NULL ){
     switch( var->label ){
     case IDENT:
       if( !findIdentLocally( var->table, var->tok->text ) ) 
-	addSymbol( var->table, var->tok->text, -1 , parent_node, NULL );
+	addSymbol( var->table, var->tok->text, 2 , parent_node, NULL );
       else 
 	printError( "Redeclaration of IDENT", var );
       break;
@@ -194,28 +203,19 @@ void variableHandler(node* var, node* parent_node, variableDataPack* data ){
       
     case variableBinding:
       {
-	if( var->children[1] != NULL ){
-	  var->children[1]->nodeType = getOptionalNodeType( var->children[1] );  
-	  var->nodeType = strdup( var->children[1]->nodeType );
-	}
 	//type information population!
 	//replace this with a parseVariableName to actually delve through symbol tables
 	//right now it only handles IDENTS
 	if( var->children[0] != NULL && var->children[0]->label == IDENT ){
-	  
-	  
-	  var->children[0]->nodeType = strdup(var->nodeType); 
-	  printf("Ok, my type of %s is %s\n",var->children[0]->tok->text, var->children[0]->nodeType); 
+	  //printf("Ok, my type of %s is %s\n",var->children[0]->tok->text, var->children[0]->nodeType); 
 	  
 	  if( !findIdentLocally( var->children[0]->table, var->children[0]->tok->text ) )
-	    addSymbol( var->children[0]->table, var->children[0]->tok->text, -1, var->children[0], data );
-	  
+	    addSymbol( var->children[0]->table, var->children[0]->tok->text, 1, var->children[0], data );
 	  else printError( "Redeclaration of IDENT", var->children[0] );
 	}
 	
 	//variable Initialization. Typecheck here is required as well.
 	if( var->children[2] != NULL && var->children[2]->label == variableInitialization ){ //
-	  var->children[2]->nodeType = strdup( var->nodeType );
 	  checkIdentsInInitialization( var->children[2], var );
 	}
       }
@@ -342,7 +342,9 @@ void assignmentHandler( node* var, node* root){
 
 
 void classHandler( node* var, node* parent_node ){
-  
+  if( var != NULL){
+    
+  }
 }
  
 int compareTypes( node* var, node* parent_node ){
@@ -379,7 +381,7 @@ char* getOptionalNodeType( node* var ){
     if( var->children[1]->label == IDENT )
       return strdup( var->children[1]->tok->text );
   }
-  else return strdup("Object");
+  else return strdup("void");
 }
 
 void traverseTree(node* head, node* parent_node, int level){

@@ -40,11 +40,11 @@ int findIdent(symbolTable* table, char* ident){
 
 //THIS MAY POINT TO THE RELEVANT NODE. NOT NECESSARILY THE IDENT NODE ITSELF
 //Example: 
-int addSymbol(symbolTable* table, char* ident, int type, struct node* token, variableDataPack* flags){  
+int addSymbol(symbolTable* table, char* ident, int baseType, struct node* token, variableDataPack* flags){  
   field* lol = (field*)malloc(sizeof(field));
   
   lol->name = strdup(ident);
-  lol->type = type;
+  lol->baseType = baseType;
   lol->token = token;
   
   if(flags != NULL) lol->flags = updateFlagsFromData( flags );
@@ -66,13 +66,13 @@ void printTable(symbolTable* table){
   for( i; i < table->nSymbols; i++ ){
     if(table->fields[i]->name != NULL){
       printf( "Ident: %s : Type: %s\n", table->fields[i]->name, table->fields[i]->token->nodeType );
-      if(table->fields[i]->flags != NULL){
+      /*if(table->fields[i]->flags != NULL){
 	int j = 0;
 	printf("\tFlags active\n");
 	for(j; j < 7; j++){
 	  printf("\t\t%d\n", table->fields[i]->flags[j]);
 	}
-      }
+	}*/
     }
   }
 }
