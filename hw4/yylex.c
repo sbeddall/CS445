@@ -47,7 +47,7 @@
 "break" { eval(_BREAK);  yylval.n = makeNode(_BREAK, NULL,  YYDup(), 0); return _BREAK; }
 "case" {  eval(_CASE);  yylval.n = makeNode(_CASE, NULL,  YYDup(), 0); return _CASE; }
 "catch" { eval(_CATCH);  yylval.n = makeNode(_CATCH, NULL,  YYDup(), 0);  return _CATCH; } 
-"class" { eval(_CLASS);   yylval.n = makeNode(_CLASS, NULL,  YYDup(), 0); return _CLASS; }
+"class" | "Class" { eval(_CLASS);   yylval.n = makeNode(_CLASS, NULL,  YYDup(), 0); return _CLASS; }
 "const" { eval(_CONST); yylval.n = makeNode(_CONST, NULL,  YYDup(), 0); return _CONST; }
 "continue" { eval(_CONTINUE);  yylval.n = makeNode(_CONTINUE, NULL,  YYDup(), 0);  return _CONTINUE; }
 "default" { eval(_DEFAULT);  yylval.n = makeNode(_DEFAULT, NULL,  YYDup(), 0); return _DEFAULT; }

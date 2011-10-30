@@ -44,8 +44,8 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
 
 void yysemantics(node* head){  
   //build the symbol tables
-  buildSymbolTables(head, NULL);
-  populateSymbolTables(head, NULL);
+  //buildSymbolTables(head, NULL);
+  //  populateSymbolTables(head, NULL);
   
   //treePrint
   //  traverseTree(head,NULL,0);
@@ -94,7 +94,6 @@ void populateSymbolTables( node* head, node* parent_node ){
       break;
       
     case functionCall:
-      
       break;
       
     case classStatement:
@@ -115,16 +114,19 @@ void populateSymbolTables( node* head, node* parent_node ){
       
     case expression:
       
-      break;
+      break;   
       
-      
-    case IDENT:
+      /*    case IDENT:
       if( !findIdent( head->table, head->tok->text ) ) printError( "Use of an ident without declaring", head );
       break;
-      
+      */
     default:
       {
-	int n = head->nchildren;      
+	
+	break;
+      }
+    }
+      int n = head->nchildren;      
 	int i;
 	for( i = 0; i < n; i++ ){      
 	  if( head->children[i] == NULL ){
@@ -133,9 +135,6 @@ void populateSymbolTables( node* head, node* parent_node ){
 	    populateSymbolTables( head->children[i], head );
 	  }
 	}
-	break;
-      }
-    }
   }
 }
 
@@ -342,8 +341,19 @@ void assignmentHandler( node* var, node* root){
 
 
 void classHandler( node* var, node* parent_node ){
-  if( var != NULL){
-    
+  if( var != NULL ){
+    int n = var->nchildren;
+    int i = 0;
+    for( i; i < n; i++ ){
+      if(var->children[i]->label == IDENT){
+	if( !findIdentLocally( var->children[0]->table, var->children[0]->tok->text ) )
+	  addSymbol( var->children[0]->table, var->children[0]->tok->text, 3, var->children[0], NULL );
+	else 
+	  printError( "Redeclaration of Class definition", var->children[i] );
+ 
+	  printTable( var->table );
+      }
+    }
   }
 }
  
@@ -377,11 +387,14 @@ node* miniTraverse( node* head, int label ){
 }
 
 char* getOptionalNodeType( node* var ){
-  if( var->label == optionalVariableType ){
-    if( var->children[1]->label == IDENT )
-      return strdup( var->children[1]->tok->text );
+  if( var != NULL){
+    if( var->label == optionalVariableType ){
+      if( var->children[1]->label == IDENT )
+	return strdup( var->children[1]->tok->text );
+    }
+    else return strdup("void");
   }
-  else return strdup("void");
+  return strdup("void");
 }
 
 void traverseTree(node* head, node* parent_node, int level){

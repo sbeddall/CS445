@@ -274,7 +274,7 @@ Modulename:
     ;
 */
 block:
-   LBRACE RBRACE {$$ = makeNode(block, NULL, NULL, 2, $1, $2);}
+   LBRACE RBRACE {$$ = makeNode(block, makeTable(NULL), NULL, 2, $1, $2);}
    | LBRACE sourceElements RBRACE {$$ = makeNode(block, makeTable(NULL), NULL, 3, $1, $2, $3);}
    | objectInitializer {$$ = $1}
    ;
@@ -291,7 +291,7 @@ variableDeclarationList:
     
 variableBinding: 
    variableName optionalVariableType variableInitialization {$$ = makeNode(variableBinding, NULL, NULL, 3, $1, $2, $3); $$->nodeType = strdup( getOptionalNodeType( $2) );
-   $1->nodeType = strdup( getOptionalNodeType( $2) ); $3->nodeType = strdup( getOptionalNodeType( $2) ); $2->nodeType = strdup( getOptionalNodeType( $2) );}
+     if($1 != NULL) $1->nodeType = strdup( getOptionalNodeType( $2) ); if($3 != NULL) $3->nodeType = strdup( getOptionalNodeType( $2) ); if($2 != NULL) $2->nodeType = strdup( getOptionalNodeType( $2) );}
    ;
 
 variableName:
@@ -382,8 +382,8 @@ functionStatement:
    ;
 
 functionDeclaration:
-   _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(functionDeclaration, NULL, NULL, 4, $1, $2, $3, $4); }
-   | modifier _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(functionDeclaration, NULL, NULL, 5, $1, $2, $3, $4, $5);}    
+   _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(functionDeclaration, NULL, NULL, 4, $1, $2, $3, $4); $3->targetScope = $4->targetScope; }
+   | modifier _FUNCTION getterSetter IDENT functionHeader {$$ = makeNode(functionDeclaration, NULL, NULL, 5, $1, $2, $3, $4, $5); $4->targetScope = $5->targetScope;}    
    ;
 
 getterSetter:
@@ -398,14 +398,14 @@ functionCall:
    ;
 
 functionHeader:
-   LPAREN variableDeclarationList RPAREN block {$$ = makeNode(functionHeader, NULL, NULL, 4, $1, $2, $3, $4);} 
-   | LPAREN variableDeclarationList RPAREN COLON variableName block {$$ = makeNode(functionHeader, NULL, NULL, 6, $1, $2, $3, $4, $5, $6);}
-   | LPAREN RPAREN block {$$ = makeNode(functionHeader, NULL, NULL, 3, $1, $2, $3);}
-   | LPAREN RPAREN COLON variableName block {$$ = makeNode(functionHeader, NULL, NULL, 5, $1, $2, $3, $4, $5); }
+   LPAREN variableDeclarationList RPAREN block {$$ = makeNode(functionHeader, NULL, NULL, 4, $1, $2, $3, $4); $$->targetScope = $4->table;} 
+   | LPAREN variableDeclarationList RPAREN COLON variableName block {$$ = makeNode(functionHeader, NULL, NULL, 6, $1, $2, $3, $4, $5, $6); $$->targetScope = $6->table;}
+   | LPAREN RPAREN block {$$ = makeNode(functionHeader, NULL, NULL, 3, $1, $2, $3); $$->targetScope = $3->table;}
+   | LPAREN RPAREN COLON variableName block {$$ = makeNode(functionHeader, NULL, NULL, 5, $1, $2, $3, $4, $5); $$->targetScope = $5->table; }
    ;
 
 packageStatement:
-   _PACKAGE variableName block {$$ = makeNode(packageStatement, NULL, NULL, 3, $1, $2, $3);}
+   _PACKAGE variableName block {$$ = makeNode(packageStatement, NULL, NULL, 3, $1, $2, $3); $2->targetScope = $3->table;}
    ;
    
 ternaryExpression:
@@ -427,10 +427,10 @@ returnStatement:
    ;
 
 classStatement:
-   _CLASS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 3, $1, $2, $3); $1->targetScope = $2->table;}
-   | modifier _CLASS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 4, $1, $2, $3, $4); $3->targetScope = $4->table; }
-   | _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 5, $1, $2, $3, $4, $5); $2->targetScope = $5->table; }
-   | modifier _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 6, $1, $2, $3, $4, $5, $6); $3->targetScope = $6->table;}
+   _CLASS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 3, $1, $2, $3); }
+   | modifier _CLASS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 4, $1, $2, $3, $4);  }
+   | _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 5, $1, $2, $3, $4, $5);  }
+   | modifier _CLASS IDENT _EXTENDS IDENT block {$$ = makeNode(classStatement, NULL, NULL, 6, $1, $2, $3, $4, $5, $6);}
    ;
 
 modifier:

@@ -11,3 +11,6 @@ var x:Number = 2;
 l = z;
 
 x = z;
+class Z {
+      var l:Int = z;      
+}
