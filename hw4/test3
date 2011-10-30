@@ -22,3 +22,8 @@ class eep {
       var i:Number = 0;
 }
 
+var zeep:eep;
+
+zeep.lol = 2;
+
+

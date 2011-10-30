@@ -290,8 +290,16 @@ variableDeclarationList:
    ;
     
 variableBinding: 
-   variableName optionalVariableType variableInitialization {$$ = makeNode(variableBinding, NULL, NULL, 3, $1, $2, $3); $$->nodeType = strdup( getOptionalNodeType( $2) );
-     if($1 != NULL) $1->nodeType = strdup( getOptionalNodeType( $2) ); if($3 != NULL) $3->nodeType = strdup( getOptionalNodeType( $2) ); if($2 != NULL) $2->nodeType = strdup( getOptionalNodeType( $2) );}
+   variableName optionalVariableType variableInitialization {$$ = makeNode(variableBinding, NULL, NULL, 3, $1, $2, $3);
+     $$->nodeType = strdup( getOptionalNodeType( $2) );
+     if($1 != NULL) 
+       $1->nodeType = strdup( getOptionalNodeType( $2) ); 
+     if($3 != NULL) 
+       $3->nodeType = strdup( getOptionalNodeType( $2) ); 
+     if($2 != NULL){ 
+       $2->nodeType = strdup( getOptionalNodeType( $2) );
+     }
+   }
    ;
 
 variableName:

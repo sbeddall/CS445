@@ -51,14 +51,27 @@ node* getVariable( symbolTable* scope, node* var ){
       printError( "Use of an undeclared variable.", var );
   }  
   else {
+    printf("Encountering getVariable second else\n");
+    printf("%d\n", var->children[0]->label);
+    printf("%d %d\n", var->children[1]->label, ACCESSDOT);
+    printf("%d\n", var->children[2]->label);
     //if it's a variableName
     //we need to check to see if the type is a class
-    
-    
+    if( var->children[0]->label == IDENT ){
+      printf("INTO TEH IF\n"); 
+      node* temp = getSymbolNode( var->children[0]->table, var->children[0]->tok->text );
+      if(temp == NULL) printError("Class error. No such class", var->children[0]);
+      
+      if( findIdent( temp->table, temp->nodeType ) ){
+	printf("I found the type %s\n", temp->nodeType);
+	return getVariable( temp->targetScope, var->children[0] );
+      }
+      printf("%s\n", var->children[0]->nodeType);
+      printError("Class type does not Exist", var->children[0]);
+    }
   }
   
-  
-  printf("Something went terribly wrong");
+  printf("Something went terribly wrong. Var label is %d", var->label);
   return var;
 }
 
@@ -231,7 +244,7 @@ void variableHandler(node* var, node* parent_node, variableDataPack* data ){
 	//type information population!
 	//replace this with a parseVariableName to actually delve through symbol tables
 	//right now it only handles IDENTS
-
+	
 	if( var->children[0] != NULL &&  ( var->children[0]->label == IDENT || var->children[0]->label == variableName ) ){
 	  //printf("Ok, my type of %s is %s\n",var->children[0]->tok->text, var->children[0]->nodeType); 
 	  if( !findIdentLocally( var->children[0]->table, var->children[0]->tok->text ) )
