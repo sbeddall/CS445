@@ -57,17 +57,14 @@ int addSymbol(symbolTable* table, char* ident, int baseType, struct node* token,
 }
 
 
-
-void printTable(symbolTable* table){
-  printf("Printing Table: %p\n", table);
-  
+void printTable( symbolTable* table, int level ){
+  printf("%*sPrinting Table: %p\n",level, " ", table);
   int i = 0;
   for( i; i < table->nSymbols; i++ ){
     if(table->fields[i]->name != NULL){
-      printf( "Ident: %s : Type: %s : Base Type: %d\n", table->fields[i]->name, table->fields[i]->token->nodeType, table->fields[i]->baseType );
+      printf( "%*sIdent: %s : Type: %s : Base Type: %d\n", level, " ", table->fields[i]->name, table->fields[i]->token->nodeType, table->fields[i]->baseType );
       if( table->fields[i]->baseType == 3){
-	printf("\t%p\n", table->fields[i]->token->targetScope);
-	printTable(table->fields[i]->token->targetScope);
+	printTable(table->fields[i]->token->targetScope, ++level);
       }
       /*if(table->fields[i]->flags != NULL){
 	int j = 0;
@@ -80,14 +77,15 @@ void printTable(symbolTable* table){
   }
 }
 
+
 void printTableHierarchy(symbolTable* table){
   symbolTable* iterator = table;
 
   while(iterator->parent != NULL){
-    printTable(iterator);
+    printTable(iterator, 0);
     iterator = iterator->parent;
   }
-  printTable(iterator);
+  printTable(iterator, 0);
 }
 
 int* updateFlagsFromData( variableDataPack* data ){
@@ -121,12 +119,18 @@ int* updateFlagsFromData( variableDataPack* data ){
   return flags;  
 }
 
+field* getField( symbolTable* table, char* ident ){
+int i = 0;
+ for( i; i < table->nSymbols; i++){
+   if(compareStrings(ident, table->fields[i]->name)) return table->fields[i];
+ }
+ return getField( table->parent, ident );  
+}
+
 struct node* getSymbolNode( symbolTable* table, char* ident ){
   int i = 0;
   for( i; i < table->nSymbols; i++){
     if(compareStrings(ident, table->fields[i]->name)) return table->fields[i]->token;
   }
-  
-  
-  return getSymbolNode( table->parent, ident );;
+  return getSymbolNode( table->parent, ident );
 }

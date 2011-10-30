@@ -42,8 +42,24 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   return new;
 }
 
-node* getVariable(symbolTable* scope, node* var){
-
+node* getVariable( symbolTable* scope, node* var ){
+  //base case
+  if( var->label == IDENT ){
+    if( findIdent( scope, var->tok->text ) )
+      return getSymbolNode( var->table, var->tok->text );
+    else 
+      printError( "Use of an undeclared variable.", var );
+  }  
+  else {
+    //if it's a variableName
+    //we need to check to see if the type is a class
+    
+    
+  }
+  
+  
+  printf("Something went terribly wrong");
+  return var;
 }
 
 void yysemantics(node* head){  
@@ -54,7 +70,7 @@ void yysemantics(node* head){
   //treePrint
   //  traverseTree(head,NULL,0);
 
-  printTable(head->table);
+  printTable(head->table, 0);
 }
 
 
@@ -106,9 +122,15 @@ void populateSymbolTables( node* head, node* parent_node ){
       
     case assignStatement:
       {
-	if( findIdent( head->table, head->children[0]->tok->text ) ){
-	  head->nodeType = strdup( getSymbolNode( head->children[0]->table, head->children[0]->tok->text )->nodeType );
-	  assignmentHandler( head, head );
+	node* new;
+	if( head->children[0]->label == variableName )
+	  new = getVariable( head->children[0]->table, head->children[0] );
+	else
+	  new = head->children[0];
+	printf("\n\n %d \n\n", new->label );
+	if( findIdent( new->table, new->tok->text ) ){
+	  head->nodeType = strdup( getSymbolNode( new->table, new->tok->text )->nodeType );
+	  assignmentHandler( new, head );
 	}
 	else
 	  printError("Assigning to a non-existent variable", head->children[0]);
@@ -209,9 +231,9 @@ void variableHandler(node* var, node* parent_node, variableDataPack* data ){
 	//type information population!
 	//replace this with a parseVariableName to actually delve through symbol tables
 	//right now it only handles IDENTS
-	if( var->children[0] != NULL && var->children[0]->label == IDENT ){
+
+	if( var->children[0] != NULL &&  ( var->children[0]->label == IDENT || var->children[0]->label == variableName ) ){
 	  //printf("Ok, my type of %s is %s\n",var->children[0]->tok->text, var->children[0]->nodeType); 
-	  
 	  if( !findIdentLocally( var->children[0]->table, var->children[0]->tok->text ) )
 	    addSymbol( var->children[0]->table, var->children[0]->tok->text, 1, var->children[0], data );
 	  else printError( "Redeclaration of IDENT", var->children[0] );
@@ -280,6 +302,21 @@ void checkIdentsInInitialization(node* head, node* root){
 	  }
 	}
       } 
+      break;
+    case variableName:
+      {
+	node* new = getVariable( head->table, head );
+     	if(new->tok->text != NULL){
+	  if( !findIdent(new->table, new->tok->text) )
+	    printError("Use of an ident without declaring", new);
+	  else {
+	    //check type information
+   	    if( !compareTypes( getSymbolNode( new->table, new->tok->text ) , root ) ){
+	      printError("Mismatching Types of the two Idents", new);
+	    }
+	  }
+	} 
+      }
       break;
     case NUMBERLIT:
       if( !compareTypes( head, root ) ){

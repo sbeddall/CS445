@@ -56,7 +56,7 @@ int findIdent(symbolTable* table, char* ident); //searches up
 int addSymbol( symbolTable* table, char* ident, int baseType, struct node* token, struct variableDataPack* flags );
 int* updateFlagsFromData( variableDataPack* data );
 struct node* getSymbolNode( symbolTable* table, char* ident);
-
-void printTable(symbolTable* table);
+field* getField( symbolTable* table, char* ident );
+void printTable(symbolTable* table, int level);
 
 #endif

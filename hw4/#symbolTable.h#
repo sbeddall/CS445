@@ -22,9 +22,9 @@
 
 typedef struct field {
   char *name;
-  int type;
   struct node* token;
   int* flags; 
+  int baseType; //1 = var. 2 = function. 3 = class
   /*
     
     0 var 
@@ -39,6 +39,7 @@ typedef struct field {
     9 static
   
   */
+  
   //struct ctype *elemtype;
 } field;
   
@@ -52,10 +53,10 @@ symbolTable* makeTable(symbolTable* parent);
 
 int findIdentLocally(symbolTable* table, char* ident); //no recursion up
 int findIdent(symbolTable* table, char* ident); //searches up
-int addSymbol(symbolTable* table, char* ident, int type, struct node* token, struct variableDataPack* flags);
+int addSymbol( symbolTable* table, char* ident, int baseType, struct node* token, struct variableDataPack* flags );
 int* updateFlagsFromData( variableDataPack* data );
 struct node* getSymbolNode( symbolTable* table, char* ident);
-
-void printTable(symbolTable* table);
+field* getField( symbolTable* table, char* ident );
+void printTable(symbolTable* table, int level);
 
 #endif
