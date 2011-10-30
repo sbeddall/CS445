@@ -24,6 +24,7 @@ class eep {
 
 var zeep:eep;
 
-zeep.lol = 2;
+zeep.i = 2;
+
 
 

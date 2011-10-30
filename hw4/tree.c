@@ -45,32 +45,42 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
 node* getVariable( symbolTable* scope, node* var ){
   //base case
   if( var->label == IDENT ){
-    if( findIdent( scope, var->tok->text ) )
-      return getSymbolNode( var->table, var->tok->text );
-    else 
-      printError( "Use of an undeclared variable.", var );
+    //printf("%s\n", var->nodeType);
+    if( findIdent( scope, var->tok->text ) ){
+      //printf("%s\n", var->tok->text);
+      return getSymbolNode( scope, var->tok->text );
+    }
+    else{ 
+       printError( "Use of an undeclared variable.", var );
+       //printTable( var->table, 0 );
+    }
   }  
-  else {
-    printf("Encountering getVariable second else\n");
-    printf("%d\n", var->children[0]->label);
-    printf("%d %d\n", var->children[1]->label, ACCESSDOT);
-    printf("%d\n", var->children[2]->label);
-    //if it's a variableName
-    //we need to check to see if the type is a class
+  else if( var->label == variableName ){
     if( var->children[0]->label == IDENT ){
-      printf("INTO TEH IF\n"); 
-      node* temp = getSymbolNode( var->children[0]->table, var->children[0]->tok->text );
-      if(temp == NULL) printError("Class error. No such class", var->children[0]);
+      //printf("INTO TEH IF\n"); 
       
-      if( findIdent( temp->table, temp->nodeType ) ){
-	printf("I found the type %s\n", temp->nodeType);
-	return getVariable( temp->targetScope, var->children[0] );
+      //check the variable exists
+      if( findIdent( var->table, var->children[0]->tok->text ) ){
+	//printf( "Variable Exists %s\n", var->children[0]->tok->text );
+	node* tempClassNode = getSymbolNode( var->table, var->children[0]->tok->text );
+	//	printTable( tempClassNode->table, 0 );
+	node* temp = getSymbolNode( tempClassNode->table, tempClassNode->nodeType );
+	//printf("%s\n", tempClassNode->nodeType);
+	
+	if(temp == NULL) printError("Class error. No such class", var->children[0]);
+	
+	if( findIdent( scope, temp->tok->text ) ){
+	  //printf("I found the type %s\n", temp->tok->text);
+	  return getVariable( temp->targetScope, var->children[2] );
+	}
+	else {
+	  printError("I didn't find the class type %s\n", var->children[0]);
+	}
+	
       }
-      printf("%s\n", var->children[0]->nodeType);
-      printError("Class type does not Exist", var->children[0]);
+      printError("Class Instance does not Exist", var->children[0]);
     }
   }
-  
   printf("Something went terribly wrong. Var label is %d", var->label);
   return var;
 }
@@ -83,7 +93,7 @@ void yysemantics(node* head){
   //treePrint
   //  traverseTree(head,NULL,0);
 
-  printTable(head->table, 0);
+  //  printTable(head->table, 0);
 }
 
 
@@ -140,7 +150,7 @@ void populateSymbolTables( node* head, node* parent_node ){
 	  new = getVariable( head->children[0]->table, head->children[0] );
 	else
 	  new = head->children[0];
-	printf("\n\n %d \n\n", new->label );
+	//printf("\n\n %d \n\n", new->label );
 	if( findIdent( new->table, new->tok->text ) ){
 	  head->nodeType = strdup( getSymbolNode( new->table, new->tok->text )->nodeType );
 	  assignmentHandler( new, head );
