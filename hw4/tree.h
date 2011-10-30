@@ -20,6 +20,7 @@ typedef struct node {
 //  symbolTable* parent;
 //node* makeNode(char* text,symbolTable* parent, token* tok, int nchildren, ...);
 node* makeNode(int label, symbolTable* parent,  token* tok, int nchildren, ...);
+node* getVariable( symbolTable* scope, node* var );
 void yysemantics(node* head);
 void populateSymbolTables(node* head, node* parent_node);
 void buildSymbolTables(node* head, node* parent_node);

@@ -42,15 +42,19 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   return new;
 }
 
+node* getVariable(symbolTable* scope, node* var){
+
+}
+
 void yysemantics(node* head){  
   //build the symbol tables
   buildSymbolTables(head, NULL);
-   populateSymbolTables(head, NULL);
+  populateSymbolTables(head, NULL);
   
   //treePrint
   //  traverseTree(head,NULL,0);
 
-  //printTable(head->table);
+  printTable(head->table);
 }
 
 
@@ -349,21 +353,23 @@ void classHandler( node* var, node* parent_node ){
 	if( !findIdentLocally( var->children[i]->table, var->children[i]->tok->text ) )
 	  addSymbol( var->children[i]->table, var->children[i]->tok->text, 3, var->children[i], NULL );
 	else 
-	  printError( "Redeclaration of Class definition", var->children[i] );
- 
-	  printTable( var->table );
+	  printError( "Redeclaration of Class definition", var->children[i] );	
       }
     }
   }
 }
  
 int compareTypes( node* var, node* parent_node ){
-  if( compareStrings( parent_node->nodeType, "void"))
+  if( var != NULL && parent_node != NULL ){
+    if( compareStrings( parent_node->nodeType, "void"))
+      return 1;
+    if( !compareStrings( parent_node->nodeType, var->nodeType ) ) {
+      return 0;
+    }
     return 1;
-  if( !compareStrings( parent_node->nodeType, var->nodeType ) ) {
-    return 0;
   }
-  return 1;
+  printError("Ident doesn't exist.", var);
+  return 0; 
 }
 
 //not sure this will actually work

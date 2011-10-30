@@ -53,7 +53,6 @@ int addSymbol(symbolTable* table, char* ident, int baseType, struct node* token,
   
   table->nSymbols++;
   int n = table->nSymbols-1;
-
   table->fields[n] = lol; 
 }
 
@@ -66,6 +65,10 @@ void printTable(symbolTable* table){
   for( i; i < table->nSymbols; i++ ){
     if(table->fields[i]->name != NULL){
       printf( "Ident: %s : Type: %s : Base Type: %d\n", table->fields[i]->name, table->fields[i]->token->nodeType, table->fields[i]->baseType );
+      if( table->fields[i]->baseType == 3){
+	printf("\t%p\n", table->fields[i]->token->targetScope);
+	printTable(table->fields[i]->token->targetScope);
+      }
       /*if(table->fields[i]->flags != NULL){
 	int j = 0;
 	printf("\tFlags active\n");
@@ -123,6 +126,7 @@ struct node* getSymbolNode( symbolTable* table, char* ident ){
   for( i; i < table->nSymbols; i++){
     if(compareStrings(ident, table->fields[i]->name)) return table->fields[i]->token;
   }
-   
-  return NULL;
+  
+  
+  return getSymbolNode( table->parent, ident );;
 }

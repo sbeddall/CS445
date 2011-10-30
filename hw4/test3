@@ -13,4 +13,7 @@ l = z;
 x = z;
 class Z {
       var l:Int = z;      
+
+      var z:KIK = k;
+
 }
