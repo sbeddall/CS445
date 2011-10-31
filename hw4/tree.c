@@ -60,37 +60,36 @@ node* getVariable( symbolTable* scope, node* var ){
       //printf("INTO TEH IF\n"); 
       
       //check the variable exists
-      if( findIdent( var->table, var->children[0]->tok->text ) ){
+      if( findIdent( var->children[0]->table, var->children[0]->tok->text ) ){
 	//printf( "Variable Exists %s\n", var->children[0]->tok->text );
-	node* tempClassNode = getSymbolNode( var->table, var->children[0]->tok->text );
+	node* tempClassNode = getSymbolNode( var->children[0]->table, var->children[0]->tok->text );
 	//	printTable( tempClassNode->table, 0 );
 	node* temp;
 	if( findIdent( tempClassNode->table, tempClassNode->nodeType ) ){
 	  node* temp = getSymbolNode( tempClassNode->table, tempClassNode->nodeType );
-	  //printf("%s\n", tempClassNode->nodeType);
+	  if( findIdent( scope, temp->tok->text ) ){
+	    //printf("I found the type %s\n", temp->tok->text);
+	    
+	    return getVariable( temp->targetScope, var->children[2] );
+	  }
+	  else {
+	    printError("I didn't find the class type %s\n", var->children[0]);
+	  }
 	}
 	else {
 	  printError("Accessing a variable or function as a class. Not possible.", var->children[0] );
 	  return var;
 	}
-	      
 	
-	if(temp == NULL) printError("Class error. No such class", var->children[0]);
-	
-	if( findIdent( scope, temp->tok->text ) ){
-	  //printf("I found the type %s\n", temp->tok->text);
-	  
-	  return getVariable( temp->targetScope, var->children[2] );
-	}
-	else {
-	  printError("I didn't find the class type %s\n", var->children[0]);
-	}
+	//if(temp == NULL) printError("Class error. No such class", var->children[0]);
+	//else {
 	
       }
+      
       printError("Class Instance does not Exist", var->children[0]);
     }
   }
-  printf("Something went terribly wrong. Var label is %d", var->label);
+  //printf("Something went terribly wrong. Var label is %d", var->label);
   return var;
 }
 
@@ -160,6 +159,10 @@ void populateSymbolTables( node* head, node* parent_node ){
 	else
 	  new = head->children[0];
 	//printf("\n\n %d \n\n", new->label );
+	if( new->label != IDENT ){
+	  //printError("Target assigned variable does not exist. Breaking", parent_node);
+	  break;
+	}
 	if( findIdent( new->table, new->tok->text ) ){
 	  head->nodeType = strdup( getSymbolNode( new->table, new->tok->text )->nodeType );
 	  assignmentHandler( new, head );
@@ -338,7 +341,8 @@ void checkIdentsInInitialization(node* head, node* root){
     case variableName:
       {
 	node* new = getVariable( head->table, head );
-     	if(new->tok->text != NULL){
+	if( new->label != IDENT ) break;
+	if(new->tok->text != NULL){
 	  if( !findIdent(new->table, new->tok->text) )
 	    printError("Use of an ident without declaring", new);
 	  else {
@@ -360,14 +364,17 @@ void checkIdentsInInitialization(node* head, node* root){
       if( !compareTypes( head, root ) )
 	printError("Mismatching Types, I am a String", head);
       break;
-	  
-    }
-    int n = head->nchildren;
-    int i;
-    for(i = 0; i < n; i++){      
-      if(head->children[i]==NULL);
-      else 
-	checkIdentsInInitialization( head->children[i] , root );
+
+    default:
+      {
+          int n = head->nchildren;
+	  int i;
+	  for(i = 0; i < n; i++){      
+	    if(head->children[i]==NULL);
+	    else 
+	      checkIdentsInInitialization( head->children[i] , root );
+	  }
+      }
     }
   }
 }
@@ -376,6 +383,13 @@ void checkIdentsInInitialization(node* head, node* root){
 void assignmentHandler( node* var, node* root){
   if( var != NULL ){
     switch( var->label ){
+      
+    case variableName:
+      {
+	
+      }
+      break; 
+      
     case IDENT:
       { 
 	if(var->tok->text != NULL){
@@ -390,6 +404,7 @@ void assignmentHandler( node* var, node* root){
 	}
       } 
       break;
+
     case NUMBERLIT:
       if( !compareTypes( var, root ) ){
 	printError("Mismatching Types, I am a Number", var);
@@ -400,14 +415,17 @@ void assignmentHandler( node* var, node* root){
       if( !compareTypes( var, root ) )
 	printError("Mismatching Types, I am a String", var);
       break;
-      
-    }
-    int n = var->nchildren;
-    int i;
-    for(i = 0; i < n; i++){      
-      if(var->children[i]==NULL);
-      else 
-	assignmentHandler( var->children[i] , root );
+
+    default:
+      {
+      int n = var->nchildren;
+      int i;
+      for(i = 0; i < n; i++){      
+	if(var->children[i]==NULL);
+	else 
+	  assignmentHandler( var->children[i] , root );
+      }   
+      }
     }
   }
 }

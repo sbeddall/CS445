@@ -195,8 +195,10 @@ void ISval(int category, char* yytext){
 }
 
 void printError(char* errorText, struct node* head){
-  printf("%s: %s\n", errorText, head->tok->text);
+  
+  if( head->tok != NULL) printf("%s: %s\n", errorText, head->tok->text);
   printf("\tNode label: %d\n", head->label);
-  printf("\tLine Number: %d\n", head->tok->lineno);
+  if( head->tok != NULL) printf("\tLine Number: %d\n", head->tok->lineno);
   printf("\tSymbol Table: %p\n\n", head->table); 
+  
 }

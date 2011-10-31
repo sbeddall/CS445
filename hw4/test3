@@ -22,9 +22,9 @@ class eep {
       var i:Number = 0;
 }
 
-var zeep:meep;
+var zeep:eep;
 
 zeep.i = 2;
 
-
+var p:Number = zeep.i;
 
