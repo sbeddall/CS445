@@ -69,7 +69,8 @@ node* getVariable( symbolTable* scope, node* var ){
 	  node* temp = getSymbolNode( tempClassNode->table, tempClassNode->nodeType );
 	  if( temp->tok == NULL ){
 	    printError( "Unexpected Error", var );
-	    return var;
+	    return var
+
 	  }
 	  
 	  if( findIdent( scope, temp->tok->text ) ){
