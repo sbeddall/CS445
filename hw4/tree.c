@@ -64,13 +64,22 @@ node* getVariable( symbolTable* scope, node* var ){
 	//printf( "Variable Exists %s\n", var->children[0]->tok->text );
 	node* tempClassNode = getSymbolNode( var->table, var->children[0]->tok->text );
 	//	printTable( tempClassNode->table, 0 );
-	node* temp = getSymbolNode( tempClassNode->table, tempClassNode->nodeType );
-	//printf("%s\n", tempClassNode->nodeType);
+	node* temp;
+	if( findIdent( tempClassNode->table, tempClassNode->nodeType ) ){
+	  node* temp = getSymbolNode( tempClassNode->table, tempClassNode->nodeType );
+	  //printf("%s\n", tempClassNode->nodeType);
+	}
+	else {
+	  printError("Accessing a variable or function as a class. Not possible.", var->children[0] );
+	  return var;
+	}
+	      
 	
 	if(temp == NULL) printError("Class error. No such class", var->children[0]);
 	
 	if( findIdent( scope, temp->tok->text ) ){
 	  //printf("I found the type %s\n", temp->tok->text);
+	  
 	  return getVariable( temp->targetScope, var->children[2] );
 	}
 	else {
