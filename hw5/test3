@@ -1,0 +1,30 @@
+
+var z: String = "hello!";
+
+var z: String = 2;
+
+var Y:Int = z;
+
+var z:String = 2;
+    
+var x:Number = 2;
+
+l = z;
+
+x = z;
+
+class Z {
+      var l:Int = z;      
+      var z:KIK = k;
+}
+
+class eep {
+      var i:Number = 0;
+}
+
+var zeep:eep;
+
+zeep.i = 2;
+
+var p:Number = zeep.i;
+
