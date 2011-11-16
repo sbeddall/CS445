@@ -15,6 +15,8 @@ typedef struct node {
   struct node** children;
   char* nodeType;
   struct symbolTable* targetScope;
+  char* code;
+  
 } node;
 
 //  symbolTable* parent;

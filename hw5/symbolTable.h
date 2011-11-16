@@ -41,6 +41,7 @@ typedef struct field {
   */
   
   //struct ctype *elemtype;
+  void* value;
 } field;
   
 typedef struct symbolTable { 

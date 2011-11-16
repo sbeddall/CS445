@@ -1,15 +1,13 @@
 DEBUG = DEBUG=0
 
 all:
-	- @make clean 
-	- @make ec
+	make ec
 
-ec: yyparse.tab.o lex.yy.o main.o structures.o tree.o symbolTable.o dataPacks.o
-	gcc -ggdb -o ec lex.yy.o main.o structures.o tree.o yyparse.tab.o symbolTable.o dataPacks.o 
+ec: yyparse.tab.o lex.yy.o main.o structures.o tree.o symbolTable.o dataPacks.o TAC.o codeGen.o
+	gcc -ggdb -o ec lex.yy.o main.o structures.o tree.o yyparse.tab.o symbolTable.o dataPacks.o TAC.o codeGen.o
 
 debug: 
-	- @make clean
-	- @make ec DEBUG=DEBUG=1
+	@make ec DEBUG=DEBUG=1
 
 lex.yy.o : lex.yy.c
 	gcc -ggdb -c  lex.yy.c
@@ -38,21 +36,27 @@ symboltable.o : symbolTable.c
 dataPacks.o : dataPacks.c
 	gcc -ggdb -c -D$(DEBUG) dataPacks.c
 
+TAC.o : TAC.c
+	gcc -ggdb -c -D$(DEBUG) TAC.c
+
+codeGen.o : codeGen.c
+	gcc -ggdb -c -D$(DEBUG) codeGen.c
+
 clean: 	
-	- rm yyparse.tab.c
-	- rm yyparse.tab.h
-	- rm lex.yy.o 
-	- rm *.*~ 
-	- rm main.o
-	- rm lex.yy.c	
-	- rm compiler
-	- rm ec
-	- rm *~x
-	- rm *.o
-	- rm *~
-	- rm *.output
-	- rm *.dot
-	- rm *.tar
+	@- rm yyparse.tab.c
+	@- rm yyparse.tab.h
+	@- rm lex.yy.o 
+	@- rm *.*~ 
+	@- rm main.o
+	@- rm lex.yy.c	
+	@- rm compiler
+	@- rm ec
+	@- rm *~x
+	@- rm *.o
+	@- rm *~
+	@- rm *.output
+	@- rm *.dot
+	@- rm *.tar
 
 tar: 
-	tar cf hw4.tar makefile main.c yylex.c structures.c structures.h yyparse.y tree.c tree.h test test3 enums.h dataPacks.c dataPacks.h symbolTable.h symbolTable.c 	
+	tar cf hw5.tar makefile main.c yylex.c structures.c structures.h yyparse.y tree.c tree.h test test3 enums.h dataPacks.c dataPacks.h symbolTable.h symbolTable.c 	
