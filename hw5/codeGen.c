@@ -5,14 +5,36 @@
 #include <string.h>
 
 extern int NUMVARIABLES;
+extern int NUMLABELS;
 
 char* newLabel(){
 
   char* new = (char*)malloc(sizeof(char)*10);
+
+  new[0] = 'L';
+  new[1] = '_';
+  new[2] = '\0';
+  
+  char* integerToString = (char*)malloc(sizeof(char) * 10);
+  
+  itoa(NUMLABELS, integerToString);
+  
+  reverseString(integerToString);
+  
+  strcat(new,integerToString);
+
+  NUMLABELS++;
+
+  return new;
+}
+
+//do I want to put the actual symbolTable functionality here?
+char* newVariable(symbolTable* parent){
+  char* new = (char*)malloc(sizeof(char)*10);
   new[0] = '_';
   new[1] = '_';
   new[2] = 't';
-  new[3] = '\0';
+  new[3] = '\0'; 
   
   char* integerToString = (char*)malloc(sizeof(char) * 10);
   
@@ -25,13 +47,7 @@ char* newLabel(){
 
   NUMVARIABLES++;
 
-  return new;
-}
-
-char* newVariable(symbolTable* parent){
-  
-  
-  return NULL;
+  return new;   
 }
 
 char* itoa(int val, char* buf){

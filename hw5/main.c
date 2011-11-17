@@ -20,6 +20,8 @@ extern FILE* yyin;
 int failed;
 symbolTable* global_table;
 node* head;
+int NUMVARIABLES;
+int NUMLABELS;
 
 main(int argc, char* argv[]){
   failed = 0;
@@ -27,8 +29,9 @@ main(int argc, char* argv[]){
   YYTOKEN = (token*)malloc(sizeof(token));
   global_table = makeTable(NULL);
   status = 0;
+  NUMVARIABLES = 0;
+  NUMLABELS = 0;
   
- 
   int successful = 0;
   int total = 0;
   int i = 1;

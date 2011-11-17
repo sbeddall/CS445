@@ -15,8 +15,10 @@ typedef struct node {
   struct node** children;
   char* nodeType;
   struct symbolTable* targetScope;
-  char* code;
   
+  //stuff for code gen
+  //TACLISTPOINTER* code;
+  field* place;
 } node;
 
 //  symbolTable* parent;

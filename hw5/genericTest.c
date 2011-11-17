@@ -10,9 +10,11 @@
 //FILE* FILENAME;
 
 int NUMVARIABLES;
+int NUMLABELS;
 
 int main(){
   NUMVARIABLES = 0;
+  NUMLABELS = 0;
   /*  list* head = (list*)malloc(sizeof(list));
   int* lol = (int*)malloc(sizeof(int));
   lol[0] = 2;
@@ -44,6 +46,8 @@ int main(){
   
   for(i; i < 300; i++){
     lol = newLabel();
+    printf("%s\n", lol);
+    lol = newVariable(NULL);
     printf("%s\n", lol);
   }
   
