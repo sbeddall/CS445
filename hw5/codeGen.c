@@ -4,16 +4,28 @@
 #include <stdio.h>
 #include <string.h>
 
+extern int NUMVARIABLES;
 
 char* newLabel(){
-  char* new = "__t";
-  
-  char* integerToString[30];
 
-  int length = my_itoa(count, integerToString);
+  char* new = (char*)malloc(sizeof(char)*10);
+  new[0] = '_';
+  new[1] = '_';
+  new[2] = 't';
+  new[3] = '\0';
   
-  count++;
-  return strcat(new,integerToString);
+  char* integerToString = (char*)malloc(sizeof(char) * 10);
+  
+  itoa(NUMVARIABLES, integerToString);
+  
+  reverseString(integerToString);
+  
+  strcat(integerToString,"__");
+  strcat(new,integerToString);
+
+  NUMVARIABLES++;
+
+  return new;
 }
 
 char* newVariable(symbolTable* parent){
@@ -22,56 +34,48 @@ char* newVariable(symbolTable* parent){
   return NULL;
 }
 
-//this is not my code. itoa is not standard, so I'm using this one I found
-//online. Again. Crediting: 
-int my_itoa(int val, char* buf)
-{
-    const unsigned int radix = 10;
+char* itoa(int val, char* buf){
+  int new = (unsigned int)val;
+  char* temp = buf;
+  
+  
+  while(val > 0){
+    
+    new = val % 10;
+    val /= 10;
+    
+    *temp++ = new + '0';
+  }
 
-    char* p;
-    unsigned int a;        //every digit
-    int len;
-    char* b;            //start of the digit char
-    char temp;
-    unsigned int u;
-
-    p = buf;
-
-    if (val < 0)
-    {
-        *p++ = '-';
-        val = 0 - val;
-    }
-    u = (unsigned int)val;
-
-    b = p;
-
-    do
-    {
-        a = u % radix;
-        u /= radix;
-
-        *p++ = a + '0';
-
-    } while (u > 0);
-
-    len = (int)(p - buf);
-
-    *p-- = 0;
-
-    //swap
-    do
-    {
-        temp = *p;
-        *p = *b;
-        *b = temp;
-        --p;
-        ++b;
-
-    } while (b < p);
-
-    return len;
+  *temp++ = '\0';
+  
+  return NULL;
 }
 
+void reverseString(char* buf){
+  char* temp1 = buf;
+  char* temp2 = buf;
+  
+  while(*temp2 != '\0'){
+    temp2++;
+  }
+  temp2--;
+  char new;
+  
+  while(temp1 < temp2){
+    new = *temp1;
+    *temp1 = *temp2;
+    *temp2 = new;
+    
+    temp1++;
+    temp2--;
+  }
+}
 
-
+/*
+val 53
+new 53%10 = 3
+val 53/10 = 5
+new 5%10 = 5
+val 5/10 = 0
+*/

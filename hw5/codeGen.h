@@ -3,13 +3,12 @@
 #include "symbolTable.h"
 
 
-int count = 0;
-
 char* newLabel();
 char* newVariable(symbolTable* parent);
 
+char* itoa(int val, char* buf);
 int my_itoa(int val, char* buf);
-
+void reverseString(char* buf);
 
 
 #endif
