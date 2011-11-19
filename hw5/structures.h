@@ -30,6 +30,7 @@ typedef struct genericList {
 void genericAdd(list* head, void* argument);
 int genericInsert(list* head, void* argument, int where);
 void genericPrint(list* head);
+void cocatenateChildren(list* head, list* next);
 
 //linked list functions
 void addToList(token_item* head, token* new);

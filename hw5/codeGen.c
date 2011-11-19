@@ -3,6 +3,9 @@
 #include "symbolTable.h"
 #include <stdio.h>
 #include <string.h>
+#include "structures.h"
+#include "enums.h"
+#include "yyparse.tab.h"
 
 extern int NUMVARIABLES;
 extern int NUMLABELS;
@@ -49,6 +52,56 @@ char* newVariable(symbolTable* parent){
 
   return new;   
 }
+
+
+void populatePlaces(node* head){
+  if(head != NULL){
+    int n = head->nchildren;
+    int i = 0;
+    for(i = 0; i < n; i++){      
+      if(head->children[i]!=NULL){
+	populatePlaces(head->children[i]);
+      }
+    }
+    
+    //do work
+    switch(head->label){
+    case whileStatement:
+      //make new item
+      
+      //makelabel
+      //code
+      //endlabel
+      break;
+    default:
+      head->code = concatenateChildren(head);
+      break;
+	
+    }
+  }
+}
+
+
+list* concatenateChildren(node* head){
+  if(head != NULL){
+    list* first;
+    int n = head->nchildren;
+    int i = 0;
+    for(i = 0; i < n; i++){      
+      if(head->children[i]!=NULL && head->children[i]->code != NULL){
+	if(i == 0){
+	  first = head->children[i]->code;
+	}
+	
+      }
+    }
+  }
+  
+
+  return NULL;
+}
+
+
 
 char* itoa(int val, char* buf){
   int new = (unsigned int)val;

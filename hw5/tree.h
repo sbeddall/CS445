@@ -17,7 +17,7 @@ typedef struct node {
   struct symbolTable* targetScope;
   
   //stuff for code gen
-  //TACLISTPOINTER* code;
+  list* code;
   field* place;
 } node;
 
@@ -38,5 +38,6 @@ char* getOptionalNodeType( node* var );
 void traverseTree(node* head,node* parent_node, int level);
 int comparetypes( node* var, node* parent_node);
 node* miniTraverse( node* head, int label );
+void checkTypes(node* head);
 
 #endif

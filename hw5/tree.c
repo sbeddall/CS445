@@ -106,7 +106,7 @@ void yysemantics(node* head){
   //build the symbol tables
   buildSymbolTables(head, NULL);
   populateSymbolTables(head, NULL);
-  
+  checkTypes(head);
   //treePrint
   //  traverseTree(head,NULL,0);
 
@@ -499,6 +499,8 @@ char* getOptionalNodeType( node* var ){
   return strdup("void");
 }
 
+
+
 void traverseTree(node* head, node* parent_node, int level){
   if(head != NULL){
     int n = head->nchildren;
@@ -552,7 +554,24 @@ void traverseTree(node* head, node* parent_node, int level){
   }
 }
 
+void checkTypes(node* head){
+  if(head != NULL){
+    int n = head->nchildren;
+    int i = 0;
+    for(i = 0; i < n; i++){      
+      if(head->children[i]!=NULL){
+	checkTypes(head->children[i]);
+      }
+    }
+    
+    //do work
+    switch(head->label){
+    }
+    
+  }
 
+  
+}
 
 
 
