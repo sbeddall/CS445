@@ -13,7 +13,9 @@ char* itoa(int val, char* buf);
 int my_itoa(int val, char* buf);
 void reverseString(char* buf);
 
+void yycodegen(node* head);
 void populatePlaces(node* head);
 list* concatenateChildren(node* head);
+void generateTAC(node* head);
 
 #endif

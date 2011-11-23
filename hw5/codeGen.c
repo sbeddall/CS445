@@ -31,6 +31,11 @@ char* newLabel(){
   return new;
 }
 
+void yycodegen(node* head){
+  //populatePlaces(head);
+  generateTAC(head);
+}
+
 //do I want to put the actual symbolTable functionality here?
 char* newVariable(symbolTable* parent){
   char* new = (char*)malloc(sizeof(char)*10);
@@ -47,8 +52,12 @@ char* newVariable(symbolTable* parent){
   
   strcat(integerToString,"__");
   strcat(new,integerToString);
-
+  
   NUMVARIABLES++;
+  
+  //add to symbolTable! We get offset that way!
+  int result = addSymbol( parent, integerToString, 1, NULL, NULL);
+  
 
   return new;   
 }
@@ -81,9 +90,35 @@ void populatePlaces(node* head){
   }
 }
 
+void generateTAC(node* head){
+  if(head != NULL){
+    int n = head->nchildren;
+    int i = 0;
+    for(i = 0; i < n; i++){      
+      if(head->children[i]!=NULL){
+	populatePlaces(head->children[i]);
+      }
+    }
+    
+    //do work
+    switch(head->label){
+    case whileStatement:
+      //make new item
+      
+      //makelabel
+      //code
+      //endlabel
+      break;
+    default:
+      head->code = concatenateChildren(head);
+      break;
+	
+    }
+  }  
+}
 
 list* concatenateChildren(node* head){
-  list* first = NULL;;
+  list* first = NULL;
   if(head != NULL){
     int n = head->nchildren;
     int i = 0;

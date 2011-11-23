@@ -43,7 +43,7 @@ main(int argc, char* argv[]){
       yyparse(); 
       //      printf("Global Symbol Table: %p\n", global_table); 
       yysemantics(head);   
-      
+      yycodegen(head);
     }
     fclose(yyin);
     LINENO = 1;
