@@ -6,6 +6,7 @@
 #include "structures.h"
 #include "enums.h"
 #include "yyparse.tab.h"
+#include "TAC.h"
 
 extern int NUMVARIABLES;
 extern int NUMLABELS;
@@ -33,7 +34,18 @@ char* newLabel(){
 
 void yycodegen(node* head){
   //populatePlaces(head);
+  char* test1 = "add";
+  char* test2 = "t1";
+  char* test3 = "t2";
+  char* test4 = "t3";
+  char* lol2 = newLabel();
+
+
+  TAC* lol = makeLabeledTAC(lol2, test1, test2, test3, test4);
+  
+
   generateTAC(head);
+  printTAC(lol);
 }
 
 //do I want to put the actual symbolTable functionality here?
@@ -82,10 +94,14 @@ void populatePlaces(node* head){
       //code
       //endlabel
       break;
+      
+    case expr:
+      break;
+      
     default:
       head->code = concatenateChildren(head);
       break;
-	
+      
     }
   }
 }
@@ -107,7 +123,7 @@ void generateTAC(node* head){
       
       //makelabel
       //code
-      //endlabel
+      //endlabel!
       break;
     default:
       head->code = concatenateChildren(head);

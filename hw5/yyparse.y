@@ -429,6 +429,7 @@ functionHeader:
 
 packageStatement:
    _PACKAGE variableName block {$$ = makeNode(packageStatement, NULL, NULL, 3, $1, $2, $3); $2->targetScope = $3->table;}
+   | _PACKAGE block {$$ = makeNode(packageStatement, NULL, NULL, 2, $1, $2);}
    ;
    
 ternaryExpression:

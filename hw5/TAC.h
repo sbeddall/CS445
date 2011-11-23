@@ -3,10 +3,10 @@
 #include "structures.h"
 
 
-/***********TAC*****************
-* char* | char* | char* | char * 
-* LABEL | arg1  | arg2  | arg3 *
-*******************************/
+/***********TAC*************************
+* char* | char* | char* | char* | char * 
+* LABEL | cmd   | arg1  | arg2  | arg3 *
+***************************************/
 
 
 typedef struct TAC {
@@ -17,8 +17,9 @@ typedef struct TAC {
 
 
 TAC* makeBlankTAC();
-TAC* makeTAC(char* arg1, char* arg2, char* arg3);
-TAC* makeLabeledTAC(char* label, char* arg1, char* arg2, char* arg3);
+TAC* makeTAC(char* cmd, char* arg1, char* arg2, char* arg3);
+TAC* makeLabeledTAC(char* label, char* cmd, char* arg1, char* arg2, char* arg3);
 void printTAC(TAC* line);
+void printTACList(list* head);
 
 #endif 
