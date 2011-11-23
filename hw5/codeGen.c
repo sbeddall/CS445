@@ -83,22 +83,24 @@ void populatePlaces(node* head){
 
 
 list* concatenateChildren(node* head){
+  list* first = NULL;;
   if(head != NULL){
-    list* first;
     int n = head->nchildren;
     int i = 0;
     for(i = 0; i < n; i++){      
-      if(head->children[i]!=NULL && head->children[i]->code != NULL){
-	if(i == 0){
+      if(head->children[i] != NULL && head->children[i]->code != NULL){
+	//make sure we aren't concatenating null stuff
+	if(first == NULL){
 	  first = head->children[i]->code;
 	}
-	
+	else
+	  concatenateList(first, head->children[i]->code);	
       }
     }
   }
   
 
-  return NULL;
+  return first;
 }
 
 

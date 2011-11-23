@@ -61,6 +61,20 @@ void genericPrint(list* head){
   printf("%p\n", iterator);
 }
 
+void concatenateList(list* first, list* second){
+  list* iterator = first;
+  
+  while(iterator->next != NULL){
+    iterator = iterator->next;
+  }
+  
+  //what happens if we pass it something that doesn't exist? FAULT TOLERENCE SIR
+  if(second != NULL){
+    iterator->next = second;
+  }
+  
+}
+
 //linked list implementation stuff
 void addToList(token_item* head, token* new){
   printf("Adding to List: %d\n", new->category);
