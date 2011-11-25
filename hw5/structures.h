@@ -41,7 +41,7 @@ token* YYDup();
 
 //string functions
 int compareStrings(char* first, char* second);
-
+char* makeNewString(char* op);
 
 //YYToken Populators
 void evalToYYToken(int category, char* yytext);

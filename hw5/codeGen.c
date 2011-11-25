@@ -193,22 +193,40 @@ void generateTAC(node* head){;
 	head->code = newListItem();
 	char* arg1 = NULL;
 	char* arg2 = NULL;
+	
+	//left side should never be NULL
 	if(head->children[0]->label == expr){
 	  arg1 = head->children[0]->place->name;
 	}
-	if(head->children[2]->label == expr){
-	  arg2 = head->children[2]->place->name;
-	} 
+	if(head->children[0]->label == IDENT){
+	  arg1 = head->children[0]->tok->text;
+	}
+	if(head->children[0]->label == NUMBERLIT ||
+	   head->children[0]->label == STRINGLIT)
+	  arg1 = head->children[0]->tok->text;
 	
-	head->code->content = makeTAC(head->children[1]->tok->text, 
+	//right side MAY be NULL. must check it.
+	if(head->children[2] != NULL ){
+	  if(head->children[2]->label == expr){
+	    arg2 = head->children[2]->place->name;
+	  } 
+	  //variableName?
+	  if(head->children[2]->label == IDENT){
+	    arg2 = head->children[2]->tok->text;
+	  }
+	  if(head->children[2]->label == NUMBERLIT ||
+	     head->children[2]->label == STRINGLIT)
+	    arg2 = head->children[2]->tok->text;
+	}
+	//	printf("%d\n", head->children[1]->label);
+	head->code->content = makeTAC(decideOperator(head->children[1]), 
 				      head->place->name, arg1, arg2);
 	
 	printTAC(head->code->content);
 
 	concatenateList(head->code,concatenateChildren(head));
       }
-      break;
-      
+      break;      
 
 
     default:
@@ -278,6 +296,51 @@ void reverseString(char* buf){
     temp1++;
     temp2--;
   }
+}
+
+char* decideOperator(node* operator){
+  char* new = new;
+  //printf("IM GOING IN! %d\n",operator->label);
+  switch(operator->label){
+    //add
+  case PLUS:
+    new = makeNewString("ADD");
+    return new;
+    break;
+    
+    //sub
+  case MINUS:
+    new = makeNewString("SUB");
+    return new;
+    break;
+    
+    //mul
+  case MULTIPLY:
+    new = makeNewString("MUL");
+    return new;
+    break;
+    
+    //div
+  case DIVIDE:
+    new = makeNewString("DIV");
+    return new;
+    break;
+
+    //mod
+  case MODULO:
+    new = makeNewString("MOD");
+    return new;
+    break;
+    
+    //we have problems if we get to here!
+  case INCREMENT:
+    break;
+  case DECREMENT:
+    break;
+  }
+
+  
+  return new;;
 }
 
 /*

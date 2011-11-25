@@ -375,6 +375,7 @@ expr:
    | expr MINUS expr {$$ = makeNode(expr, NULL, NULL, 3, $1, $2, $3); } 
    | expr MULTIPLY expr {$$ = makeNode(expr, NULL, NULL, 3, $1, $2, $3); }
    | expr DIVIDE expr {$$ = makeNode(expr, NULL, NULL, 3, $1, $2, $3); }
+   | expr MODULO expr {$$ = makeNode(expr, NULL, NULL, 3, $1, $2, $3); }
    | expr INCREMENT {$$ = makeNode(expr, NULL, NULL, 2, $1, $2); }
    | expr DECREMENT {$$ = makeNode(expr, NULL, NULL, 2, $1, $2); }
    ;

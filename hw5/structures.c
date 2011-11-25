@@ -169,6 +169,24 @@ int compareStrings(char* first, char* second){
   return 1;
 }
 
+char* makeNewString(char* op){
+  
+  int i = 0;
+  int iterator = 0;
+  //get length
+  while(op[iterator] != '\0'){
+    i++;
+    iterator++;
+  }
+
+  char* new = (char*)malloc(sizeof(char)*i);
+  
+  for(iterator = 0; iterator < i; iterator++){
+    new[iterator] = op[iterator];
+  }
+  
+  return new;
+}
 
 //populating YYToken
 void evalToYYToken(int category, char* yytext){
