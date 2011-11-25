@@ -152,7 +152,7 @@ void generateTAC(node* head){;
 	  name     type     initialization (head->children[2])
 	                           assign value (head->children[1])
 	 */
-	printf("Variable Binding Here!\n");
+	//printf("Variable Binding Here!\n");
 	head->code = newListItem();
 	if(head->children[2] != NULL){
 	  if(head->children[2]->children[1]->label == expr){
@@ -222,8 +222,8 @@ void generateTAC(node* head){;
 	head->code->content = makeTAC(decideOperator(head->children[1]), 
 				      head->place->name, arg1, arg2);
 	
-	printTAC(head->code->content);
-
+	//printTAC(head->code->content);
+	
 	concatenateList(head->code,concatenateChildren(head));
       }
       break;      
