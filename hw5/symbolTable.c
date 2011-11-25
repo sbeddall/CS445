@@ -49,7 +49,7 @@ int addSymbol(symbolTable* table, char* ident, int baseType, struct node* token,
   
   if(flags != NULL) lol->flags = updateFlagsFromData( flags );
 
-    
+  
   
   table->nSymbols++;
   int n = table->nSymbols-1;
@@ -62,10 +62,11 @@ void printTable( symbolTable* table, int level ){
   int i = 0;
   for( i; i < table->nSymbols; i++ ){
     if(table->fields[i]->name != NULL){
-      printf( "Ident: %s : Type: %s : Base Type: %d\n", table->fields[i]->name, table->fields[i]->token->nodeType, table->fields[i]->baseType );
+      printf( "Ident: %s : Base Type: %d\n", table->fields[i]->name, table->fields[i]->baseType );
       if( table->fields[i]->baseType == 3){
 	printTable(table->fields[i]->token->targetScope, level);
       }
+      //, table->fields[i]->token->nodeType, 
       /*if(table->fields[i]->flags != NULL){
 	int j = 0;
 	printf("\tFlags active\n");

@@ -280,9 +280,9 @@ void variableHandler(node* var, node* parent_node, variableDataPack* data ){
 	  //printf("Ok, my type of %s is %s\n",var->children[0]->tok->text, var->children[0]->nodeType); 
 	  if( !findIdentLocally( var->children[0]->table, var->children[0]->tok->text ) ){
 	    addSymbol( var->children[0]->table, var->children[0]->tok->text, 1, var->children[0], data );
-	    field* location = getField(var->children[0]->table, var->children[0]->tok->text);
-	    var->place = location;
-	    var->children[0]->place = location;
+	    // field* location = getField(var->children[0]->table, var->children[0]->tok->text);
+	    //var->place = location;
+	    //var->children[0]->place = location;
 	  }
 	  else printError( "Redeclaration of IDENT", var->children[0] );
 	}

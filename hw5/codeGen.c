@@ -59,7 +59,7 @@ char* newVariable(symbolTable* parent){
   NUMVARIABLES++;
   
   //add to symbolTable! We get offset that way!
-  int result = addSymbol( parent, integerToString, 1, NULL, NULL);
+  int result = addSymbol( parent, new, 1, NULL, NULL);
   
 
   return new;   
@@ -82,11 +82,14 @@ void populatePlaces(node* head){
       
     case expr:
       {
+	
 	//add new variable to symbol table.
 	//set place to that variable in symbol table.
 	char* new = newVariable( head->table );
+	
 	field* location = getField( head->table, new );
 	head->place = location;
+	//printTable(head->table,0);
       }
       break;
            
@@ -153,19 +156,19 @@ void generateTAC(node* head){;
 	head->code = newListItem();
 	if(head->children[2] != NULL){
 	  if(head->children[2]->children[1]->label == expr){
-	    head->code->content = makeTAC("ASN", "test", 
+	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
 			   head->children[2]->children[1]->place->name,NULL);
-	    printTAC(head->code->content);
+	    // printTAC(head->code->content);
 	  }
 	  if(head->children[2]->children[1]->label == NUMBERLIT){
 	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
 			   head->children[2]->children[1]->tok->text,NULL);
-	    printTAC(head->code->content);
+	    //printTAC(head->code->content);
 	  }
 	  if(head->children[2]->children[1]->label == STRINGLIT){
 	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
 			   head->children[2]->children[1]->tok->text,NULL);
-	    printTAC(head->code->content);
+	    //	    printTAC(head->code->content);
 	  }
 	 
 	}
@@ -180,8 +183,28 @@ void generateTAC(node* head){;
       break;
 
     case expr:
+      /*
+            expr
+	| mathvalue
+	| expr sign expr
+	| expr++
+       */
       {
 	head->code = newListItem();
+	char* arg1 = NULL;
+	char* arg2 = NULL;
+	if(head->children[0]->label == expr){
+	  arg1 = head->children[0]->place->name;
+	}
+	if(head->children[2]->label == expr){
+	  arg2 = head->children[2]->place->name;
+	} 
+	
+	head->code->content = makeTAC(head->children[1]->tok->text, 
+				      head->place->name, arg1, arg2);
+	
+	printTAC(head->code->content);
+
 	concatenateList(head->code,concatenateChildren(head));
       }
       break;
