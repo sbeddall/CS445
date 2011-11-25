@@ -62,17 +62,20 @@ void genericPrint(list* head){
 }
 
 void concatenateList(list* first, list* second){
-  list* iterator = first;
-  
-  while(iterator->next != NULL){
-    iterator = iterator->next;
+  if(first != NULL){
+    list* iterator = first;
+    
+    while(iterator->next != NULL){
+      iterator = iterator->next;
+    }
+    
+    //what happens if we pass it something that doesn't exist? FAULT TOLERENCE SIR
+    if(second != NULL){
+      iterator->next = second;
+    }
   }
-  
-  //what happens if we pass it something that doesn't exist? FAULT TOLERENCE SIR
-  if(second != NULL){
-    iterator->next = second;
-  }
-  
+  else
+    first = second;
 }
 
 //linked list implementation stuff

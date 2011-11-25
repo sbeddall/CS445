@@ -60,4 +60,5 @@ struct node* getSymbolNode( symbolTable* table, char* ident);
 field* getField( symbolTable* table, char* ident );
 void printTable(symbolTable* table, int level);
 
+
 #endif

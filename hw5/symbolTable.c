@@ -128,6 +128,8 @@ int i = 0;
  return getField( table->parent, ident );  
 }
 
+
+
 struct node* getSymbolNode( symbolTable* table, char* ident ){
   int i = 0;
   for( i; i < table->nSymbols; i++){

@@ -8,6 +8,7 @@
 #include "yyparse.tab.h"
 #include "TAC.h"
 
+
 extern int NUMVARIABLES;
 extern int NUMLABELS;
 
@@ -45,7 +46,9 @@ void yycodegen(node* head){
   
 
   generateTAC(head);
+  printTACList(head->code);
   printTAC(lol);
+
 }
 
 //do I want to put the actual symbolTable functionality here?
@@ -85,21 +88,24 @@ void populatePlaces(node* head){
       }
     }
     
-    //do work
+    
+    //the places of variables should be taken care of already in semantic
     switch(head->label){
-    case whileStatement:
-      //make new item
-      
-      //makelabel
-      //code
-      //endlabel
-      break;
       
     case expr:
+      {
+	//add new variable to symbol table.
+	//set place to that variable in symbol table.
+	char* new = newVariable( head->table );
+	field* location = getField( head->table, new );
+	head->place = location;
+      }
       break;
       
+ 
+      
     default:
-      head->code = concatenateChildren(head);
+      //      head->code = concatenateChildren(head);
       break;
       
     }
@@ -116,20 +122,81 @@ void generateTAC(node* head){
       }
     }
     
-    //do work
     switch(head->label){
+      
+    case packageStatement:
+      {
+	head->code = newListItem();
+	if(head->children[2]->label == IDENT){
+	  if(head->children[2]->tok->text != NULL){
+	    head->code->content = makeLabeledTAC(head->children[2]->tok->text,
+						 NULL, NULL, NULL, NULL);
+	  }
+	}
+	head->code->content = makeLabeledTAC("anonpkg",NULL,NULL,NULL,NULL);
+      
+	concatenateList(head->code,concatenateChildren(head));
+      }
+      break;
+      
+      
     case whileStatement:
       //make new item
       
       //makelabel
       //code
-      //endlabel!
+      //endlabel
+      
       break;
+      
+    case functionCall:
+      head->code = newListItem();
+      
+      head->code = concatenateChildren(head);
+      break;
+      
+
+    case variableBinding:
+      {
+	/*
+	      variableBinding (head)
+	  name     type     initialization (head->children[2])
+	                           assign value (head->children[1])
+	 */
+
+	head->code = newListItem();
+	if(head->children[2] != NULL){
+	  if(head->children[2]->children[1]->label == expr){
+	    head->code->content = makeTAC("ASN", "test", 
+			   head->children[2]->children[1]->place->name,NULL);
+	    printTAC(head->code->content);
+	  }
+	}
+	
+	concatenateList(head->code,concatenateChildren(head));
+      }
+      break;
+      
+
+    case assignStatement:
+      head->code = concatenateChildren(head);
+      break;
+
+    case expr:
+      {
+	head->code = newListItem();
+	
+	concatenateList(head->code,concatenateChildren(head));
+      }
+      break;
+      
+
+
     default:
       head->code = concatenateChildren(head);
       break;
-	
     }
+    
   }  
 }
 

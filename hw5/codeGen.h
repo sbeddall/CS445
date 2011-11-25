@@ -17,7 +17,6 @@ void yycodegen(node* head);
 void populatePlaces(node* head);
 list* concatenateChildren(node* head);
 void generateTAC(node* head);
-void printTACList(list* head);
 
 
 #endif

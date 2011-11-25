@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include "structures.h"
 
+
+
+
 //it's the TAC function roundup!
 TAC* makeBlankTAC(){
   TAC* new = (TAC*)malloc(sizeof(TAC));
@@ -59,7 +62,7 @@ void printTAC(TAC* line){
       if(line->entries[i] != NULL){
 	printf("%s\t|",line->entries[i]);
       }
-      else printf("\t");
+      else printf(" --\t");
     }
     printf("\n");
   }
@@ -80,3 +83,9 @@ void printTACList(list* head){
   }
 }
 
+list* newListItem(){
+  list* new = (list*)malloc(sizeof(list));
+  new->content = NULL;
+  new->next = NULL;
+  return new;
+}
