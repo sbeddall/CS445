@@ -29,7 +29,7 @@ TAC* makeTAC(char* cmd,char* arg1, char* arg2, char* arg3){
   TAC* new = makeBlankTAC();
 
   if(cmd != NULL){
-    new->entries[1] = strdup(arg1);
+    new->entries[1] = strdup(cmd);
   }
   if(arg1 != NULL){
     new->entries[2] = strdup(arg1);
@@ -60,11 +60,14 @@ void printTAC(TAC* line){
     printf("|");
     for(i; i < 5; i++){
       if(line->entries[i] != NULL){
-	printf("%s\t|",line->entries[i]);
+	printf(" %s|",line->entries[i]);
       }
-      else printf(" --\t");
+      else printf(" -- |");
     }
     printf("\n");
+  }
+  else {
+    printf("Nothing Here");
   }
 }
 
