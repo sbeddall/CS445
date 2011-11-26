@@ -5,6 +5,7 @@
 extern token* YYTOKEN;
 extern int LINENO;
 extern char* FILENAME;
+extern int status;
 
 //generic linked list stuff
 void genericAdd(list* head, void* argument){
@@ -195,10 +196,13 @@ void ISval(int category, char* yytext){
 }
 
 void printError(char* errorText, struct node* head){
-  
+  /*
   if( head->tok != NULL) printf("%s: %s\n", errorText, head->tok->text);
   printf("\tNode label: %d\n", head->label);
   if( head->tok != NULL) printf("\tLine Number: %d\n", head->tok->lineno);
   printf("\tSymbol Table: %p\n\n", head->table); 
-  
+  */
+
+  //status update as per assignment
+  status = -3;
 }

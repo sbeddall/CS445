@@ -15,16 +15,21 @@
   extern char* FILENAME;
   extern node* head;
   extern token* YYTOKEN;
-  
+  extern int status;
   extern symbolTable* global_table;
 
   
   // bison requires that you supply this function
 void yyerror(const char *msg)
 {
-  failed++;
+  /*  failed++;
   printf("Filename: %s\n", FILENAME);
   printf("ERROR(PARSER): %s, %s\nLine Number: %d\n", msg, yytext, LINENO);
+  */
+
+  //change exit status
+  status = -2;
+  
 }
 
 %}

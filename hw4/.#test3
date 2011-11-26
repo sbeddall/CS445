@@ -1,1 +1,0 @@
-scotty@scotty-mobile.1958:1319859615

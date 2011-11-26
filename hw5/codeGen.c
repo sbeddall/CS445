@@ -187,10 +187,10 @@ void generateTAC(node* head){;
 	  
 	}
 	
-	printf("%d\n",head->children[2]->children[1]->label);
 	
-	
-	concatenateList(head->code,concatenateChildren(head));
+	list* new = concatenateChildren(head);	
+	concatenateList(new, head->code);
+	head->code = new;
       }
       break;
       
@@ -241,7 +241,22 @@ void generateTAC(node* head){;
 	
 	//printTAC(head->code->content);
 	
-	concatenateList(head->code,concatenateChildren(head));
+	list* new = concatenateChildren(head);
+	list* next = head->code;
+	
+
+	if(new != NULL){
+	  //	  printf("In expr, printing children: \n");
+	  //printTACList(new);
+	  //	  printf("In expr, printing me: \n");
+	  // printTACList(next);
+	  
+	  concatenateList(new, head->code);
+	  head->code = new;
+	}
+	else {
+	  //do nothing?
+	}
       }
       break;      
       
@@ -323,8 +338,6 @@ void generateTACList(node* head, list* lst){;
 	  }
 	  
 	}
-	
-	printf("%d\n",head->children[2]->children[1]->label);
 	
 	
 	concatenateList(lst,head->code);

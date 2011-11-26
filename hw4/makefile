@@ -45,4 +45,4 @@ clean:
 	- rm *.tar
 
 tar: 
-	tar cf hw3.tar makefile main.c yylex.c structures.c structures.h yyparse.y tree.c tree.h test	
+	tar cf hw4.tar makefile main.c yylex.c structures.c structures.h yyparse.y tree.c tree.h test test3 enums.h dataPacks.c dataPacks.h symbolTable.h symbolTable.c 	

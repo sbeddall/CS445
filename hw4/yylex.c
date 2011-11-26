@@ -7,7 +7,7 @@
   //#include "defines.h" 
   extern token* YYTOKEN;
   extern int LINENO;
-   
+  extern int status;
 
   #define eval(x) evalToYYToken(x, yytext)
 
@@ -150,7 +150,7 @@
 "*" { eval(MULTIPLY);  yylval.n = makeNode(MULTIPLY, NULL,  YYDup(), 0); return MULTIPLY; }
 
 
-. {  }
+. { status = -1; }
 
 %%
 
