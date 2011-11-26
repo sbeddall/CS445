@@ -254,3 +254,19 @@ void printErrorVerbose(char* errorText, struct node* head){
   status = -3;
   
 }
+
+char* getFileName(){
+  
+  char* filename = strdup(FILENAME);
+  char* iterator2 = filename;
+  
+  while(*iterator2 != '\0'){
+    if(*iterator2 == '.')
+      *iterator2 = '\0';
+    iterator2++;
+  }
+  
+  strcat(filename,".ic");
+
+  return filename;
+}

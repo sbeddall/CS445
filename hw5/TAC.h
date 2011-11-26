@@ -21,5 +21,6 @@ TAC* makeTAC(char* cmd, char* arg1, char* arg2, char* arg3);
 TAC* makeLabeledTAC(char* label, char* cmd, char* arg1, char* arg2, char* arg3);
 void printTAC(TAC* line);
 void printTACList(list* head);
-
+void printTACListToFile(list* head);
+void printTACToFile(TAC* line, FILE* file);
 #endif 

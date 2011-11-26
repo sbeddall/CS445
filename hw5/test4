@@ -13,4 +13,9 @@ package {
 	function lol(i:lol){
 		 var l:Int = 3;
 	}
+	
+	class Lol {
+	      var p:Int = 2;
+	}
+
 }

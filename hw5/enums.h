@@ -78,6 +78,8 @@ enum opcodes {
   PARM,
   CALL,
   RET,
+  proc,
+  class,
 };
 
 #endif

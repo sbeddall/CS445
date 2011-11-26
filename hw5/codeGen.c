@@ -13,6 +13,9 @@ extern int NUMVARIABLES;
 extern int NUMLABELS;
 
 
+#if (DEBUG == 1)
+#define printTACListToFile(code) printTACList(code)
+#endif
 
 char* newLabel(){
 
@@ -47,7 +50,7 @@ void yycodegen(node* head){
   //generateTACList(head, lst);
   generateTAC(head);
 
-  printTACList(head->code);
+  printTACListToFile(head->code);
 }
 
 //do I want to put the actual symbolTable functionality here?
@@ -160,8 +163,13 @@ void generateTAC(node* head){;
     case functionCall:
       //head->code = newListItem();
       
+      
+
+      
       head->code = concatenateChildren(head);
       break;
+      
+    
       
       
     case variableBinding:
@@ -213,22 +221,52 @@ void generateTAC(node* head){;
     case classStatement:
       {
 	head->code = newListItem();
+	char* title = "ANON";
+	if(head->nchildren == 3){
+	  //1
+	  if(head->children[1]->label == IDENT){
+	    title = head->children[1]->tok->text;
+	  }
+	}
+	else if(head->nchildren == 4){
+	  //2
+	  if(head->children[2]->label == IDENT){
+	    title = head->children[2]->tok->text;
+	  }
+	}
+	else if(head->nchildren == 5){
+	  //1
+	  if(head->children[1]->label == IDENT){
+	    title = head->children[1]->tok->text;
+	  }
+	}
+	else if(head->nchildren == 6){
+	  //2
+	  if(head->children[2]->label == IDENT){
+	    title = head->children[2]->tok->text;
+	  }
+	}
 	
+	head->code->content = makeLabeledTAC(title, "class",NULL,NULL,NULL);
+
 	list* endLabel = newListItem();
 	endLabel->content = makeTAC("end", NULL, NULL, NULL);
 	
 	list* new = concatenateChildren(head);
-	list* next = head->code;
+	/*	list* next = head->code;
 	
 	if(new != NULL){
 	  concatenateList(new, head->code);
 	  head->code = new;
-	}
+	  }*/
+
+	concatenateList(head->code, new);
 	
 	concatenateList(head->code, endLabel);
        }
       break;
       
+
     case functionDeclaration:
       {
 	head->code = newListItem();
@@ -607,6 +645,8 @@ void generateTACList(node* head, list* lst){;
       break;      
 
     case expression:
+      head->code = newListItem();
+      
       
       
       break;

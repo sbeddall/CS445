@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "structures.h"
 
+extern char* FILENAME;
 
 
 
@@ -76,6 +77,27 @@ void printTAC(TAC* line){
 }
 
 
+void printTACToFile(TAC* line, FILE* file){
+  if(line != NULL){
+    int i = 0;
+    fprintf(file,"|");
+    for(i; i < 5; i++){
+      if(line->entries[i] != NULL){
+	fprintf(file,"%-10s|",line->entries[i]);
+      }
+      else{ 
+	fprintf(file,"%-9s","--");
+	fprintf(file,"|");
+      }
+    }
+    fprintf(file,"\n");
+  }
+  else {
+    printf("Nothing Here");
+  }
+}
+
+
 void printTACList(list* head){
   list* iterator = head;
   
@@ -89,5 +111,25 @@ void printTACList(list* head){
     }
     printTAC(iterator->content);
   }
+
 }
 
+void printTACListToFile(list* head){
+  char* filename = getFileName();
+  FILE* file = fopen(filename, "w+");
+   list* iterator = head;
+   
+   if(iterator != NULL){
+    while(iterator->next != NULL){
+      if(iterator->content != NULL){
+	printTACToFile(iterator->content, file);
+      }
+      
+      iterator = iterator->next;
+    }
+    printTACToFile(iterator->content, file);
+  }
+  
+  fclose(file);
+
+}

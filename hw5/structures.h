@@ -56,5 +56,6 @@ void ISval(int category, char* yytext);
 //error printer
 void printError(char* errorText, struct node* head);
 void printErrorVerbose(char* errorText, struct node* head);
+char* getFileName();
 
 #endif
