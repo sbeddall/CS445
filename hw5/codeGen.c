@@ -128,9 +128,11 @@ void generateTAC(node* head){;
       {
 	head->code = newListItem();
 	if(head->nchildren > 2){
-	  if(head->children[1]->tok->text != NULL){
-	    head->code->content = makeLabeledTAC(head->children[1]->tok->text,
-						 NULL, NULL, NULL, NULL);
+	  if(head->children[1]->label == IDENT){
+	    if(head->children[1]->tok->text != NULL){
+	      head->code->content = makeLabeledTAC(head->children[1]->tok->text,
+						   NULL, NULL, NULL, NULL);
+	    }
 	  }
 	}
 	else 
@@ -187,13 +189,33 @@ void generateTAC(node* head){;
 	  
 	}
 	
-	
+	/*
 	list* new = concatenateChildren(head);	
 	concatenateList(new, head->code);
 	head->code = new;
+	*/
+	
+	list* new = concatenateChildren(head);
+	list* next = head->code;
+	
+	if(new != NULL){
+	  concatenateList(new, head->code);
+	  head->code = new;
+	}
       }
       break;
       
+    case functionDeclaration:
+      {
+	list* new = concatenateChildren(head);
+	list* next = head->code;
+	
+	if(new != NULL){
+	  concatenateList(new, head->code);
+	  head->code = new;
+	}
+      }
+      break;
       
     case assignStatement:
       {
@@ -226,8 +248,6 @@ void generateTAC(node* head){;
 	  concatenateList(new, head->code);
 	  head->code = new;
 	}
-
-	
       }
       break;
 

@@ -7,6 +7,7 @@
 #include "symbolTable.h"
 #include "dataPacks.h"
 
+
 typedef struct node {
   int nchildren; 
   int label;
@@ -15,6 +16,9 @@ typedef struct node {
   struct node** children;
   char* nodeType;
   struct symbolTable* targetScope;
+  
+  //specific to functions
+  list* args;
   
   //stuff for code gen
   list* code;
@@ -29,6 +33,7 @@ void yysemantics(node* head);
 void populateSymbolTables(node* head, node* parent_node);
 void buildSymbolTables(node* head, node* parent_node);
 void functionHandler(node* var, node* parent_node);
+void functionHandlerSmall(node* var);
 void variableHandler(node* var, node* parent_node, variableDataPack* data);
 void checkIdentsInInitialization(node* head, node* root);
 void parseVariableName(node* var, node* parent_node);
@@ -39,5 +44,6 @@ void traverseTree(node* head,node* parent_node, int level);
 int comparetypes( node* var, node* parent_node);
 node* miniTraverse( node* head, int label );
 void checkTypes(node* head);
+list* buildArgList(node* head, list* lst);
 
 #endif

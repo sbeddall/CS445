@@ -88,9 +88,3 @@ void printTACList(list* head){
   }
 }
 
-list* newListItem(){
-  list* new = (list*)malloc(sizeof(list));
-  new->content = NULL;
-  new->next = NULL;
-  return new;
-}

@@ -78,6 +78,14 @@ void concatenateList(list* first, list* second){
     first = second;
 }
 
+list* newListItem(){
+  list* new = (list*)malloc(sizeof(list));
+  new->content = NULL;
+  new->next = NULL;
+  return new;
+}
+
+
 //linked list implementation stuff
 void addToList(token_item* head, token* new){
   printf("Adding to List: %d\n", new->category);

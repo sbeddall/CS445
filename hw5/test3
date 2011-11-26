@@ -1,8 +1,10 @@
 
+package {
+	
 var z: String = "hello!";
 
 var z: String = 2;
-
+/*
 var Y:Int = z;
 
 var z:String = 2;
@@ -27,4 +29,5 @@ var zeep:eep;
 zeep.i = 2;
 
 var p:Number = zeep.i;
-
+*/
+}

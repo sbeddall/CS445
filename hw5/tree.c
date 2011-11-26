@@ -7,6 +7,7 @@
 #include "dataPacks.h"
 #include "structures.h"
 #include <string.h>
+#include "codeGen.h"
 
 #if (DEBUG == 1)
 #define printError(errorText, head) printErrorVerbose(errorText, head)
@@ -24,7 +25,8 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   new->tok = tok;
   new->place = NULL;
   new->code = NULL;
-
+  new->args = NULL;
+  
   new->nodeType = strdup("void");
   if( new->targetScope != NULL ){
     new->targetScope = NULL;
@@ -152,8 +154,7 @@ void populateSymbolTables( node* head, node* parent_node ){
       break;  
       
     case functionDeclaration:
-      functionHandler( head, parent_node );
-
+      functionHandlerSmall( head );
       break;
       
     case functionCall:
@@ -216,10 +217,24 @@ void functionHandler( node* var, node* parent_node ){
   if( var != NULL ){
     switch( var->label ){
     case IDENT:
-      if( !findIdentLocally( var->table, var->tok->text ) ) 
-	addSymbol( var->table, var->tok->text, 2 , parent_node, NULL );
-      else 
-	printError( "Redeclaration of IDENT", var );
+      {
+	if( !findIdentLocally( var->table, var->tok->text ) ){ 
+	  list* lst = newListItem();
+	  int* size = malloc(sizeof(int));
+	  *size = 0;
+	  lst->content = size;
+	  
+	  addSymbol( var->table, var->tok->text, 2 , parent_node, NULL );
+	  if(parent_node->nchildren == 5){
+	    var->args = buildArgList(parent_node->children[4], lst);
+	  }
+	  else if(parent_node->nchildren == 4){
+	    var->args = buildArgList(parent_node->children[3], lst);
+	  }
+	}
+	else 
+	  printError( "Redeclaration of IDENT", var );
+      }
       break;
       
     default: 
@@ -239,6 +254,91 @@ void functionHandler( node* var, node* parent_node ){
     }
   }
 }
+
+void functionHandlerSmall( node* var ){
+  if( var != NULL ){
+    switch( var->label ){
+    case functionDeclaration:
+      {
+	list* lst = newListItem();
+	int* size = malloc(sizeof(int));
+	*size = 0;
+	lst->content = size;
+	if(var->nchildren == 5){
+	  if( !findIdentLocally( var->table, var->children[3]->tok->text ) ){ 
+	    addSymbol( var->table, var->children[3]->tok->text, 2 , var->children[3], NULL );
+	  }
+	  else 
+	    printError( "Redeclaration of IDENT", var );
+	  var->args = buildArgList(var->children[4], lst);
+	}
+	else if(var->nchildren == 4){
+	  if( !findIdentLocally( var->table, var->children[2]->tok->text ) ){ 
+	    addSymbol( var->table, var->children[2]->tok->text, 2 , var->children[3], NULL );
+	  }
+	  else 
+	    printError( "Redeclaration of IDENT", var );
+	  var->args = buildArgList(var->children[3], lst);
+	  
+	}
+	
+	printf("My little ponie's number of arguments is: %d", *size);
+      }
+      break;
+      
+    default: 
+      { 
+	int n = var->nchildren;      
+	int i;
+	for( i = 0; i < n; i++ ){      
+	  if( var->children[i] == NULL ){
+	    //do nothing
+	  }
+	  else{
+	    functionHandlerSmall( var->children[i]);
+	  } 
+	}    
+	break;
+      }
+    }
+  }
+}
+
+list* buildArgList(node* head, list* lst){
+  if( head != NULL ){
+    if(head->label != block ){
+      switch( head->label ){
+      case variableBinding:
+	{
+	  int* lol = lst->content;
+	  lol[0]++;
+	}
+      break;
+      
+      default:
+	//do nothing
+	break;
+      }
+      
+      
+      int n = head->nchildren;      
+      int i;
+      for( i = 0; i < n; i++ ){      
+	if( head->children[i] == NULL ){
+	  //do nothing
+      }
+	else{
+	  buildArgList( head->children[i], lst );
+	} 
+      }   
+    }
+  }
+  
+
+  
+  return lst;
+}
+
 
 void variableHandler(node* var, node* parent_node, variableDataPack* data ){  
   if(var != NULL){

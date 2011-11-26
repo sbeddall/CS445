@@ -31,6 +31,8 @@ void genericAdd(list* head, void* argument);
 int genericInsert(list* head, void* argument, int where);
 void genericPrint(list* head);
 void cocatenateList(list* first, list* second);
+list* newListItem();
+
 
 //linked list functions
 void addToList(token_item* head, token* new);
