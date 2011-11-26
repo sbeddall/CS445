@@ -10,5 +10,7 @@ variableDataPack* initializeDataPack(){
   data->protectedFlag = 0;
   data->overrideFlag = 0;
   data-> nativeFlag = 0;
+
+  return data;
 }
 

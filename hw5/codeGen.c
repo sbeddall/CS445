@@ -117,12 +117,13 @@ void generateTAC(node* head){;
       {
 	head->code = newListItem();
 	if(head->children[2] != NULL){
-	  if(head->children[2]->tok->text != NULL){
-	    head->code->content = makeLabeledTAC(head->children[2]->tok->text,
+	  if(head->children[1]->tok->text != NULL){
+	    head->code->content = makeLabeledTAC(head->children[1]->tok->text,
 						 NULL, NULL, NULL, NULL);
 	  }
 	}
-	head->code->content = makeLabeledTAC("anon_pkg",NULL,NULL,NULL,NULL);
+	else 
+	  head->code->content = makeLabeledTAC("anon_pkg",NULL,NULL,NULL,NULL);
 	
 	concatenateList(head->code,concatenateChildren(head));
       }
