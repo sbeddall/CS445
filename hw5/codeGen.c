@@ -238,6 +238,8 @@ void generateTAC(node* head){;
 	
 	//get ident. use to start the PROC
 	char* ident = "ANON";
+	char* arg1 = NULL;
+	char* arg2 = NULL;
 	
 	if(head->children[3]->label == IDENT){
 	  ident = head->children[3]->tok->text;

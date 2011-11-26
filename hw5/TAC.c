@@ -61,9 +61,12 @@ void printTAC(TAC* line){
     printf("|");
     for(i; i < 5; i++){
       if(line->entries[i] != NULL){
-	printf(" %s|",line->entries[i]);
+	printf("%-10s|",line->entries[i]);
       }
-      else printf(" -- |");
+      else{ 
+	printf("%-9s","--");
+	printf("|");
+      }
     }
     printf("\n");
   }
