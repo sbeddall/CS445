@@ -60,4 +60,24 @@ enum rules {
   catch,
 };
 
+enum opcodes {
+  ADD = 700,
+  SUB,
+  MUL,
+  DIV,
+  MOD,
+  NEG,
+  ASN,
+  ADDR,
+  LCONT,
+  SCONT,
+  GOTO,
+  BLESS,
+  BIF,
+  BNIF,
+  PARM,
+  CALL,
+  RET,
+};
+
 #endif

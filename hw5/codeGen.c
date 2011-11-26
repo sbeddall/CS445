@@ -72,7 +72,7 @@ char* newVariable(symbolTable* parent){
   //add to symbolTable! We get offset that way!
   int result = addSymbol( parent, new, 1, NULL, NULL);
   
-
+  
   return new;   
 }
 
@@ -196,7 +196,39 @@ void generateTAC(node* head){;
       
       
     case assignStatement:
-      head->code = concatenateChildren(head);
+      {
+	head->code = newListItem();
+	char* cmd = NULL;
+	char* arg1 = NULL;
+	char* arg2 = NULL;
+	char* arg3 = NULL;
+	
+	if(head->children[2]->label == newObject){
+	  if(head->children[2]->children[2] != NULL){
+	    cmd = "NEWOBJ";
+	    arg1 = head->children[0]->tok->text;
+	    arg2 = head->children[2]->children[1]->tok->text;
+	  }
+	}
+	if(head->children[2]->label == expr){
+	  cmd = "ASN";
+	  arg1 = head->children[0]->tok->text;
+	  arg2 = head->children[2]->place->name;
+	}
+
+	head->code->content = makeTAC(cmd, arg1, arg2, arg3);
+
+	
+	list* new = concatenateChildren(head);
+	list* next = head->code;
+	
+	if(new != NULL){
+	  concatenateList(new, head->code);
+	  head->code = new;
+	}
+
+	
+      }
       break;
 
     case expr:
@@ -244,7 +276,7 @@ void generateTAC(node* head){;
 	list* new = concatenateChildren(head);
 	list* next = head->code;
 	
-
+	
 	if(new != NULL){
 	  //	  printf("In expr, printing children: \n");
 	  //printTACList(new);
@@ -265,155 +297,6 @@ void generateTAC(node* head){;
       head->code = concatenateChildren(head);
       break;
     }
-    
-  }  
-}
-
-
-void generateTACList(node* head, list* lst){;
-  if(head != NULL){
-    
-    switch(head->label){
-      
-    case packageStatement:
-      {
-	head->code = newListItem();
-	if(head->nchildren > 2){
-	  if(head->children[1]->tok->text != NULL){
-	    head->code->content = makeLabeledTAC(head->children[1]->tok->text,
-						 NULL, NULL, NULL, NULL);
-	  }
-	}
-	else 
-	  head->code->content = makeLabeledTAC("anon_pkg",NULL,NULL,NULL,NULL);
-	
-	
-	concatenateList(lst,head->code);
-      }
-      break;
-      
-      
-    case whileStatement:
-      //make new item
-      
-      //makelabel
-      //code
-      //endlabel
-      
-      break;
-      
-    case functionCall:
-      //head->code = newListItem();
-      
-
-      break;
-      
-      
-    case variableBinding:
-      {
-	/*
-	      variableBinding (head)
-	  name     type     initialization (head->children[2])
-	                           assign value (head->children[1])
-	 */
-	//printf("Variable Binding Here!\n");
-	head->code = newListItem();
-	if(head->children[2] != NULL){
-	  if(head->children[2]->children[1]->label == expr){
-	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
-			   head->children[2]->children[1]->place->name,NULL);
-	    // printTAC(head->code->content);
-	  }
-	  
-	  if(head->children[2]->children[1]->label == NUMBERLIT){
-	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
-			   head->children[2]->children[1]->tok->text,NULL);
-	    //printTAC(head->code->content);
-	  }
-
-	  if(head->children[2]->children[1]->label == STRINGLIT){
-	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
-			   head->children[2]->children[1]->tok->text,NULL);
-	    //	    printTAC(head->code->content);
-	  }
-	  
-	}
-	
-	
-	concatenateList(lst,head->code);
-      }
-      break;
-      
-      
-    case assignStatement:
-
-      break;
-
-    case expr:
-      /*
-            expr
-	| mathvalue
-	| expr sign expr
-	| expr++
-       */
-      {
-	head->code = newListItem();
-	char* arg1 = NULL;
-	char* arg2 = NULL;
-	
-	//left side should never be NULL
-	if(head->children[0]->label == expr){
-	  arg1 = head->children[0]->place->name;
-	}
-	if(head->children[0]->label == IDENT){
-	  arg1 = head->children[0]->tok->text;
-	}
-	if(head->children[0]->label == NUMBERLIT ||
-	   head->children[0]->label == STRINGLIT)
-	  arg1 = head->children[0]->tok->text;
-	
-	//right side MAY be NULL. must check it.
-	if(head->children[2] != NULL ){
-	  if(head->children[2]->label == expr){
-	    arg2 = head->children[2]->place->name;
-	  } 
-	  //variableName?
-	  if(head->children[2]->label == IDENT){
-	    arg2 = head->children[2]->tok->text;
-	  }
-	  if(head->children[2]->label == NUMBERLIT ||
-	     head->children[2]->label == STRINGLIT)
-	    arg2 = head->children[2]->tok->text;
-	}
-	//	printf("%d\n", head->children[1]->label);
-	head->code->content = makeTAC(decideOperator(head->children[1]), 
-				      head->place->name, arg1, arg2);
-	
-
-	
-	
-	//printTAC(head->code->content);
-	
-	concatenateList(lst, head->code);
-      }
-      break;      
-      
-
-    default:
-      
-      break;
-    }
-
-    int n = head->nchildren;
-    int i = 0;
-    for(i = 0; i < n; i++){      
-      if(head->children[i]!=NULL){
-	generateTACList(head->children[i], lst);
-      }
-    }
-    
-    
-
     
   }  
 }
@@ -532,3 +415,156 @@ val 53/10 = 5
 new 5%10 = 5
 val 5/10 = 0
 */
+
+
+void generateTACList(node* head, list* lst){;
+  if(head != NULL){
+    printf("%d\n", head->label);
+    
+    switch(head->label){
+      
+    case packageStatement:
+      {
+	head->code = newListItem();
+	if(head->nchildren > 2){
+	  if(head->children[1]->tok->text != NULL){
+	    head->code->content = makeLabeledTAC(head->children[1]->tok->text,
+						 NULL, NULL, NULL, NULL);
+	  }
+	}
+	else 
+	  head->code->content = makeLabeledTAC("anon_pkg",NULL,NULL,NULL,NULL);
+	
+	
+	concatenateList(lst,head->code);
+      }
+      break;
+      
+      
+    case whileStatement:
+      //make new item
+      
+      //makelabel
+      //code
+      //endlabel
+      
+      break;
+      
+    case functionCall:
+      //head->code = newListItem();
+      
+
+      break;
+      
+      
+    case variableBinding:
+      {
+	/*
+	      variableBinding (head)
+	  name     type     initialization (head->children[2])
+	                           assign value (head->children[1])
+	 */
+	//printf("Variable Binding Here!\n");
+	head->code = newListItem();
+	if(head->children[2] != NULL){
+	  if(head->children[2]->children[1]->label == expr){
+	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
+			   head->children[2]->children[1]->place->name,NULL);
+	    // printTAC(head->code->content);
+	  }
+	  
+	  if(head->children[2]->children[1]->label == NUMBERLIT){
+	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
+			   head->children[2]->children[1]->tok->text,NULL);
+	    //printTAC(head->code->content);
+	  }
+
+	  if(head->children[2]->children[1]->label == STRINGLIT){
+	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
+			   head->children[2]->children[1]->tok->text,NULL);
+	    //	    printTAC(head->code->content);
+	  }
+	  
+	}
+	
+	
+	concatenateList(lst,head->code);
+      }
+      break;
+      
+      
+    case assignStatement:
+      break;
+      
+    case expr:
+      /*
+            expr
+	| mathvalue
+	| expr sign expr
+	| expr++
+       */
+      {
+	head->code = newListItem();
+	char* arg1 = NULL;
+	char* arg2 = NULL;
+	
+	//left side should never be NULL
+	if(head->children[0]->label == expr){
+	  arg1 = head->children[0]->place->name;
+	}
+	if(head->children[0]->label == IDENT){
+	  arg1 = head->children[0]->tok->text;
+	}
+	if(head->children[0]->label == NUMBERLIT ||
+	   head->children[0]->label == STRINGLIT)
+	  arg1 = head->children[0]->tok->text;
+	
+	//right side MAY be NULL. must check it.
+	if(head->children[2] != NULL ){
+	  if(head->children[2]->label == expr){
+	    arg2 = head->children[2]->place->name;
+	  } 
+	  //variableName?
+	  if(head->children[2]->label == IDENT){
+	    arg2 = head->children[2]->tok->text;
+	  }
+	  if(head->children[2]->label == NUMBERLIT ||
+	     head->children[2]->label == STRINGLIT)
+	    arg2 = head->children[2]->tok->text;
+	}
+	//	printf("%d\n", head->children[1]->label);
+	head->code->content = makeTAC(decideOperator(head->children[1]), 
+				      head->place->name, arg1, arg2);
+	
+	//printTAC(head->code->content);
+	
+	concatenateList(lst, head->code);
+      }
+      break;      
+
+    case expression:
+      
+      
+      break;
+      
+
+    default:
+      
+      break;
+    }
+
+    int n = head->nchildren;
+    int i = 0;
+    for(i = 0; i < n; i++){      
+      if(head->children[i]!=NULL){
+	generateTACList(head->children[i], lst);
+      }
+    }
+    
+    
+
+    
+  }  
+}
+
+
