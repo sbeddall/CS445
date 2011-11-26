@@ -23,7 +23,7 @@ enum rules {
   arrayAccessor,
   functionCall,
   ternaryExpression,
-  block ,
+  block , 
   importStatement ,
   functionStatement ,
   forStatement,

@@ -22,6 +22,9 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   // new->baseType = 0;
   new->nchildren = nchildren;
   new->tok = tok;
+  new->place = NULL;
+  new->code = NULL;
+
   new->nodeType = strdup("void");
   if( new->targetScope != NULL ){
     new->targetScope = NULL;

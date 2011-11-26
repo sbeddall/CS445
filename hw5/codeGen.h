@@ -17,6 +17,7 @@ void yycodegen(node* head);
 void populatePlaces(node* head);
 list* concatenateChildren(node* head);
 void generateTAC(node* head);
+void generateTACList(node*, list* lst);
 char* decideOperator(node* operator);
 
 #endif

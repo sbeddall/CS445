@@ -11,7 +11,7 @@
 TAC* makeBlankTAC(){
   TAC* new = (TAC*)malloc(sizeof(TAC));
   
-  int numEntries = 4;
+  int numEntries = 5;
   
   new->entries = (char**)malloc(sizeof(char*) * numEntries);
   
@@ -27,6 +27,7 @@ TAC* makeBlankTAC(){
 //PASS THIS NUMENTRIES as the number of arguments!
 TAC* makeTAC(char* cmd,char* arg1, char* arg2, char* arg3){
   TAC* new = makeBlankTAC();
+  int i = 0;
 
   if(cmd != NULL){
     new->entries[1] = strdup(cmd);
