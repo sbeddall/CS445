@@ -281,8 +281,6 @@ void functionHandlerSmall( node* var ){
 	  var->args = buildArgList(var->children[3], lst);
 	  
 	}
-	
-	printf("My little ponie's number of arguments is: %d", *size);
       }
       break;
       

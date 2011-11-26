@@ -126,6 +126,9 @@ void generateTAC(node* head){;
       
     case packageStatement:
       {
+	list* endLabel = newListItem();
+	endLabel->content = makeTAC("end", NULL, NULL, NULL);
+	
 	head->code = newListItem();
 	if(head->nchildren > 2){
 	  if(head->children[1]->label == IDENT){
@@ -139,6 +142,8 @@ void generateTAC(node* head){;
 	  head->code->content = makeLabeledTAC("anon_pkg",NULL,NULL,NULL,NULL);
 	
 	concatenateList(head->code,concatenateChildren(head));
+	concatenateList(head->code, endLabel);
+	
       }
       break;
       
@@ -205,8 +210,13 @@ void generateTAC(node* head){;
       }
       break;
       
-    case functionDeclaration:
+    case classStatement:
       {
+	head->code = newListItem();
+	
+	list* endLabel = newListItem();
+	endLabel->content = makeTAC("end", NULL, NULL, NULL);
+	
 	list* new = concatenateChildren(head);
 	list* next = head->code;
 	
@@ -214,6 +224,38 @@ void generateTAC(node* head){;
 	  concatenateList(new, head->code);
 	  head->code = new;
 	}
+	
+	concatenateList(head->code, endLabel);
+       }
+      break;
+      
+    case functionDeclaration:
+      {
+	head->code = newListItem();
+	
+	list* endLabel = newListItem();
+	endLabel->content = makeTAC("end",  NULL, NULL, NULL);
+	
+	//get ident. use to start the PROC
+	char* ident = "ANON";
+	
+	if(head->children[3]->label == IDENT){
+	  ident = head->children[3]->tok->text;
+	}
+	else if(head->children[2]->label == IDENT){
+	  ident = head->children[2]->tok->text;
+	}
+	
+	head->code->content = makeLabeledTAC(ident,"proc", NULL, NULL, NULL);
+	
+	list* new = concatenateChildren(head);
+	
+	if(new != NULL){
+	  concatenateList(head->code, new);
+	}
+	
+	
+	concatenateList(head->code, endLabel);
       }
       break;
       
