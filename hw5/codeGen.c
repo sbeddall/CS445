@@ -44,8 +44,10 @@ void yycodegen(node* head){
   
   
   
-  generateTACList(head, lst);
-  printTACList(lst);
+  //generateTACList(head, lst);
+  generateTAC(head);
+
+  printTACList(head->code);
 }
 
 //do I want to put the actual symbolTable functionality here?
@@ -374,6 +376,7 @@ void generateTACList(node* head, list* lst){;
 	head->code->content = makeTAC(decideOperator(head->children[1]), 
 				      head->place->name, arg1, arg2);
 	
+
 	
 	
 	//printTAC(head->code->content);

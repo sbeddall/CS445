@@ -84,6 +84,7 @@ void printTACList(list* head){
       
       iterator = iterator->next;
     }
+    printTAC(iterator->content);
   }
 }
 
