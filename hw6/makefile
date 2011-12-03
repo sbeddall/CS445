@@ -64,4 +64,4 @@ clean:
 	@- rm \#*
 
 tar: 
-	tar cf hw5.tar makefile main.c yylex.c structures.c structures.h yyparse.y tree.c tree.h test test3 enums.h dataPacks.c dataPacks.h symbolTable.h symbolTable.c test4 codeGen.c codeGen.h TAC.c TAC.h 	
+	tar cf hw6.tar yyparse.y *.c *.h test*

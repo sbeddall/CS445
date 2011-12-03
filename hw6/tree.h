@@ -17,6 +17,7 @@ typedef struct node {
   struct node** children;
   char* nodeType;
   struct symbolTable* targetScope;
+  
   //specific to functions
   list* args;
   
