@@ -1,0 +1,3 @@
+The compiled assignments for CS445 - Compiler Design.
+
+Each folder contains the code for a single completed assignment. I also want to note that ALL the files in an individual homework assignment evolve over the course of the semester. tree.c in hw3 is significantly different than tree.c in hw6.
