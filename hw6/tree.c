@@ -23,10 +23,15 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   // new->baseType = 0;
   new->nchildren = nchildren;
   new->tok = tok;
+
+  //iniate to NULL
   new->place = NULL;
   new->code = NULL;
   new->args = NULL;
+  new->contents = NULL;
+  new->operator = NULL;
   
+ 
   new->nodeType = strdup("void");
   if( new->targetScope != NULL ){
     new->targetScope = NULL;
@@ -107,15 +112,7 @@ node* getVariable( symbolTable* scope, node* var ){
   return var;
 }
 
-void yysemantics(node* head){  
-  //build the symbol tables
-  buildSymbolTables(head, NULL);
-  populateSymbolTables(head, NULL);
-  checkTypes(head);
-  //treePrint
-  //  traverseTree(head,NULL,0);
-  //  printTable(head->table, 0);
-}
+
     
   
 void populateSymbolTables( node* head, node* parent_node ){

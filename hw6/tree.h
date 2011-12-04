@@ -10,12 +10,19 @@
 
 
 typedef struct node {
+  //for tree control
   int nchildren; 
   int label;
-  token* tok;
-  struct symbolTable* table;
   struct node** children;
+  
+  //for data contained within the node
+  token* tok;
+  char* contents;
+  char* operator;
+  
+  //semantic analysis stuff
   char* nodeType;
+  struct symbolTable* table;
   struct symbolTable* targetScope;
   
   //specific to functions
@@ -30,7 +37,6 @@ typedef struct node {
 //node* makeNode(char* text,symbolTable* parent, token* tok, int nchildren, ...);
 node* makeNode(int label, symbolTable* parent,  token* tok, int nchildren, ...);
 node* getVariable( symbolTable* scope, node* var );
-void yysemantics(node* head);
 void populateSymbolTables(node* head, node* parent_node);
 void functionHandler(node* var, node* parent_node);
 void functionHandlerSmall(node* var);

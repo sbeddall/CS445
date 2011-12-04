@@ -1,5 +1,17 @@
 #include "semanticAnalysis.h"
 #include "yyparse.tab.h"
+#include "tree.h"
+#include "enums.h"
+
+void yysemantics(node* head){  
+  //build the symbol tables
+  buildSymbolTables(head, NULL);
+  //populateSymbolTables(head, NULL);
+  //  checkTypes(head);
+  //treePrint
+  traverseTree(head,NULL,0);
+  //printTable(head->table, 0);
+}
 
 
 void buildSymbolTables(node* head, node* parent_node){

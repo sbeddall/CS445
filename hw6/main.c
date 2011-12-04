@@ -10,6 +10,8 @@
 #include <string.h>
 #include "symbolTable.h"
 #include "tree.h"
+#include "codeGen.h"
+#include "semanticAnalysis.h"
 
 int status;
 
@@ -43,9 +45,9 @@ main(int argc, char* argv[]){
       yyparse(); 
       //printf("Global Symbol Table: %p\n", global_table); 
       yysemantics(head);   
-      yycodegen(head);
+      //yycodegen(head);
     }
-    fclose(yyin);
+    fcloose(yyin);
     LINENO = 1;
     FILENAME = argv[i];
   }

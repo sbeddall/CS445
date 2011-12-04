@@ -8,6 +8,7 @@
 #include "tree.h"
 
 
+void yysemantics(struct node* head);
 void buildSymbolTables(struct node* head, struct node* parent_node);
 
 #endif
