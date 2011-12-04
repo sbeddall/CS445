@@ -60,6 +60,7 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
 
 //no more yytokens in my nodes! readily available information is the way to go!
 void updateNodeWithToken(node* head, token* tok){
+  printf("meep");
   if(head != NULL){
     if(tok != NULL){
       
