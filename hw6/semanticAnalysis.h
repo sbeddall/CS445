@@ -11,9 +11,7 @@
 void yysemantics(struct node* head);
 void buildSymbolTables(struct node* head, struct node* parent_node);
 void compressTree(struct node* head);
+void populateSymbolTables(struct node* head, struct node* parent_node);
 void checkTypes(struct node* head);
 char* getOptionalNodeType(struct node* var);
-
-
-
 #endif

@@ -24,7 +24,7 @@ typedef struct field {
   char *name;
   struct node* token;
   int* flags; 
-  int baseType; //1 = var. 2 = function. 3 = class
+  int baseType; //1 = var. 2 = function. 3 = class. 4 = package
   /*
     
     0 var 

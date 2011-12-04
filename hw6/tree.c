@@ -8,10 +8,13 @@
 #include "structures.h"
 #include <string.h>
 #include "codeGen.h"
+#include "semanticAnalysis.h"
 
 #if (DEBUG == 1)
 #define printError(errorText, head) printErrorVerbose(errorText, head)
+#define printNodeDetails(head) printNodeDetailsVerbose(head)
 #endif
+
 
 //WORKHORSE. HO!
 node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
@@ -60,7 +63,7 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
 
 //no more yytokens in my nodes! readily available information is the way to go!
 void updateNodeWithToken(node* head, token* tok){
-  printf("meep");
+  
   if(head != NULL){
     if(tok != NULL){
       
@@ -76,21 +79,6 @@ void updateNodeWithToken(node* head, token* tok){
     }
     
     freeToken(tok);  
-  }
-}
-
-
-void printNodeDetails(node* head){
-  if(head != NULL){
-    printf("nchildren: %d\n", head->nchildren);
-    printf("label: %d\n", head->label);
-    printf("contents: %s\n", head->contents);
-    printf("operator: %d\n", head->operator);
-    printf("lineno: %d\n", head->lineno);
-    printf("filename: %s\n", head->filename);
-    printf("nodeType: %s\n", head->nodeType);
-    printf("symbolTable: %p\n", head->table);
-    printf("targetScope: %p\n", head->targetScope);
   }
 }
 
@@ -153,72 +141,6 @@ node* getVariable( symbolTable* scope, node* var ){
 
     
   
-void populateSymbolTables( node* head, node* parent_node ){
-  if( head != NULL ){
-    switch( head->label ) {
-   
-    case variableDeclaration:
-      variableHandler( head, parent_node, NULL );
-      break;  
-      
-    case functionDeclaration:
-      functionHandlerSmall( head );
-      break;
-      
-    case functionCall:
-      break;
-      
-    case classStatement:
-      classHandler( head, parent_node );
-      break;
-      
-    case assignStatement:
-      {
-	node* new;
-	if( head->children[0]->label == variableName )
-	  new = getVariable( head->children[0]->table, head->children[0] );
-	else
-	  new = head->children[0];
-	//printf("\n\n %d \n\n", new->label );
-	if( new->label != IDENT ){
-	  //printError("Target assigned variable does not exist. Breaking", parent_node);
-	  break;
-	}
-	if( findIdent( new->table, new->tok->text ) ){
-	  head->nodeType = strdup( getSymbolNode( new->table, new->tok->text )->nodeType );
-	  assignmentHandler( new, head );
-	}
-	else
-	  printError("Assigning to a non-existent variable", head->children[0]);
-	//This needs to grab the symbol type.
-	break;
-      }
-      
-    case expression:
-      
-      break;   
-      
-      /*    case IDENT:
-      if( !findIdent( head->table, head->tok->text ) ) printError( "Use of an ident without declaring", head );
-      break;
-      */
-    default:
-      {
-	
-	break;
-      }
-    }
-      int n = head->nchildren;      
-	int i;
-	for( i = 0; i < n; i++ ){      
-	  if( head->children[i] == NULL ){
-	  }
-	  else{
-	    populateSymbolTables( head->children[i], head );
-	  }
-	}
-  }
-}
 
 //this only needs to handle the initiation. not the block
 void functionHandler( node* var, node* parent_node ){

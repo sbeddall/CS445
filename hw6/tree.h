@@ -41,12 +41,11 @@ typedef struct node {
 node* makeNode(int label, symbolTable* parent,  token* tok, int nchildren, ...);
 void updateNodeWithToken(node* head, token* tok);
 void printNodeDetails(node* head);
-
+void printNodeDetailsVerbose(node* head);
 
 
 
 node* getVariable( symbolTable* scope, node* var );
-void populateSymbolTables(node* head, node* parent_node);
 void functionHandler(node* var, node* parent_node);
 void functionHandlerSmall(node* var);
 void variableHandler(node* var, node* parent_node, variableDataPack* data);

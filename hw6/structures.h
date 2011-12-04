@@ -60,4 +60,12 @@ void printError(char* errorText, struct node* head);
 void printErrorVerbose(char* errorText, struct node* head);
 char* getFileName();
 
+//debug output
+void debugOutput(struct node* head);
+void debugOutputVerbose(struct node* head);
+void printNodeDetails(struct node* head);
+void printNodeDetailsVerbose(struct node* head);
+
+
+
 #endif

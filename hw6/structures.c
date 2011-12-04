@@ -2,6 +2,7 @@
 #include <string.h>
 #include "tree.h"
 
+
 extern token* YYTOKEN;
 extern int LINENO;
 extern char* FILENAME;
@@ -273,4 +274,37 @@ char* getFileName(){
   strcat(filename,".ic");
 
   return filename;
+}
+
+
+void debugOutput(node* head){
+  status = 0;
+}
+
+void debugOutputVerbose(node* head){
+  
+  traverseTree(head,NULL,0);
+  printTable(head->table, 0);
+
+  status = 0;
+}
+
+
+
+void printNodeDetails(struct node* head){
+
+}
+
+void printNodeDetailsVerbose(struct node* head){
+  if(head != NULL){
+    printf("nchildren: %d\n", head->nchildren);
+    printf("label: %d\n", head->label);
+    printf("contents: %s\n", head->contents);
+    printf("operator: %d\n", head->operator);
+    printf("lineno: %d\n", head->lineno);
+    printf("filename: %s\n", head->filename);
+    printf("nodeType: %s\n", head->nodeType);
+    printf("symbolTable: %p\n", head->table);
+    printf("targetScope: %p\n", head->targetScope);
+  }
 }
