@@ -16,9 +16,12 @@ typedef struct node {
   struct node** children;
   
   //for data contained within the node
-  token* tok;
+  token* tok; //deprecated
   char* contents;
-  char* operator;
+  int operator;
+  int lineno;
+  char* filename;
+
   
   //semantic analysis stuff
   char* nodeType;
@@ -36,6 +39,12 @@ typedef struct node {
 //  symbolTable* parent;
 //node* makeNode(char* text,symbolTable* parent, token* tok, int nchildren, ...);
 node* makeNode(int label, symbolTable* parent,  token* tok, int nchildren, ...);
+void updateNodeWithToken(node* head, token* tok);
+void printNodeDetails(node* head);
+
+
+
+
 node* getVariable( symbolTable* scope, node* var );
 void populateSymbolTables(node* head, node* parent_node);
 void functionHandler(node* var, node* parent_node);
@@ -45,11 +54,9 @@ void checkIdentsInInitialization(node* head, node* root);
 void parseVariableName(node* var, node* parent_node);
 void assignmentHandler( node* var, node* parent_node );
 void classHandler(node* var, node* parent_node);
-char* getOptionalNodeType( node* var );
 void traverseTree(node* head,node* parent_node, int level);
 int comparetypes( node* var, node* parent_node);
 node* miniTraverse( node* head, int label );
-void checkTypes(node* head);
 list* buildArgList(node* head, list* lst);
 
 #endif

@@ -42,8 +42,7 @@ main(int argc, char* argv[]){
     yyin = fopen(argv[i], "r");
     if(yyin != 0){
       total++;
-      yyparse(); 
-      //printf("Global Symbol Table: %p\n", global_table); 
+      yyparse();       //printf("Global Symbol Table: %p\n", global_table); 
       yysemantics(head);   
       //yycodegen(head);
     }

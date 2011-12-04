@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "symbolTable.h"
 
+
 //token construct
 typedef struct tokenitem {
   int category;   /* the integer code returned by yylex */
@@ -40,6 +41,7 @@ void addYYTokenToList(token_item* head);
 void printList(token_item* head);
 void printYYList(token_item* head);
 token* YYDup();
+void freeToken(token* tok);
 
 //string functions
 int compareStrings(char* first, char* second);

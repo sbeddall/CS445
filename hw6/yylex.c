@@ -10,7 +10,7 @@
   extern int status;
 
 #define eval(x) evalToYYToken(x, yytext)
-
+  
   
   //C comments  http://stackoverflow.com/questions/2130097/problem-getting-c-style-comments-in-flex-lex
 
@@ -99,7 +99,7 @@
 "instanceof"  { eval(_INSTANCEOF);  yylval.n = makeNode(_INSTANCEOF, NULL,  YYDup(), 0); return _INSTANCEOF; } 
 "is"  { eval(_IS);   yylval.n = makeNode(_IS, NULL,  YYDup(), 0); return _IS; } 
 
-[a-zA-Z_][a-zA-Z0-9_]* { eval(IDENT); yylval.n = makeNode(IDENT, NULL,  YYDup(), 0); return IDENT;}
+[a-zA-Z_][a-zA-Z0-9_]* { eval(IDENT); yylval.n = makeNode(IDENT, NULL,  YYDup(), 0); return IDENT; }
 
 \. { eval(ACCESSDOT); yylval.n = makeNode(ACCESSDOT, NULL,  YYDup(), 0); return ACCESSDOT; }
 \, { eval(COMMA); yylval.n = makeNode(COMMA, NULL,  YYDup(), 0); return COMMA;}

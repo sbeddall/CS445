@@ -161,6 +161,10 @@ token* YYDup(){
   return new;
 }
 
+void freeToken(token* tok){
+  free(tok);
+}
+
 //string comparison
 int compareStrings(char* first, char* second){
   //step through to compare until we hit the end of the first string

@@ -324,8 +324,8 @@ variableName:
 
 optionalVariableType
    : /* empty */ {$$ = NULL;}
-   | COLON variableName {$$ = makeNode(optionalVariableType, NULL, NULL, 2, $1, $2); }
-   | COLON nativeType { $$ = makeNode(optionalVariableType, NULL, NULL, 2, $1, $2); }
+   | COLON variableName {$$ = makeNode(optionalVariableType, NULL, NULL, 1, $2); }
+   | COLON nativeType { $$ = makeNode(optionalVariableType, NULL, NULL, 1, $2); }
    ;
 
 variableKind
@@ -335,11 +335,11 @@ variableKind
 
 variableInitialization
    : /* empty */ {$$ = NULL;}
-   | ASSIGN value {$$ = makeNode(variableInitialization, NULL, NULL, 2, $1, $2);}
+   | ASSIGN value {$$ = makeNode(variableInitialization, NULL, NULL, 1, $2);}
    ;
 
 assignStatement:
-   variableName assign value SEMICOLON {$$ = makeNode(assignStatement, NULL, NULL, 3, $1, $2, $3);}
+   variableName assign value SEMICOLON {$$ = makeNode(assignStatement, NULL, NULL, 2, $1, $3); $$->operator = $2->label;}
    ;
 
 valueList:
@@ -365,19 +365,19 @@ mathValue:
    | variableName {$$ = $1} 
    | functionCall {$$ = $1} 
    | ternaryExpression {$$ = $1} 
-   | MINUS mathValue {$$ = makeNode(mathValue, NULL, NULL, 2, $1, $2);} 
-   | PLUS mathValue {$$ = makeNode(mathValue, NULL, NULL, 2, $1, $2);} 
+   | MINUS mathValue {$$ = makeNode(mathValue, NULL, NULL, 2, $1, $2); $$->operator = MINUS;} 
+   | PLUS mathValue {$$ = makeNode(mathValue, NULL, NULL, 2, $1, $2); $$->operator = PLUS;} 
    ;
 
 expr:
-   mathValue {$$ = $1 }
-   | expr PLUS expr {$$ = makeNode(expr, NULL, NULL, 3, $1, $2, $3); }
-   | expr MINUS expr {$$ = makeNode(expr, NULL, NULL, 3, $1, $2, $3); } 
-   | expr MULTIPLY expr {$$ = makeNode(expr, NULL, NULL, 3, $1, $2, $3); }
-   | expr DIVIDE expr {$$ = makeNode(expr, NULL, NULL, 3, $1, $2, $3); }
-   | expr MODULO expr {$$ = makeNode(expr, NULL, NULL, 3, $1, $2, $3); }
-   | expr INCREMENT {$$ = makeNode(expr, NULL, NULL, 2, $1, $2); }
-   | expr DECREMENT {$$ = makeNode(expr, NULL, NULL, 2, $1, $2); }
+   mathValue {$$ = $1}
+   | expr PLUS expr {$$ = makeNode(expr, NULL, NULL, 2, $1, $3); $$->operator = PLUS;}
+   | expr MINUS expr {$$ = makeNode(expr, NULL, NULL, 2, $1, $3); $$->operator = MINUS;} 
+   | expr MULTIPLY expr {$$ = makeNode(expr, NULL, NULL, 2, $1, $3); $$->operator = MULTIPLY;}
+   | expr DIVIDE expr {$$ = makeNode(expr, NULL, NULL, 2, $1, $3); $$->operator = DIVIDE;}
+   | expr MODULO expr {$$ = makeNode(expr, NULL, NULL, 2, $1, $3); $$->operator = MODULO;}
+   | expr INCREMENT {$$ = makeNode(expr, NULL, NULL, 1, $2); $$->operator = INCREMENT;}
+   | expr DECREMENT {$$ = makeNode(expr, NULL, NULL, 1, $2); $$->operator = DECREMENT;}
    ;
 
 nativeType:
@@ -508,7 +508,7 @@ elseStatement:
    ;
 
 expression:
-   LPAREN value logicalOperator expression RPAREN {$$ = makeNode(expression, NULL, NULL, 3, $2, $3, $4);}
+   LPAREN value logicalOperator expression RPAREN {$$ = makeNode(expression, NULL, NULL, 2, $2, $4); $$->operator = $3->label;}
    | LPAREN value RPAREN {$$ = makeNode(expression, NULL, NULL, 1, $2);}
    ;
 

@@ -22,15 +22,17 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   new->label = label;
   // new->baseType = 0;
   new->nchildren = nchildren;
-  new->tok = tok;
+  new->tok = tok;  
+
+  //take info from yytoken, add to the node, free the yytoken
+  updateNodeWithToken(new, tok);
+  printNodeDetails(new);
 
   //iniate to NULL
   new->place = NULL;
   new->code = NULL;
   new->args = NULL;
-  new->contents = NULL;
-  new->operator = NULL;
-  
+
  
   new->nodeType = strdup("void");
   if( new->targetScope != NULL ){
@@ -54,6 +56,41 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   }
   
   return new;
+}
+
+//no more yytokens in my nodes! readily available information is the way to go!
+void updateNodeWithToken(node* head, token* tok){
+  if(head != NULL){
+    if(tok != NULL){
+      
+      if(tok->text != NULL){
+	head->contents = strdup(tok->text);
+      }
+      
+      if(tok->filename != NULL){
+	head->filename = strdup(tok->text);
+      }
+      
+      head->lineno = tok->lineno;
+    }
+    
+    freeToken(tok);  
+  }
+}
+
+
+void printNodeDetails(node* head){
+  if(head != NULL){
+    printf("nchildren: %d\n", head->nchildren);
+    printf("label: %d\n", head->label);
+    printf("contents: %s\n", head->contents);
+    printf("operator: %d\n", head->operator);
+    printf("lineno: %d\n", head->lineno);
+    printf("filename: %s\n", head->filename);
+    printf("nodeType: %s\n", head->nodeType);
+    printf("symbolTable: %p\n", head->table);
+    printf("targetScope: %p\n", head->targetScope);
+  }
 }
 
 node* getVariable( symbolTable* scope, node* var ){
@@ -563,18 +600,6 @@ node* miniTraverse( node* head, int label ){
   return NULL;
 }
 
-char* getOptionalNodeType( node* var ){
-  if( var != NULL){
-    if( var->label == optionalVariableType ){
-      if( var->children[1]->label == IDENT )
-	return strdup( var->children[1]->tok->text );
-    }
-    else return strdup("void");
-  }
-  return strdup("void");
-}
-
-
 
 void traverseTree(node* head, node* parent_node, int level){
   if(head != NULL){
@@ -587,24 +612,20 @@ void traverseTree(node* head, node* parent_node, int level){
     for(j; j < level; j++){
       printf("%s", " ");
     }
-    if(head->tok != NULL){
-      if(head->tok->text != NULL){
+    if(head->label <= 400){
+      if(head->contents != NULL){
 	//printf("Mem:%p,%s", head, head->text);
-	printf("%s ", head->tok->text);
+	printf("%s ", head->contents);
 	printf("%d", head->label);
 	printf(" Symbol Table Pointer: %p", (head->table));
 	printf("\n");
       }
-      else{
-	//printf("Null Text, Memory Location %p\n", head);
-      }
     }
-    else {
+    else{
       printf("Label: %d -- ", head->label);
       printf("Symbol Table Pointer: %p\n", (head->table));
     }
-
-    
+        
     int i;
     int k;
     /*printf("My Memory Location: %p\n", head);
@@ -630,25 +651,6 @@ void traverseTree(node* head, node* parent_node, int level){
     }
     
   }
-}
-
-void checkTypes(node* head){
-  if(head != NULL){
-    int n = head->nchildren;
-    int i = 0;
-    for(i = 0; i < n; i++){      
-      if(head->children[i]!=NULL){
-	checkTypes(head->children[i]);
-      }
-    }
-    
-    //do work
-    switch(head->label){
-    }
-    
-  }
-
-  
 }
 
 
