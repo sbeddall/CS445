@@ -582,12 +582,10 @@ void traverseTree(node* head, node* parent_node, int level){
     // if( level > 0 && head->text == NULL) level--;
     
     //general information about the node
-    printf("Label: %d -- ", head->label);
-    printf("Symbol Table Pointer: %p\n", (head->table));
-    
+   
     int j = 0;
     for(j; j < level; j++){
-      //printf("%d", level);
+      printf("%s", " ");
     }
     if(head->tok != NULL){
       if(head->tok->text != NULL){
@@ -601,6 +599,11 @@ void traverseTree(node* head, node* parent_node, int level){
 	//printf("Null Text, Memory Location %p\n", head);
       }
     }
+    else {
+      printf("Label: %d -- ", head->label);
+      printf("Symbol Table Pointer: %p\n", (head->table));
+    }
+
     
     int i;
     int k;

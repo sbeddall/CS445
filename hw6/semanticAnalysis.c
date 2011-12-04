@@ -6,6 +6,8 @@
 void yysemantics(node* head){  
   //build the symbol tables
   buildSymbolTables(head, NULL);
+
+  
   //populateSymbolTables(head, NULL);
   //  checkTypes(head);
   //treePrint

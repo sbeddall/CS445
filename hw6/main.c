@@ -47,7 +47,7 @@ main(int argc, char* argv[]){
       yysemantics(head);   
       //yycodegen(head);
     }
-    fcloose(yyin);
+    fclose(yyin);
     LINENO = 1;
     FILENAME = argv[i];
   }
