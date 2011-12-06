@@ -7,11 +7,22 @@
 #include <stdlib.h>
 #include "tree.h"
 
-
+/*Tree Manipulation*/
 void yysemantics(struct node* head);
 void buildSymbolTables(struct node* head, struct node* parent_node);
 void compressTree(struct node* head);
 void populateSymbolTables(struct node* head, struct node* parent_node);
-void checkTypes(struct node* head);
+
+/*Type Stuff*/
+void checkTypes(struct node* head, struct node* parent);
 char* getOptionalNodeType(struct node* var);
+
+
+
+/*HANDLERS*/
+void variableHandler(struct node* head); 
+void functionHandler(struct node* head);  
+void classHandler(struct node* head);  
+void packageHandler(struct node* head);  
+
 #endif

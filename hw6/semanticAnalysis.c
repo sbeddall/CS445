@@ -1,3 +1,4 @@
+
 #include "semanticAnalysis.h"
 #include "yyparse.tab.h"
 #include "tree.h"
@@ -16,17 +17,20 @@ extern int status;
 
 
 
-void yysemantics(node* head){    //build the symbol tables
-  buildSymbolTables(head, NULL);
+void yysemantics(node* head){    
+  buildSymbolTables(head, NULL); //build the symbol tables
 
   //compressTree(head);
   
-  //populateSymbolTables(head, NULL);
-  //checkTypes(head);
+  //populate symbol tables. 
+  populateSymbolTables(head, NULL); //class, package, variable declarations.
 
+  checkTypes(head, NULL);
+  
+  /////miscellaneous checks
 
   //treePrint
-  debugOutput(head);
+  debugOutput(head); //won't output unless we have "debug" turned on.
 }
 
 
@@ -55,8 +59,7 @@ void buildSymbolTables(node* head, node* parent_node){
 }
 
 void compressTree(node* head){
-  
-  
+  //don't use this I think
 }
 
 void populateSymbolTables( node* head, node* parent_node ){
@@ -64,76 +67,58 @@ void populateSymbolTables( node* head, node* parent_node ){
     switch( head->label ) {
    
     case variableDeclaration:
-      variableHandler( head, parent_node, NULL );
-      break;  
+      {
+	variableHandler(head);
+	break;  
+      }
       
     case functionDeclaration:
-      functionHandlerSmall( head );
-      break;
-      
-    case functionCall:
-      break;
-      
-    case classStatement:
-      classHandler( head, parent_node );
-      break;
-      
-    case assignStatement:
       {
-	node* new;
-	if( head->children[0]->label == variableName )
-	  new = getVariable( head->children[0]->table, head->children[0] );
-	else
-	  new = head->children[0];
-	//printf("\n\n %d \n\n", new->label );
-	if( new->label != IDENT ){
-	  //printError("Target assigned variable does not exist. Breaking", parent_node);
-	  break;
-	}
-	if( findIdent( new->table, new->tok->text ) ){
-	  head->nodeType = strdup( getSymbolNode( new->table, new->tok->text )->nodeType );
-	  assignmentHandler( new, head );
-	}
-	else
-	  printError("Assigning to a non-existent variable", head->children[0]);
-	//This needs to grab the symbol type.
+	functionHandler(head);
 	break;
       }
       
-    case expression:
+    case classStatement:
+      {
+	printf("I'm in a classStatement!\n");
+	classHandler(head);
+	break;
+      }
       
-      break;   
-      
-      /*    case IDENT:
-      if( !findIdent( head->table, head->tok->text ) ) printError( "Use of an ident without declaring", head );
-      break;
-      */
+    case packageStatement:
+      {
+	packageHandler(head);
+	break;
+      }
+
     default:
       {
-	
+	//nothing
 	break;
       }
     }
-      int n = head->nchildren;      
-	int i;
-	for( i = 0; i < n; i++ ){      
-	  if( head->children[i] == NULL ){
-	  }
-	  else{
-	    populateSymbolTables( head->children[i], head );
-	  }
-	}
+    int n = head->nchildren;      
+    int i;
+    for( i = 0; i < n; i++ ){      
+      if( head->children[i] == NULL ){
+      }
+      else{
+	populateSymbolTables( head->children[i], head );
+      }
+    }
   }
 }
 
 
-void checkTypes(node* head){
+
+
+void checkTypes(node* head, struct node* parent){
   if(head != NULL){
     int n = head->nchildren;
     int i = 0;
     for(i = 0; i < n; i++){      
       if(head->children[i]!=NULL){
-	checkTypes(head->children[i]);
+	checkTypes(head->children[i], NULL);
       }
     }
     
@@ -145,8 +130,6 @@ void checkTypes(node* head){
 }
 
 
-
-
 char* getOptionalNodeType( node* var ){
   if( var != NULL){
     if( var->label == optionalVariableType ){
@@ -156,5 +139,95 @@ char* getOptionalNodeType( node* var ){
     else return strdup("void");
   }
   return strdup("void");
+}
+
+
+/*HANDLERS*/
+void variableHandler( node* var ){  
+  if(var != NULL){
+    /*
+    if( data == NULL) data = initializeDataPack();
+    */
+    switch( var->label ){
+      /*  
+    case _VAR:
+      data->varFlag = 1;
+      break;
+
+    case _CONST:
+      data->constFlag = 1;
+      break;
+      
+    case _PUBLIC:
+      data->publicFlag = 1;
+      break;
+      
+    case _PRIVATE:
+      data->privateFlag = 1;
+      break;
+
+    case _PROTECTED:
+      data->protectedFlag = 1;
+      break;
+      
+    case _OVERRIDE:
+      data->overrideFlag = 1;
+      break;
+
+    case _NATIVE:
+      data->nativeFlag = 1;
+      break;
+      */
+    case variableBinding:
+      {
+	
+      }
+      break;
+      
+      
+    default: 
+      { 
+	int n = var->nchildren;      
+	int i;
+	for(i = 0; i < n; i++){      
+	  if(var->children[i]==NULL){
+	    //do nothing
+	  }
+	  else{
+	    variableHandler(var->children[i]);
+	  } 
+	}    
+	break;
+      }
+    }
+  } 
+}
+
+void functionHandler(struct node* head){
+
+}
+
+void classHandler(struct node* head){
+  if( head != NULL ){
+    int n = head->nchildren;
+    int i = 0;
+    for( i; i < n; i++ ){
+      if(head->children[i]->label == IDENT){
+	if( !findIdentLocally( head->children[i]->table, head->children[i]->contents ) )
+	  {
+	    //update the place here as well
+	    printf("Adding symbol to Table: %s\n", head->children[i]->contents);
+	    addSymbol( head->children[i]->table, head->children[i]->contents, 3, head->children[i], NULL );
+	    break;
+	  }
+	else 
+	  printError( "Redeclaration of Class definition", head->children[i] );	
+      }
+    }
+  }
+}
+
+void packageHandler(struct node* head){
+
 }
 

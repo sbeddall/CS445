@@ -46,16 +46,19 @@ void printNodeDetailsVerbose(node* head);
 
 
 node* getVariable( symbolTable* scope, node* var );
-void functionHandler(node* var, node* parent_node);
-void functionHandlerSmall(node* var);
-void variableHandler(node* var, node* parent_node, variableDataPack* data);
 void checkIdentsInInitialization(node* head, node* root);
 void parseVariableName(node* var, node* parent_node);
 void assignmentHandler( node* var, node* parent_node );
-void classHandler(node* var, node* parent_node);
 void traverseTree(node* head,node* parent_node, int level);
 int comparetypes( node* var, node* parent_node);
 node* miniTraverse( node* head, int label );
 list* buildArgList(node* head, list* lst);
+
+/*
+deprecated
+void classHandler(node* var, node* parent_node);
+void functionHandler(node* var, node* parent_node);
+void functionHandlerSmall(node* var);
+*/
 
 #endif

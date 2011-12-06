@@ -49,8 +49,6 @@ int addSymbol(symbolTable* table, char* ident, int baseType, struct node* token,
   
   if(flags != NULL) lol->flags = updateFlagsFromData( flags );
 
-  
-  
   table->nSymbols++;
   int n = table->nSymbols-1;
   table->fields[n] = lol; 

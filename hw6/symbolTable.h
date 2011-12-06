@@ -26,7 +26,7 @@ typedef struct field {
   int* flags; 
   int baseType; //1 = var. 2 = function. 3 = class. 4 = package
   /*
-    
+    Flags
     0 var 
     1 const
     2 public 
