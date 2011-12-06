@@ -1,21 +1,13 @@
-package {
-	var y:Lol;
+var y:Lol;	
 	
-	y = new Lol();
-	
-	y = x + 2;
-	
-	
-	var x:Int = 2 + 2 + 3 - 2;
+var x:Int = 2 + 2 + 3 - 2;
 
-	var z:Int = 3;
+var z:Int = 3;
 
-	function lol(i:lol){
-		 var l:Int = 3;
-	}
+function lol(i:lol){
+	 var l:Int = 3;
+}
 	
-	class Lol {
-	      var p:Int = 2;
-	}
-
+class Lol {
+      var p:Int = 2;
 }

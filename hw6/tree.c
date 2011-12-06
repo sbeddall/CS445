@@ -29,7 +29,7 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
 
   //take info from yytoken, add to the node, free the yytoken
   updateNodeWithToken(new, tok);
-  printNodeDetails(new);
+  //  printNodeDetails(new);
 
   //iniate to NULL
   new->place = NULL;

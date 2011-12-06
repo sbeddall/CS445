@@ -80,7 +80,6 @@ void populateSymbolTables( node* head, node* parent_node ){
       
     case classStatement:
       {
-	printf("I'm in a classStatement!\n");
 	classHandler(head);
 	break;
       }
@@ -143,12 +142,12 @@ char* getOptionalNodeType( node* var ){
 
 
 /*HANDLERS*/
-void variableHandler( node* var ){  
-  if(var != NULL){
+void variableHandler( node* head ){  
+  if(head != NULL){
     /*
     if( data == NULL) data = initializeDataPack();
     */
-    switch( var->label ){
+    switch( head->label ){
       /*  
     case _VAR:
       data->varFlag = 1;
@@ -175,26 +174,37 @@ void variableHandler( node* var ){
       break;
 
     case _NATIVE:
-      data->nativeFlag = 1;
-      break;
+    data->nativeFlag = 1;
+    break;
       */
     case variableBinding:
       {
-	
+	if(head->children[0]->label == IDENT){
+	  if( !findIdentLocally( head->children[0]->table, head->children[0]->contents ) )
+	    {
+	      addSymbol( head->children[0]->table, head->children[0]->contents, 1, head->children[0], NULL );
+	      break;
+	    }
+	  else 
+	    printError( "Redeclaration of variable", head->children[0] );	
+	}
+	if(head->children[0]->label == variableName){
+	  printError("Incorrect usage of variable inheritance. Try declaring inside the correct scope.", head->children[0]);
+	}
       }
       break;
       
       
     default: 
       { 
-	int n = var->nchildren;      
+	int n = head->nchildren;      
 	int i;
 	for(i = 0; i < n; i++){      
-	  if(var->children[i]==NULL){
+	  if(head->children[i]==NULL){
 	    //do nothing
 	  }
 	  else{
-	    variableHandler(var->children[i]);
+	    variableHandler(head->children[i]);
 	  } 
 	}    
 	break;
@@ -204,7 +214,7 @@ void variableHandler( node* var ){
 }
 
 void functionHandler(struct node* head){
-
+  
 }
 
 void classHandler(struct node* head){
@@ -215,8 +225,6 @@ void classHandler(struct node* head){
       if(head->children[i]->label == IDENT){
 	if( !findIdentLocally( head->children[i]->table, head->children[i]->contents ) )
 	  {
-	    //update the place here as well
-	    printf("Adding symbol to Table: %s\n", head->children[i]->contents);
 	    addSymbol( head->children[i]->table, head->children[i]->contents, 3, head->children[i], NULL );
 	    break;
 	  }
