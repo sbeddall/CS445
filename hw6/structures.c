@@ -283,9 +283,9 @@ void debugOutput(node* head){
 
 void debugOutputVerbose(node* head){
   
-  traverseTree(head,NULL,0);
-  printTable(head->table, 0);
-  
+   traverseTree(head,NULL,0);
+   printTable(head->table, 0);
+     
   status = 0;
 }
 

@@ -16,7 +16,7 @@ lex.yy.c : yylex.c
 	lex yylex.c
 
 yyparse.tab.o : yyparse.tab.c
-	gcc -ggdb -c yyparse.tab.c
+	gcc -ggdb -c -D$(DEBUG) yyparse.tab.c
 
 yyparse.tab.c : yyparse.y
 	bison  -d -t -v  yyparse.y

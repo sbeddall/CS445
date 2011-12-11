@@ -6,12 +6,16 @@ package  {
 	var z:Int = 3;
 
 	var z:Number = 2;
-
+	
+	}
+	
+lol
+	
 	function lol(i:lol){
 		 var l:Int = 3;
 	}
 			 	
 	class Lol {
-	      var p:Int = 2;
+		      var p:Int = 2;
 	}
 }

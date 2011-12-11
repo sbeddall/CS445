@@ -228,7 +228,8 @@ void functionHandler(struct node* head){
 	      //set up the target scope
 	      int j = i + 1;
 	      head->children[i]->targetScope = head->children[j]->targetScope;
-	      printf("There is a god damn targetscope here! %p\n", head->targetScope);
+	      
+	      
 	      break;
 	    }
 	  else 

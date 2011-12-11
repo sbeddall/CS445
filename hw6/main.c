@@ -43,8 +43,16 @@ main(int argc, char* argv[]){
     if(yyin != 0){
       total++;
       yyparse();       //printf("Global Symbol Table: %p\n", global_table); 
-      yysemantics(head);   
-      //yycodegen(head);
+      if(status == 0){
+	yysemantics(head);   
+      }
+      else {
+	printf("Error in parser, abandoning semantic analysis\n");
+      }
+      if(status == 0){
+	//yycodegen(head);
+      }
+      else printf("Error in parser or semantic, abandoning codeGen\n");
     }
     fclose(yyin);
     LINENO = 1;

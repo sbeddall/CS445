@@ -9,13 +9,13 @@
 #include "semanticAnalysis.h"
 #include "codeGen.h"
 
-
-#ifdef DEBUG 
-#define yyerror(const char* msg) yyerrorVerbose(const char* msg)
+  
+#if (DEBUG == 1) 
+  //##define yyerror(msg) yyerrorVerbose(msg)
 #endif  
-
+  
 // better error reporting
-#define YYERROR_VERBOSE
+
   extern char* yytext;
   extern int LINENO;
   extern int failed;
@@ -29,18 +29,21 @@
   //#define eval(x) evalToYYToken(x, yytext)
 
   // bison requires that you supply this function
+#define YYERROR_VERBOSE
 void  yyerror(const char* msg){
   status = -2;
+  if(DEBUG == 1){
+   printf("Filename: %s\n", FILENAME);
+   printf("ERROR(PARSER): %s, %s\nLine Number: %d\n", msg, yytext, LINENO); 
+  }
+
 }
 
-void yyerrorVerbose(const char *msg)
-{  
  
-  printf("Filename: %s\n", FILENAME);
-  printf("ERROR(PARSER): %s, %s\nLine Number: %d\n", msg, yytext, LINENO); 
-  //change exit status 
-  status = -2;
-}
+ void yyerrorVerbose(const char *msg)
+ { 
+   status = -2;
+ }
 
 %}
 
@@ -422,9 +425,9 @@ functionCall:
    ;
 
 functionHeader:
-   LPAREN variableDeclarationList RPAREN block {$$ = makeNode(functionHeader, NULL, NULL, 2, $2, $4); $$->targetScope = $4->table;} 
-   | LPAREN variableDeclarationList RPAREN COLON variableName block {$$ = makeNode(functionHeader, NULL, NULL, 3, $2, $5, $6); $$->targetScope = $6->table;}
-   | LPAREN RPAREN block {$$ = makeNode(functionHeader, NULL, NULL, 1, $3); $$->targetScope = $3->table;}
+   LPAREN variableDeclarationList RPAREN block {$$ = makeNode(functionHeader, NULL, NULL, 2, $2, $4); $$->targetScope = $4->table; } 
+   | LPAREN variableDeclarationList RPAREN COLON variableName block {$$ = makeNode(functionHeader, NULL, NULL, 3, $2, $5, $6); $$->targetScope = $6->table; }
+   | LPAREN RPAREN block {$$ = makeNode(functionHeader, NULL, NULL, 1, $3); $$->targetScope = $3->table; }
    | LPAREN RPAREN COLON variableName block {$$ = makeNode(functionHeader, NULL, NULL, 2, $4, $5); $$->targetScope = $5->table; }
    ;
 

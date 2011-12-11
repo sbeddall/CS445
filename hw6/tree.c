@@ -21,6 +21,9 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   
   node* new = (node*) malloc(sizeof( node ));
   
+  //$2->table = $4->table;
+  ///$2->table = $6->table;
+
   new->table = parent;
   new->label = label;
   // new->baseType = 0;
