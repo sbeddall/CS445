@@ -250,9 +250,9 @@ void printError(char* errorText, struct node* head){
 
 void printErrorVerbose(char* errorText, struct node* head){
   
-  if( head->tok != NULL) printf("%s: %s\n", errorText, head->tok->text);
+  if( head->contents != NULL) printf("%s: %s\n", errorText, head->contents);
   printf("\tNode label: %d\n", head->label);
-  if( head->tok != NULL) printf("\tLine Number: %d\n", head->tok->lineno);
+  printf("\tLine Number: %d\n", head->lineno);
   printf("\tSymbol Table: %p\n\n", head->table); 
 
   //status update as per assignment

@@ -214,10 +214,50 @@ void variableHandler( node* head ){
 }
 
 void functionHandler(struct node* head){
-  
+  if( head != NULL ){
+    int n = head->nchildren;
+    int i = 0;
+    for( i; i < n; i++ ){
+      if(head->children[i] != NULL){
+	if(head->children[i]->label == IDENT){
+	  if( !findIdentLocally( head->children[i]->table, head->children[i]->contents ) )
+	    {
+	      addSymbol( head->children[i]->table, head->children[i]->contents, 2, head->children[i], NULL );
+	      //set up the target scope
+	      int j = i + 1;
+	      head->children[i]->targetScope = head->children[j]->targetScope;
+	      printf("There is a god damn targetscope here! %p\n", head->targetScope);
+	      break;
+	    }
+	  else 
+	    printError( "Redeclaration of function definition", head->children[i] );	
+	}
+      }
+    }
+  }  
 }
 
 void classHandler(struct node* head){
+  if( head != NULL ){
+    int n = head->nchildren;
+    int i = 0;
+    for( i; i < n; i++ ){
+      if(head->children[i] != NULL){
+	if(head->children[i]->label == IDENT){
+	  if( !findIdentLocally( head->children[i]->table, head->children[i]->contents ) )
+	    {
+	      addSymbol( head->children[i]->table, head->children[i]->contents, 3, head->children[i], NULL );
+	      break;
+	    }
+	  else 
+	    printError( "Redeclaration of class definition", head->children[i] );	
+	}
+      }
+    }
+  }
+}
+
+void packageHandler(struct node* head){
   if( head != NULL ){
     int n = head->nchildren;
     int i = 0;
@@ -229,13 +269,9 @@ void classHandler(struct node* head){
 	    break;
 	  }
 	else 
-	  printError( "Redeclaration of Class definition", head->children[i] );	
+	  printError( "Redeclaration of package definition", head->children[i] );	
       }
     }
   }
-}
-
-void packageHandler(struct node* head){
-
 }
 

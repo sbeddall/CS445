@@ -56,13 +56,20 @@ int addSymbol(symbolTable* table, char* ident, int baseType, struct node* token,
 
 
 void printTable( symbolTable* table, int level ){
+  int z = 0;
+  for(z; z < level; z++)printf(" ");
   printf("Printing Table: %p\n", table);
   int i = 0;
   for( i; i < table->nSymbols; i++ ){
     if(table->fields[i]->name != NULL){
+      z = 0;
+      for(z; z < level; z++)printf(" ");
       printf( "Ident: %s : Base Type: %d\n", table->fields[i]->name, table->fields[i]->baseType );
       if( table->fields[i]->baseType == 3){
-	printTable(table->fields[i]->token->targetScope, level);
+	printTable(table->fields[i]->token->targetScope, level+1);
+      }
+      if( table->fields[i]->baseType == 2){
+	printTable(table->fields[i]->token->targetScope, level+1);
       }
       //, table->fields[i]->token->nodeType, 
       /*if(table->fields[i]->flags != NULL){
@@ -74,7 +81,7 @@ void printTable( symbolTable* table, int level ){
 	}*/
     }
   }
-  printf("End of Table\n\n");
+  //  printf("End of Table\n");
 }
 
 
