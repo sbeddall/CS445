@@ -30,6 +30,7 @@ typedef struct node {
   
   //specific to functions
   list* args;
+  int numArgs;
   
   //stuff for code gen
   list* code;

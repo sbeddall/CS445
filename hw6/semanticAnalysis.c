@@ -3,9 +3,11 @@
 #include "yyparse.tab.h"
 #include "tree.h"
 #include "enums.h"
+#include "codeGen.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 
 extern int status;
 
@@ -259,18 +261,13 @@ void classHandler(struct node* head){
 
 void packageHandler(struct node* head){
   if( head != NULL ){
-    int n = head->nchildren;
-    int i = 0;
-    for( i; i < n; i++ ){
-      if(head->children[i]->label == IDENT){
-	if( !findIdentLocally( head->children[i]->table, head->children[i]->contents ) )
-	  {
-	    addSymbol( head->children[i]->table, head->children[i]->contents, 3, head->children[i], NULL );
-	    break;
-	  }
-	else 
-	  printError( "Redeclaration of package definition", head->children[i] );	
-      }
+    if(head->children[0]->label == IDENT){
+      if( !findIdentLocally( head->children[0]->table, head->children[0]->contents ) )
+	{
+	  addSymbol( head->children[0]->table, head->children[0]->contents, 4, head->children[0], NULL );
+	}
+      else 
+	  printError( "Redeclaration of package definition", head->children[0] );	
     }
   }
 }

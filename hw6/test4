@@ -1,15 +1,17 @@
-var y:Lol;	
-	
-var x:Int = 2 + 2 + 3 - 2;
+package  {
+	var y:Lol;	
+		
+	var x:Int = 2 + 2 + 3 - 2;
 
-var z:Int = 3;
+	var z:Int = 3;
 
-var z:Number = 2;
+	var z:Number = 2;
 
-function lol(i:lol){
-	 var l:Int = 3;
-}
-	
-class Lol {
-      var p:Int = 2;
+	function lol(i:lol){
+		 var l:Int = 3;
+	}
+			 	
+	class Lol {
+	      var p:Int = 2;
+	}
 }

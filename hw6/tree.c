@@ -35,7 +35,7 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   new->place = NULL;
   new->code = NULL;
   new->args = NULL;
-
+  new->numArgs = 0;
  
   new->nodeType = strdup("void");
   if( new->targetScope != NULL ){

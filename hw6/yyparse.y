@@ -7,7 +7,7 @@
 #include "enums.h"
 #include <string.h>
 #include "semanticAnalysis.h"
-
+#include "codeGen.h"
 
 
 #ifdef DEBUG 
@@ -430,7 +430,16 @@ functionHeader:
 
 packageStatement:
    _PACKAGE variableName block {$$ = makeNode(packageStatement, NULL, NULL, 2, $2, $3); $2->targetScope = $3->table;}
-   | _PACKAGE block {$$ = makeNode(packageStatement, NULL, NULL, 1, $2);}
+   | _PACKAGE block {
+     token* tok = (token*)malloc(sizeof(token));
+     tok->category = IDENT;
+     tok->text = newLabel();
+     tok->lineno = YYTOKEN->lineno;
+     tok->filename = strdup(FILENAME);
+     node* token = makeNode(IDENT, NULL, tok, 0);
+     $$ = makeNode(packageStatement, NULL, NULL, 2, token, $2);
+     token->targetScope = $2->table;
+   }
    ;
    
 ternaryExpression:

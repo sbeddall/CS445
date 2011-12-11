@@ -71,6 +71,9 @@ void printTable( symbolTable* table, int level ){
       if( table->fields[i]->baseType == 2){
 	printTable(table->fields[i]->token->targetScope, level+1);
       }
+      if( table->fields[i]->baseType == 4){
+	printTable(table->fields[i]->token->targetScope, level+1);
+      }
       //, table->fields[i]->token->nodeType, 
       /*if(table->fields[i]->flags != NULL){
 	int j = 0;
