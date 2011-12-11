@@ -4,6 +4,7 @@
 #include "tree.h"
 #include "enums.h"
 #include "codeGen.h"
+#include "structures.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -135,7 +136,7 @@ char* getOptionalNodeType( node* var ){
   if( var != NULL){
     if( var->label == optionalVariableType ){
       if( var->children[0]->label == IDENT )
-	return strdup( var->children[0]->tok->text );
+	return strdup( var->children[0]->contents );
     }
     else return strdup("void");
   }
@@ -219,17 +220,22 @@ void functionHandler(struct node* head){
   if( head != NULL ){
     int n = head->nchildren;
     int i = 0;
+    int z;
+    int j;
     for( i; i < n; i++ ){
       if(head->children[i] != NULL){
+	
+	
 	if(head->children[i]->label == IDENT){
 	  if( !findIdentLocally( head->children[i]->table, head->children[i]->contents ) )
 	    {
-	      addSymbol( head->children[i]->table, head->children[i]->contents, 2, head->children[i], NULL );
+	      addSymbol( head->children[i]->table, 
+			 head->children[i]->contents, 2, head->children[i], NULL );
 	      //set up the target scope
-	      int j = i + 1;
+	      j = i + 1;
 	      head->children[i]->targetScope = head->children[j]->targetScope;
 	      
-	      
+	      z = i;
 	      break;
 	    }
 	  else 
@@ -237,7 +243,24 @@ void functionHandler(struct node* head){
 	}
       }
     }
-  }  
+    
+    //we need to grab the functionHeader!
+    node* iterator = head->children[j];
+    
+    //now step through the functionHeader node and find the arg list
+    for( i=0; i < n; i++ ){
+      //printf("\n\nLabel %d \n\n", head->children[i]->label);
+	  
+      if(iterator->children[i] != NULL){
+	if(iterator->children[i]->label == variableDeclarationList ||
+	   iterator->children[i]->label == variableBinding){
+	  head->children[z]->args = functionArgumentHandler(NULL, iterator->children[i]);
+	}
+      }
+    }
+
+    
+  } 
 }
 
 void classHandler(struct node* head){
@@ -273,3 +296,43 @@ void packageHandler(struct node* head){
   }
 }
 
+/* HELPERS */
+list* functionArgumentHandler(list* front, struct node* head){
+  switch(head->label){
+  case variableDeclarationList:
+    {
+      //non-base case. attach the child and recurse
+      if(front == NULL){//uh oh! we need to make a new list!
+	list* lst = newListItem();
+	lst->content = strdup(head->children[0]->nodeType);
+	return functionArgumentHandler(lst, head->children[1]);
+      }
+      else {
+	genericAdd(front, strdup(head->children[0]->nodeType));
+	return functionArgumentHandler(front, head->children[1]);
+      }
+    }
+    break;
+
+  case variableBinding:
+    {
+      //base case. attach myself and return
+      if(front == NULL){ //uh oh! we need to make a new list!
+	list* lst = newListItem();
+	lst->content = strdup(head->nodeType);
+	return lst;
+      }
+      else {
+	genericAdd(front, strdup(head->nodeType));
+	return front;
+      }
+    }
+    break;
+    
+  default:
+    //here in case of panic
+    return front;
+    break;
+  }
+  
+}

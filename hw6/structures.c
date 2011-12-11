@@ -56,10 +56,21 @@ void genericPrint(list* head){
   list* iterator = head;
   
   while(iterator->next != NULL){
-    printf("%p\n",iterator); 
+    printf("\n\n%p\n\n\n",iterator); 
     iterator = iterator->next;
   }
   printf("%p\n", iterator);
+}
+
+
+void stringPrint(list* head){
+  list* iterator = head;
+  
+  while(iterator->next != NULL){
+    printf("%s\n",(char*)iterator->content); 
+    iterator = iterator->next;
+  }
+  printf("%s\n", (char*)iterator->content);
 }
 
 void concatenateList(list* first, list* second){

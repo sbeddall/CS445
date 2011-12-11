@@ -25,4 +25,8 @@ void functionHandler(struct node* head);
 void classHandler(struct node* head);  
 void packageHandler(struct node* head);  
 
+/*HELPERS*/
+list* functionArgumentHandler(list* front, struct node* head);
+
+
 #endif

@@ -304,7 +304,7 @@ variableDeclaration //1
 
 variableDeclarationList:
    variableBinding {$$ = $1}
-   | variableDeclarationList COMMA variableBinding {$$ = makeNode(variableDeclarationList, NULL, NULL, 2, $1, $3);} 
+   | variableBinding COMMA variableDeclarationList {$$ = makeNode(variableDeclarationList, NULL, NULL, 2, $1, $3);} 
    ;
     
 variableBinding: 
