@@ -27,6 +27,7 @@ void packageHandler(struct node* head);
 
 /*HELPERS*/
 list* functionArgumentHandler(list* front, struct node* head);
+int compareTypes(node* first, node* second);
 
 
 #endif

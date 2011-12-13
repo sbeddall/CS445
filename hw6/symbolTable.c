@@ -64,7 +64,7 @@ void printTable( symbolTable* table, int level ){
     if(table->fields[i]->name != NULL){
       z = 0;
       for(z; z < level; z++)printf(" ");
-      printf( "Ident: %s : Base Type: %d\n", table->fields[i]->name, table->fields[i]->baseType );
+      printf( "Symbol: %s : Base Type: %d\n", table->fields[i]->name, table->fields[i]->baseType );
       if( table->fields[i]->baseType == 3){
 	printTable(table->fields[i]->token->targetScope, level+1);
       }

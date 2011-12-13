@@ -1,4 +1,3 @@
-
 #include "semanticAnalysis.h"
 #include "yyparse.tab.h"
 #include "tree.h"
@@ -23,8 +22,6 @@ extern int status;
 void yysemantics(node* head){    
   buildSymbolTables(head, NULL); //build the symbol tables
 
-  //compressTree(head);
-  
   //populate symbol tables. 
   populateSymbolTables(head, NULL); //class, package, variable declarations.
 
@@ -247,10 +244,10 @@ void functionHandler(struct node* head){
     //we need to grab the functionHeader!
     node* iterator = head->children[j];
     
+    
     //now step through the functionHeader node and find the arg list
-    for( i=0; i < n; i++ ){
-      //printf("\n\nLabel %d \n\n", head->children[i]->label);
-	  
+    for( i=0; i < head->children[j]->nchildren; i++ ){
+      //printf("\n\nLabel %d \n\n", head->children[i]->label);      
       if(iterator->children[i] != NULL){
 	if(iterator->children[i]->label == variableDeclarationList ||
 	   iterator->children[i]->label == variableBinding){
@@ -335,4 +332,10 @@ list* functionArgumentHandler(list* front, struct node* head){
     break;
   }
   
+}
+
+int compareTypes(node* first, node* second){
+  
+  
+  return 1;
 }
