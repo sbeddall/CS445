@@ -27,7 +27,8 @@ typedef struct node {
   char* nodeType;
   struct symbolTable* table;
   struct symbolTable* targetScope;
-  
+  int usage;
+
   //specific to functions
   list* args;
   int numArgs;
@@ -46,7 +47,7 @@ void printNodeDetailsVerbose(node* head);
 
 
 
-node* getVariable( symbolTable* scope, node* var );
+
 void checkIdentsInInitialization(node* head, node* root);
 void parseVariableName(node* var, node* parent_node);
 void assignmentHandler( node* var, node* parent_node );

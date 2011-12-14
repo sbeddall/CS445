@@ -310,8 +310,10 @@ variableDeclarationList:
 variableBinding: 
    variableName optionalVariableType variableInitialization {$$ = makeNode(variableBinding, NULL, NULL, 3, $1, $2, $3);
      $$->nodeType = strdup( getOptionalNodeType( $2 ) );
-     if($1 != NULL) 
+     if($1 != NULL){ 
+       $1->usage = 1;
        $1->nodeType = strdup( getOptionalNodeType( $2 ) ); 
+     }
      if($3 != NULL) 
        $3->nodeType = strdup( getOptionalNodeType( $2 ) ); 
      if($2 != NULL){ 
@@ -347,7 +349,7 @@ assignStatement:
 
 valueList:
    value {$$ = $1}
-   | valueList COMMA value {$$ = makeNode(valueList, NULL, NULL, 2, $1, $3);}
+   |  value COMMA valueList {$$ = makeNode(valueList, NULL, NULL, 2, $1, $3);}
    ;
 
 value:

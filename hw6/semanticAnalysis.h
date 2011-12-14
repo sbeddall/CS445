@@ -28,6 +28,9 @@ void packageHandler(struct node* head);
 list* functionArgumentHandler(list* front, struct node* head);
 char* resolveName(struct node* head, char* str);
 int compareTypes(struct node* first, struct node* second);
-
+int compareTypeStrings(char* first, char* second);
+struct node* getVariableNode( struct symbolTable* scope, struct node* head );
+struct node* getVariable( struct symbolTable* scope, struct node* var );
+int createArgList(struct node* head, list* front);
 
 #endif

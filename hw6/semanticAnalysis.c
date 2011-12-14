@@ -163,6 +163,48 @@ void populateSymbolTables( node* head, node* parent_node ){
 
 void checkTypes(node* head, struct node* parent){
   if(head != NULL){
+    
+    
+    //do work
+    switch(head->label){
+    case functionCall:
+      {
+	if( findIdent(head->table,head->children[0]->contents ) ){
+	  node* temp = getSymbolNode(head->table, head->children[0]->contents);
+	  printf("%d", checkArgList());
+	  
+	}
+	else {
+	  printError("Use of an undeclared function", head);
+	}
+	break;
+      }
+
+    case forStatement:
+      //make sure everything is a number, int, uint, or float.
+      break;      
+
+
+    case variableName:
+      {
+	break;
+      }
+
+    case variableBinding:
+      
+      break;
+
+    case assignStatement:
+      break;
+
+    case expr:
+      
+      break;
+
+    default:
+      break;
+    }
+
     int n = head->nchildren;
     int i = 0;
     for(i = 0; i < n; i++){      
@@ -170,26 +212,7 @@ void checkTypes(node* head, struct node* parent){
 	checkTypes(head->children[i], NULL);
       }
     }
-    
-    //do work
-    switch(head->label){
-    case forStatement:
-      //make sure everything is a number, int, uint, or float.
-      break;      
 
-    case variableBinding:
-      break;
-
-    case assignStatement:
-      break;
-
-    case expr:
-      break;
-
-    default:
-      break;
-    }
-    
   }  
 }
 
@@ -480,3 +503,178 @@ int compareTypes(node* first, node* second){
   return 0;
 }
 
+int compareTypeStrings(char* first, char* second){
+  
+  if( first != NULL && second != NULL ){
+    
+    if( compareStrings( first, "void"))
+      return 1;
+    
+    if( compareStrings( first, "number" ) ||
+	compareStrings( first, "uint" ) ||
+	compareStrings( first, "int" ) ){
+      if( compareStrings( second, "number" ) ||
+	  compareStrings( second, "uint" ) ||
+	  compareStrings( second, "int" ) ){
+	return 1;
+      }
+      return 0;
+    }
+    
+    if( !compareStrings( first, second ) ){
+      return 0;
+    }
+    
+    return 1;
+  }  
+  return 0;
+}
+
+/*
+node* getVariableNode(node* head,char* symbol){
+  if(head != NULL){
+    switch(head->label){
+      
+      
+
+      
+    }
+  }
+  }*/
+
+node* getVariableNode( symbolTable* scope, node* head ){
+  printf("In getVariableNode\n");
+  
+  if(scope != NULL && head != NULL){
+    printf("scope != NULL and head != NULL\n");
+    printf("%d\n", head->label);
+    switch(head->label){
+    case IDENT:
+      {
+	printf("What the hell?\n");
+	printf("In IDENT\n");
+	if( findIdent(scope, head->contents) ){
+	  printf("Getting ready to return!\n");
+	  node* tempNodeForReturning = getSymbolNode( scope, head->contents);
+	  return tempNodeForReturning;
+	}
+	else {
+	  printf("God damnit!\n");
+	  printError("Use of an undeclared variable.", head);
+	  break;
+	}
+      }
+    case variableName:
+      {
+	printf("Go in here somehow\n");
+	if(head->children[0]->label == IDENT){
+	  //if I can find the class or package
+	  if( findIdent( head->children[0]->table, head->children[0]->contents ) ){
+	    
+	    //then we need to get that class or package's scope.
+	    //with the correct scope, we can then recursively call this function
+	    //make a temporary node. use this temp node to grab the scope.
+	    node* tempNodeForScoping = getSymbolNode( head->table, head->children[0]->contents );
+	    
+	    //with the new scope, go ahead and recursively call
+	    printf("I'm looking at %s. Recursively calling.\n", head->children[0]->contents);
+	    return getVariableNode(tempNodeForScoping->table, head->children[1]);
+	  }
+	  printError("Class or Package Instance does not Exist", head->children[0]);
+	}
+      }
+
+    default:
+      //just in case everything is broken
+      return NULL;
+      break;
+    }
+  }
+  printf("Table or Head = NULL!\n");
+  return NULL;
+}
+  
+  
+node* getVariable( symbolTable* scope, node* var ){
+  if( var->label == IDENT ){
+    //printf("%s\n", var->nodeType);
+    if( findIdent( scope, var->contents ) ){
+      //printf("%s\n", var->contents);
+      return getSymbolNode( scope, var->contents );
+    }
+    else{ 
+       printError( "Use of an undeclared variable.", var );
+       //printTable( var->table, 0 );
+    }
+  }  
+  else if( var->label == variableName ){
+    if( var->children[0]->label == IDENT ){
+      //printf("INTO TEH IF\n"); 
+      
+      //check the variable exists
+      if( findIdent( var->children[0]->table, var->children[0]->contents ) ){
+	//printf( "Variable Exists %s\n", var->children[0]->contents );
+	node* tempClassNode = getSymbolNode( var->children[0]->table, var->children[0]->contents );
+	//	printTable( tempClassNode->table, 0 );
+	node* temp;
+	if( findIdent( tempClassNode->table, tempClassNode->nodeType ) ){
+	  node* temp = getSymbolNode( tempClassNode->table, tempClassNode->nodeType );
+	  if( temp->tok == NULL ){
+	    printError( "Unexpected Error", var );
+	    return var;
+	  }
+	  
+	  if( findIdent( scope, temp->contents ) ){
+	    //printf("I found the type %s\n", temp->contents);
+	    
+	    return getVariable( temp->targetScope, var->children[2] );
+	  }
+	  else {
+	    printError("I didn't find the class type %s\n", var->children[0]);
+	  }
+	}
+	else {
+	  printError("Accessing a variable or function as a class. Not possible.", var->children[0] );
+	  return var;
+	}
+	
+	//if(temp == NULL) printError("Class error. No such class", var->children[0]);
+	//else {
+	
+      }
+      
+      printError("Class Instance does not Exist", var->children[0]);
+    }
+  }
+  //printf("Something went terribly wrong. Var label is %d", var->label);
+  return var;
+}
+  
+
+int checkArgList(node* head, list* front){
+  switch(head->label){
+  case valueList:
+    {
+      if( !compareTypeStrings(head->children[0]->nodeType, front->content) )
+	printError("Type mismatch in argument list", head->children[0]);
+      if(front->next != NULL){
+	return checkArgList(head->children[1], front->next);
+      }
+      printError("Too many arguments\n",head->children[1]);
+      break;
+    }
+    
+  default:
+    //here in case of panic
+    //check type
+    {
+      printf("%d", head->label);
+      if( !compareTypeStrings(head->nodeType, front->content) )
+	printError("Type mismatch in argument list", head);
+      
+    
+      return 1;
+      break;
+    }
+  }
+}

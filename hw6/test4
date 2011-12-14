@@ -1,5 +1,12 @@
 import trace;
 
+
+package lol {
+	class Lol {
+	      var i:Int;
+	}
+}
+
 package  {
 	var y:Lol;	
 		
@@ -7,13 +14,14 @@ package  {
 
 	var z:Int = 3;
 
-	var z:Number = 2;
-	
+	var z:Number = lol.Lol.i;
 	
 	function lol(i:lol, z:kkk){
 		 var l:Int = 3;
 	}
-			 	
+		
+	z = lol(x,y);
+				 	
 	class Lol {
 	       var p:Int = 2;
 	}

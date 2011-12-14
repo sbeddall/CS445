@@ -29,7 +29,8 @@ node* makeNode(int label, symbolTable* parent, token* tok, int nchildren, ...){
   // new->baseType = 0;
   new->nchildren = nchildren;
   new->tok = tok;  
-
+  new->usage = 0;
+  
   //take info from yytoken, add to the node, free the yytoken
   updateNodeWithToken(new, tok);
   //  printNodeDetails(new);
@@ -83,61 +84,6 @@ void updateNodeWithToken(node* head, token* tok){
   }
 }
 
-node* getVariable( symbolTable* scope, node* var ){
-  //base case
-  if( var->label == IDENT ){
-    //printf("%s\n", var->nodeType);
-    if( findIdent( scope, var->tok->text ) ){
-      //printf("%s\n", var->tok->text);
-      return getSymbolNode( scope, var->tok->text );
-    }
-    else{ 
-       printError( "Use of an undeclared variable.", var );
-       //printTable( var->table, 0 );
-    }
-  }  
-  else if( var->label == variableName ){
-    if( var->children[0]->label == IDENT ){
-      //printf("INTO TEH IF\n"); 
-      
-      //check the variable exists
-      if( findIdent( var->children[0]->table, var->children[0]->tok->text ) ){
-	//printf( "Variable Exists %s\n", var->children[0]->tok->text );
-	node* tempClassNode = getSymbolNode( var->children[0]->table, var->children[0]->tok->text );
-	//	printTable( tempClassNode->table, 0 );
-	node* temp;
-	if( findIdent( tempClassNode->table, tempClassNode->nodeType ) ){
-	  node* temp = getSymbolNode( tempClassNode->table, tempClassNode->nodeType );
-	  if( temp->tok == NULL ){
-	    printError( "Unexpected Error", var );
-	    return var;
-	  }
-	  
-	  if( findIdent( scope, temp->tok->text ) ){
-	    //printf("I found the type %s\n", temp->tok->text);
-	    
-	    return getVariable( temp->targetScope, var->children[2] );
-	  }
-	  else {
-	    printError("I didn't find the class type %s\n", var->children[0]);
-	  }
-	}
-	else {
-	  printError("Accessing a variable or function as a class. Not possible.", var->children[0] );
-	  return var;
-	}
-	
-	//if(temp == NULL) printError("Class error. No such class", var->children[0]);
-	//else {
-	
-      }
-      
-      printError("Class Instance does not Exist", var->children[0]);
-    }
-  }
-  //printf("Something went terribly wrong. Var label is %d", var->label);
-  return var;
-}
 
 
     
@@ -276,7 +222,7 @@ void evaluateExpression(node* var, node* parent_node){
 void parseVariableName(node* var, node* parent_node){
 
 }
-
+/*
 void checkIdentsInInitialization(node* head, node* root){
   if( head != NULL ){
     switch( head->label ){
@@ -334,7 +280,7 @@ void checkIdentsInInitialization(node* head, node* root){
     }
   }
 }
-
+*/
 
 void assignmentHandler( node* var, node* root){
   if( var != NULL ){
