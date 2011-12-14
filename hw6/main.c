@@ -57,7 +57,7 @@ main(int argc, char* argv[]){
       }
       else printf("Error in parser or semantic, abandoning codeGen\n");
     }
-    fclose(yyin);
+    //fclose(yyin);
     LINENO = 1;
     yyrestart();
   }

@@ -53,24 +53,22 @@ void processImports(node* head){
 	  FILENAME = importedFile;
 	  LINENO = 1;
 
-	  printf("imported file %s\n", importedFile); 
+	  //printf("imported file %s\n", importedFile); 
 
 	  yyin = fopen(importedFile, "r");
 	  if(yyin == NULL){
-	    printf("Couldn't open file!\n");
+	    //printf("Couldn't open file!\n");
 	  }
 	  else {
-	    printf("Opened file just fine\n");
+	    //printf("Opened file just fine\n");
 	    yyparse();
-	    //	    fclose(yyin); does yyparse set it to null? I have no idea!
+	    LINENO = 1;
+	    head->children[i] = currenthead;
+	    //fclose(yyin); does yyparse set it to null? I have no idea!
 	  }
-	  
-	  
-	  LINENO = 1;
-	   
 	  //import will always have a variable name
 	  
-	  head->children[i] = currenthead;
+
 	  //now the tree is cut. oh well.
 	}
       }
@@ -455,7 +453,30 @@ char* resolveName(node* head, char* str){
 }
 
 int compareTypes(node* first, node* second){
+  if( first != NULL && second != NULL ){
+    
+    if( compareStrings( first->nodeType, "void"))
+      return 1;
+    
+    if( compareStrings( first->nodeType, "number" ) ||
+	compareStrings( first->nodeType, "uint" ) ||
+	compareStrings( first->nodeType, "int" ) ){
+      if( compareStrings( second->nodeType, "number" ) ||
+	  compareStrings( second->nodeType, "uint" ) ||
+	  compareStrings( second->nodeType, "int" ) ){
+	return 1;
+      }
+      return 0;
+    }
+    
+    if( !compareStrings( first->nodeType, second->nodeType ) ){
+      return 0;
+    }
+    
+    return 1;
+  }
+  printError("Ident doesn't exist.", first);
   
-  
-  return 1;
+  return 0;
 }
+
