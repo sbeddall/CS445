@@ -9,6 +9,7 @@
 
 /*Tree Manipulation*/
 void yysemantics(struct node* head);
+void processImports(struct node* head);
 void buildSymbolTables(struct node* head, struct node* parent_node);
 void compressTree(struct node* head);
 void populateSymbolTables(struct node* head, struct node* parent_node);
@@ -16,8 +17,6 @@ void populateSymbolTables(struct node* head, struct node* parent_node);
 /*Type Stuff*/
 void checkTypes(struct node* head, struct node* parent);
 char* getOptionalNodeType(struct node* var);
-
-
 
 /*HANDLERS*/
 void variableHandler(struct node* head); 
@@ -27,7 +26,8 @@ void packageHandler(struct node* head);
 
 /*HELPERS*/
 list* functionArgumentHandler(list* front, struct node* head);
-int compareTypes(node* first, node* second);
+char* resolveName(struct node* head, char* str);
+int compareTypes(struct node* first, struct node* second);
 
 
 #endif

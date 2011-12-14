@@ -402,7 +402,7 @@ int n = var->nchildren;
   }
 }
 */
- 
+/* 
 int compareTypes( node* var, node* parent_node ){
   if( var != NULL && parent_node != NULL ){
     if( compareStrings( parent_node->nodeType, "void"))
@@ -415,6 +415,7 @@ int compareTypes( node* var, node* parent_node ){
   printError("Ident doesn't exist.", var);
   return 0; 
 }
+*/
 
 //not sure this will actually work
 node* miniTraverse( node* head, int label ){

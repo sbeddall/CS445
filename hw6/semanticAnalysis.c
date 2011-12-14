@@ -10,7 +10,10 @@
 
 
 extern int status;
-
+extern node* currenthead;
+extern FILE* yyin;
+extern int LINENO;
+extern char* FILENAME;
 
 #if (DEBUG == 1)
 #define printError(errorText, head) printErrorVerbose(errorText, head)
@@ -20,6 +23,9 @@ extern int status;
 
 
 void yysemantics(node* head){    
+
+  processImports(head);
+  
   buildSymbolTables(head, NULL); //build the symbol tables
 
   //populate symbol tables. 
@@ -33,6 +39,52 @@ void yysemantics(node* head){
   debugOutput(head); //won't output unless we have "debug" turned on.
 }
 
+void processImports(node* head){
+  if(head != NULL){
+    int n = head->nchildren;      
+    int i;
+    
+  
+    for(i = 0; i < n; i++){
+      if(head->children[i] != NULL){
+	if(head->children[i]->label == importStatement){
+	  yyrestart();
+	  char* importedFile = resolveName(head->children[i]->children[0],NULL);
+	  FILENAME = importedFile;
+	  LINENO = 1;
+
+	  printf("imported file %s\n", importedFile); 
+
+	  yyin = fopen(importedFile, "r");
+	  if(yyin == NULL){
+	    printf("Couldn't open file!\n");
+	  }
+	  else {
+	    printf("Opened file just fine\n");
+	    yyparse();
+	    //	    fclose(yyin); does yyparse set it to null? I have no idea!
+	  }
+	  
+	  
+	  LINENO = 1;
+	   
+	  //import will always have a variable name
+	  
+	  head->children[i] = currenthead;
+	  //now the tree is cut. oh well.
+	}
+      }
+    }
+    
+    for(i = 0; i < n; i++){      
+      if(head->children[i] != NULL && head->children[i] != currenthead){
+	processImports(head->children[i]);
+      }
+    }
+    
+    
+  }  
+}
 
 void buildSymbolTables(node* head, node* parent_node){
   if(head != NULL){
@@ -123,6 +175,21 @@ void checkTypes(node* head, struct node* parent){
     
     //do work
     switch(head->label){
+    case forStatement:
+      //make sure everything is a number, int, uint, or float.
+      break;      
+
+    case variableBinding:
+      break;
+
+    case assignStatement:
+      break;
+
+    case expr:
+      break;
+
+    default:
+      break;
     }
     
   }  
@@ -332,6 +399,59 @@ list* functionArgumentHandler(list* front, struct node* head){
     break;
   }
   
+}
+
+char* resolveName(node* head, char* str){
+  switch(head->label){
+  case variableName:
+    {
+      //concat an recurse
+      if(str == NULL){
+	str = (char*)malloc(100*sizeof(char));
+	strcpy(str,head->children[0]->contents);
+	strcat(str, "/");
+      }
+      else {
+	char* current = (char*)malloc(100*sizeof(char));
+	current = strcpy(current,str);
+	current = strcat(current, head->children[0]->contents);
+	current = strcat(current, "/");
+	free(str);
+	str = current;
+      }
+      
+      return resolveName(head->children[1], str);
+      break;
+    }
+    
+  case IDENT:
+    {
+      //concat and return
+      if(str == NULL){
+	str = (char*)malloc(100*sizeof(char));
+	strcpy(str,head->contents);
+	strcat(str, ".as");
+	printf("%s\n", str);
+	//str = strdup(head->contents);
+      }
+      else {
+	char* current = (char*)malloc(100*sizeof(char));
+	current = strcpy(current,str);
+	strcat(current, head->contents);
+	strcat(current, ".as");
+	free(str);
+	str = current;
+      }
+      
+      return str;
+      break;
+    }
+    
+  default: 
+    break;
+  }
+  //absolute failure 
+  return NULL;
 }
 
 int compareTypes(node* first, node* second){

@@ -1,0 +1,5 @@
+package Trace {
+	function trace(){
+
+	}
+}

@@ -20,11 +20,11 @@
   extern int LINENO;
   extern int failed;
   extern char* FILENAME;
-  extern node* head;
+  extern node* currenthead;
   extern token* YYTOKEN;
   extern int status;
   extern symbolTable* global_table;
-  
+  extern node* globalhead;
   
   //#define eval(x) evalToYYToken(x, yytext)
 
@@ -247,7 +247,7 @@ void  yyerror(const char* msg){
 
  //start of grammar
 program:  
-   sourceElements { $$ = makeNode(program, global_table, NULL, 1, $1); head = $$; } //
+sourceElements { $$ = makeNode(program, global_table, NULL, 1, $1); if(globalhead == NULL) globalhead = $$; else currenthead = $$; } //
    ;
 
 sourceElements:
@@ -309,13 +309,13 @@ variableDeclarationList:
     
 variableBinding: 
    variableName optionalVariableType variableInitialization {$$ = makeNode(variableBinding, NULL, NULL, 3, $1, $2, $3);
-     $$->nodeType = strdup( getOptionalNodeType( $2) );
+     $$->nodeType = strdup( getOptionalNodeType( $2 ) );
      if($1 != NULL) 
-       $1->nodeType = strdup( getOptionalNodeType( $2) ); 
+       $1->nodeType = strdup( getOptionalNodeType( $2 ) ); 
      if($3 != NULL) 
-       $3->nodeType = strdup( getOptionalNodeType( $2) ); 
+       $3->nodeType = strdup( getOptionalNodeType( $2 ) ); 
      if($2 != NULL){ 
-       $2->nodeType = strdup( getOptionalNodeType( $2) );
+       $2->nodeType = strdup( getOptionalNodeType( $2 ) );
      }
    }
    ;
@@ -426,9 +426,17 @@ functionCall:
 
 functionHeader:
    LPAREN variableDeclarationList RPAREN block {$$ = makeNode(functionHeader, NULL, NULL, 2, $2, $4); $$->targetScope = $4->table; } 
-   | LPAREN variableDeclarationList RPAREN COLON variableName block {$$ = makeNode(functionHeader, NULL, NULL, 3, $2, $5, $6); $$->targetScope = $6->table; }
+   | LPAREN variableDeclarationList RPAREN COLON variableName block {
+     $$ = makeNode(functionHeader, NULL, NULL, 3, $2, $5, $6); 
+     $$->targetScope = $6->table; 
+     //optional node type
+   }
    | LPAREN RPAREN block {$$ = makeNode(functionHeader, NULL, NULL, 1, $3); $$->targetScope = $3->table; }
-   | LPAREN RPAREN COLON variableName block {$$ = makeNode(functionHeader, NULL, NULL, 2, $4, $5); $$->targetScope = $5->table; }
+   | LPAREN RPAREN COLON variableName block {
+     
+     $$ = makeNode(functionHeader, NULL, NULL, 2, $4, $5); 
+     $$->targetScope = $5->table; 
+   }
    ;
 
 packageStatement:

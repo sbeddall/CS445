@@ -21,9 +21,10 @@ token* YYTOKEN;
 extern FILE* yyin;
 int failed;
 symbolTable* global_table;
-node* head;
+node* currenthead;
 int NUMVARIABLES;
 int NUMLABELS;
+node* globalhead;
 
 main(int argc, char* argv[]){
   failed = 0;
@@ -33,6 +34,8 @@ main(int argc, char* argv[]){
   status = 0;
   NUMVARIABLES = 0;
   NUMLABELS = 0;
+  globalhead = NULL;
+  currenthead = NULL;
   
   int successful = 0;
   int total = 0;
@@ -44,19 +47,19 @@ main(int argc, char* argv[]){
       total++;
       yyparse();       //printf("Global Symbol Table: %p\n", global_table); 
       if(status == 0){
-	yysemantics(head);   
+	yysemantics(globalhead);   
       }
       else {
 	printf("Error in parser, abandoning semantic analysis\n");
       }
       if(status == 0){
-	//yycodegen(head);
+	//yycodegen(globalhead);
       }
       else printf("Error in parser or semantic, abandoning codeGen\n");
     }
     fclose(yyin);
     LINENO = 1;
-    FILENAME = argv[i];
+    yyrestart();
   }
 
       
