@@ -81,6 +81,8 @@ enum opcodes {
   proc,
   class,
   package,
+  end,
+  begin,
 };
 
 #endif

@@ -180,6 +180,7 @@ void checkTypes(node* head, struct node* parent){
 	break;
       }
 
+    
     case forStatement:
       //make sure everything is a number, int, uint, or float.
       break;      
@@ -340,6 +341,8 @@ void functionHandler(struct node* head){
 	if(iterator->children[i]->label == variableDeclarationList ||
 	   iterator->children[i]->label == variableBinding){
 	  head->children[z]->args = functionArgumentHandler(NULL, iterator->children[i]);
+	  head->children[z]->numArgs = getNumArgsFromDeclarationList(iterator->children[i],0);
+	  printf("%d\n",head->children[z]->numArgs);
 	}
       }
     }
@@ -675,6 +678,39 @@ int checkArgList(node* head, list* front){
     
       return 1;
       break;
+    }
+  }
+}
+
+int getNumArgs(node* head, int num){
+  switch(head->label){
+  case valueList:
+    {
+      num++;
+      return getNumArgs(head->children[1],num);
+    }
+    break;
+  default:
+    {
+      num++;
+      return num;
+    }
+  }
+}
+
+
+int getNumArgsFromDeclarationList(node* head, int num){
+  switch(head->label){
+  case variableDeclarationList:
+    {
+      num++;
+      return getNumArgsFromDeclarationList(head->children[1],num);
+    }
+    break;
+  default:
+    {
+      num++;
+      return num;
     }
   }
 }

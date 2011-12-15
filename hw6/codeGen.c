@@ -12,6 +12,13 @@
 extern int NUMVARIABLES;
 extern int NUMLABELS;
 
+/*
+  Get If statement done
+  get offsets done
+  get local parameter space figured out
+  ^^^ applies to classes,packages,functions
+*/
+
 
 #if (DEBUG == 1)
 #define printTACListToFile(code) printTACList(code)
@@ -41,7 +48,7 @@ char* newLabel(){
 void yycodegen(node* head){
   populatePlaces(head);
   
-  TAC* content = makeLabeledTAC("BEGIN", NULL, NULL, NULL, NULL);
+  TAC* content = makeLabeledTAC("BEGIN", 0, NULL, NULL, NULL);
   list* lst = newListItem();
   lst->content = content;
   
@@ -145,8 +152,8 @@ void generateTAC(node* head){;
 	if(head->children[0]->label == IDENT){
 	  if(head->children[0]->contents != NULL){
 	    head->code->content = makeLabeledTAC(head->children[0]->contents,
-						 "package", NULL, NULL, NULL);
-	    endLabel->content = makeLabeledTAC(head->children[0]->contents,"end", NULL, NULL, NULL);
+						 package, NULL, NULL, NULL);
+	    endLabel->content = makeLabeledTAC(head->children[0]->contents,end, NULL, NULL, NULL);
 	  }
 	}
 	  /*}
@@ -178,7 +185,7 @@ void generateTAC(node* head){;
 
 	//build list.
       
-	head->code->content = makeTAC("CALL",head->children[0]->contents,
+	head->code->content = makeTAC(CALL,head->children[0]->contents,
 				      "n",head->place->name);
 	    
 	list* new = concatenateChildren(head);
@@ -211,11 +218,11 @@ void generateTAC(node* head){;
 	    // printTAC(head->code->content);
 	    }*/
 	  if(head->children[2]->children[0]->place != NULL){
-	    head->code->content = makeTAC("ASN", head->children[0]->contents,
+	    head->code->content = makeTAC(ASN, head->children[0]->contents,
 					  head->children[2]->children[0]->place->name, NULL);
 	  }
 	  else {
-	    head->code->content = makeTAC("ASN", head->children[0]->contents,
+	    head->code->content = makeTAC(ASN, head->children[0]->contents,
 					  head->children[2]->children[0]->contents, NULL);
 	  }
 
@@ -266,10 +273,10 @@ void generateTAC(node* head){;
 	  }
 	}
 	
-	head->code->content = makeLabeledTAC(title, "class",NULL,NULL,NULL);
+	head->code->content = makeLabeledTAC(title, class,NULL,NULL,NULL);
 
 	list* endLabel = newListItem();
-	endLabel->content = makeLabeledTAC(title,"end", NULL, NULL, NULL);
+	endLabel->content = makeLabeledTAC(title,end, NULL, NULL, NULL);
 	
 	list* new = concatenateChildren(head);
 	/*	list* next = head->code;
@@ -305,8 +312,8 @@ void generateTAC(node* head){;
 	  ident = head->children[2]->contents;
 	}
 	
-	head->code->content = makeLabeledTAC(ident,"proc", NULL, NULL, NULL);
-	endLabel->content = makeLabeledTAC(ident,"end",  NULL, NULL, NULL);
+	head->code->content = makeLabeledTAC(ident,proc, NULL, NULL, NULL);
+	endLabel->content = makeLabeledTAC(ident,end,  NULL, NULL, NULL);
 	list* new = concatenateChildren(head);
 	
 	if(new != NULL){
@@ -323,7 +330,7 @@ void generateTAC(node* head){;
     case assignStatement:
       {
 	head->code = newListItem();
-	char* cmd = NULL;
+	int cmd = 0;
 	char* arg1 = NULL;
 	char* arg2 = NULL;
 	char* arg3 = NULL;
@@ -344,12 +351,12 @@ void generateTAC(node* head){;
 	*/
 
 	if(head->children[1]->place == NULL){
-	  cmd = "ASN";
+	  cmd = ASN;
 	  arg1 = head->children[0]->contents;
 	  arg2 = head->children[1]->contents;
 	}
 	else {
-	  cmd = "ASN";
+	  cmd = ASN;
 	  arg1 = head->children[0]->contents;
 	  arg2 = head->children[1]->place->name;
 	}
@@ -524,49 +531,45 @@ void reverseString(char* buf){
   }
 }
 
-char* decideOperator(node* operator){
-  char* new = new;
+int decideOperator(node* operator){
+
   //printf("IM GOING IN! %d\n",operator->label);
   switch(operator->operator){
     //add
   case PLUS:
-    new = makeNewString("ADD");
-    return new;
+    return ADD;
     break;
     
     //sub
   case MINUS:
-    new = makeNewString("SUB");
-    return new;
+    return SUB;
     break;
     
     //mul
   case MULTIPLY:
-    new = makeNewString("MUL");
-    return new;
+    return MUL;
     break;
     
     //div
   case DIVIDE:
-    new = makeNewString("DIV");
-    return new;
+    return DIV;
     break;
 
     //mod
   case MODULO:
-    new = makeNewString("MOD");
-    return new;
+    return MOD;
     break;
     
     //we have problems if we get to here!
   case INCREMENT:
     break;
+    
   case DECREMENT:
     break;
   }
 
   
-  return new;;
+  return 0;
 }
 
 /*

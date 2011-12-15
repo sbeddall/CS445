@@ -32,5 +32,7 @@ int compareTypeStrings(char* first, char* second);
 struct node* getVariableNode( struct symbolTable* scope, struct node* head );
 struct node* getVariable( struct symbolTable* scope, struct node* var );
 int createArgList(struct node* head, list* front);
+int getNumArgs(struct node* head, int num);
+int getNumArgsFromDeclarationList(struct node* head, int num);
 
 #endif

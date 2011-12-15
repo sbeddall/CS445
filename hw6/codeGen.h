@@ -18,6 +18,8 @@ void populatePlaces(node* head);
 list* concatenateChildren(node* head);
 void generateTAC(node* head);
 void generateTACList(node*, list* lst);
-char* decideOperator(node* operator);
+
+/*Helpers*/
+int decideOperator(node* operator);
 
 #endif
