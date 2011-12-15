@@ -1,12 +1,5 @@
 import trace;
 
-
-package lol {
-	class Lol {
-	      var i:Int;
-	}
-}
-
 package  {
 	var y:Lol;	
 		

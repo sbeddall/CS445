@@ -30,8 +30,8 @@ void yysemantics(node* head){
 
   //populate symbol tables. 
   populateSymbolTables(head, NULL); //class, package, variable declarations.
-
-  checkTypes(head, NULL);
+  
+  //checkTypes(head, NULL);
   
   /////miscellaneous checks
 
@@ -44,17 +44,18 @@ void processImports(node* head){
     int n = head->nchildren;      
     int i;
     
-  
+    
     for(i = 0; i < n; i++){
       if(head->children[i] != NULL){
 	if(head->children[i]->label == importStatement){
-	  yyrestart();
+	  //yyrestart();
 	  char* importedFile = resolveName(head->children[i]->children[0],NULL);
+	  //printf("This is the file I am opening %s", importedFile);
 	  FILENAME = importedFile;
 	  LINENO = 1;
-
+	  
 	  //printf("imported file %s\n", importedFile); 
-
+	  
 	  yyin = fopen(importedFile, "r");
 	  if(yyin == NULL){
 	    //printf("Couldn't open file!\n");
@@ -64,11 +65,10 @@ void processImports(node* head){
 	    yyparse();
 	    LINENO = 1;
 	    head->children[i] = currenthead;
-	    //fclose(yyin); does yyparse set it to null? I have no idea!
+	    //fclose(yyin); //does yyparse set it to null? I have no idea!
 	  }
 	  //import will always have a variable name
 	  
-
 	  //now the tree is cut. oh well.
 	}
       }
@@ -170,12 +170,12 @@ void checkTypes(node* head, struct node* parent){
     case functionCall:
       {
 	if( findIdent(head->table,head->children[0]->contents ) ){
-	  node* temp = getSymbolNode(head->table, head->children[0]->contents);
-	  printf("%d", checkArgList());
+	  //  node* temp = getSymbolNode(head->table, head->children[0]->contents);
+	  //printf("%d", checkArgList());
 	  
 	}
 	else {
-	  printError("Use of an undeclared function", head);
+	  //printError("Use of an undeclared function", head);
 	}
 	break;
       }

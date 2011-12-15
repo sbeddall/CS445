@@ -135,8 +135,8 @@ void generateTAC(node* head){;
 	head->code = newListItem();
 	if(head->nchildren > 2){
 	  if(head->children[1]->label == IDENT){
-	    if(head->children[1]->tok->text != NULL){
-	      head->code->content = makeLabeledTAC(head->children[1]->tok->text,
+	    if(head->children[1]->contents != NULL){
+	      head->code->content = makeLabeledTAC(head->children[1]->contents,
 						   NULL, NULL, NULL, NULL);
 	    }
 	  }
@@ -182,21 +182,21 @@ void generateTAC(node* head){;
 	//printf("Variable Binding Here!\n");
 	head->code = newListItem();
 	if(head->children[2] != NULL){
-	  if(head->children[2]->children[1]->label == expr){
-	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
-			   head->children[2]->children[1]->place->name,NULL);
+	  if(head->children[2]->children[0]->label == expr){
+	    head->code->content = makeTAC("ASN", head->children[0]->contents,
+			   head->children[2]->children[0]->place->name,NULL);
 	    // printTAC(head->code->content);
 	  }
 	  
-	  if(head->children[2]->children[1]->label == NUMBERLIT){
-	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
-			   head->children[2]->children[1]->tok->text,NULL);
+	  if(head->children[2]->children[0]->label == NUMBERLIT){
+	    head->code->content = makeTAC("ASN", head->children[0]->contents,
+			   head->children[2]->children[0]->contents,NULL);
 	    //printTAC(head->code->content);
 	  }
 
-	  if(head->children[2]->children[1]->label == STRINGLIT){
-	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
-			   head->children[2]->children[1]->tok->text,NULL);
+	  if(head->children[2]->children[0]->label == STRINGLIT){
+	    head->code->content = makeTAC("ASN", head->children[0]->contents,
+			   head->children[2]->children[1]->contents,NULL);
 	    //	    printTAC(head->code->content);
 	  }
 	  
@@ -225,25 +225,25 @@ void generateTAC(node* head){;
 	if(head->nchildren == 3){
 	  //1
 	  if(head->children[1]->label == IDENT){
-	    title = head->children[1]->tok->text;
+	    title = head->children[1]->contents;
 	  }
 	}
 	else if(head->nchildren == 4){
 	  //2
 	  if(head->children[2]->label == IDENT){
-	    title = head->children[2]->tok->text;
+	    title = head->children[2]->contents;
 	  }
 	}
 	else if(head->nchildren == 5){
 	  //1
 	  if(head->children[1]->label == IDENT){
-	    title = head->children[1]->tok->text;
+	    title = head->children[1]->contents;
 	  }
 	}
 	else if(head->nchildren == 6){
 	  //2
 	  if(head->children[2]->label == IDENT){
-	    title = head->children[2]->tok->text;
+	    title = head->children[2]->contents;
 	  }
 	}
 	
@@ -279,11 +279,11 @@ void generateTAC(node* head){;
 	char* arg1 = NULL;
 	char* arg2 = NULL;
 	
-	if(head->children[3]->label == IDENT){
-	  ident = head->children[3]->tok->text;
+	if(head->children[1]->label == IDENT){
+	  ident = head->children[1]->contents;
 	}
 	else if(head->children[2]->label == IDENT){
-	  ident = head->children[2]->tok->text;
+	  ident = head->children[2]->contents;
 	}
 	
 	head->code->content = makeLabeledTAC(ident,"proc", NULL, NULL, NULL);
@@ -307,17 +307,17 @@ void generateTAC(node* head){;
 	char* arg2 = NULL;
 	char* arg3 = NULL;
 	
-	if(head->children[2]->label == newObject){
-	  if(head->children[2]->children[2] != NULL){
+	if(head->children[1]->label == newObject){
+	  if(head->children[1]->children[1] != NULL){
 	    cmd = "NEWOBJ";
-	    arg1 = head->children[0]->tok->text;
-	    arg2 = head->children[2]->children[1]->tok->text;
+	    arg1 = head->children[0]->contents;
+	    arg2 = head->children[2]->children[1]->contents;
 	  }
 	}
-	if(head->children[2]->label == expr){
+	if(head->children[1]->label == expr){
 	  cmd = "ASN";
-	  arg1 = head->children[0]->tok->text;
-	  arg2 = head->children[2]->place->name;
+	  arg1 = head->children[0]->contents;
+	  arg2 = head->children[1]->place->name;
 	}
 
 	head->code->content = makeTAC(cmd, arg1, arg2, arg3);
@@ -350,11 +350,11 @@ void generateTAC(node* head){;
 	  arg1 = head->children[0]->place->name;
 	}
 	if(head->children[0]->label == IDENT){
-	  arg1 = head->children[0]->tok->text;
+	  arg1 = head->children[0]->contents;
 	}
 	if(head->children[0]->label == NUMBERLIT ||
 	   head->children[0]->label == STRINGLIT)
-	  arg1 = head->children[0]->tok->text;
+	  arg1 = head->children[0]->contents;
 	
 	//right side MAY be NULL. must check it.
 	if(head->children[2] != NULL ){
@@ -363,11 +363,11 @@ void generateTAC(node* head){;
 	  } 
 	  //variableName?
 	  if(head->children[2]->label == IDENT){
-	    arg2 = head->children[2]->tok->text;
+	    arg2 = head->children[2]->contents;
 	  }
 	  if(head->children[2]->label == NUMBERLIT ||
 	     head->children[2]->label == STRINGLIT)
-	    arg2 = head->children[2]->tok->text;
+	    arg2 = head->children[2]->contents;
 	}
 	//	printf("%d\n", head->children[1]->label);
 	head->code->content = makeTAC(decideOperator(head->children[1]), 
@@ -528,15 +528,15 @@ void generateTACList(node* head, list* lst){;
     case packageStatement:
       {
 	head->code = newListItem();
-	if(head->nchildren > 2){
-	  if(head->children[1]->tok->text != NULL){
-	    head->code->content = makeLabeledTAC(head->children[1]->tok->text,
-						 NULL, NULL, NULL, NULL);
-	  }
+	
+	if(head->children[0]->contents != NULL){
+	  head->code->content = makeLabeledTAC(head->children[0]->contents,
+					       NULL, NULL, NULL, NULL);
 	}
+	/*
 	else 
 	  head->code->content = makeLabeledTAC("anon_pkg",NULL,NULL,NULL,NULL);
-	
+	*/
 	
 	concatenateList(lst,head->code);
       }
@@ -570,20 +570,20 @@ void generateTACList(node* head, list* lst){;
 	head->code = newListItem();
 	if(head->children[2] != NULL){
 	  if(head->children[2]->children[1]->label == expr){
-	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
+	    head->code->content = makeTAC("ASN", head->children[0]->contents,
 			   head->children[2]->children[1]->place->name,NULL);
 	    // printTAC(head->code->content);
 	  }
 	  
 	  if(head->children[2]->children[1]->label == NUMBERLIT){
-	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
-			   head->children[2]->children[1]->tok->text,NULL);
+	    head->code->content = makeTAC("ASN", head->children[0]->contents,
+			   head->children[2]->children[1]->contents,NULL);
 	    //printTAC(head->code->content);
 	  }
 
 	  if(head->children[2]->children[1]->label == STRINGLIT){
-	    head->code->content = makeTAC("ASN", head->children[0]->tok->text,
-			   head->children[2]->children[1]->tok->text,NULL);
+	    head->code->content = makeTAC("ASN", head->children[0]->contents,
+			   head->children[2]->children[1]->contents,NULL);
 	    //	    printTAC(head->code->content);
 	  }
 	  
@@ -615,11 +615,11 @@ void generateTACList(node* head, list* lst){;
 	  arg1 = head->children[0]->place->name;
 	}
 	if(head->children[0]->label == IDENT){
-	  arg1 = head->children[0]->tok->text;
+	  arg1 = head->children[0]->contents;
 	}
 	if(head->children[0]->label == NUMBERLIT ||
 	   head->children[0]->label == STRINGLIT)
-	  arg1 = head->children[0]->tok->text;
+	  arg1 = head->children[0]->contents;
 	
 	//right side MAY be NULL. must check it.
 	if(head->children[2] != NULL ){
@@ -628,11 +628,11 @@ void generateTACList(node* head, list* lst){;
 	  } 
 	  //variableName?
 	  if(head->children[2]->label == IDENT){
-	    arg2 = head->children[2]->tok->text;
+	    arg2 = head->children[2]->contents;
 	  }
 	  if(head->children[2]->label == NUMBERLIT ||
 	     head->children[2]->label == STRINGLIT)
-	    arg2 = head->children[2]->tok->text;
+	    arg2 = head->children[2]->contents;
 	}
 	//	printf("%d\n", head->children[1]->label);
 	head->code->content = makeTAC(decideOperator(head->children[1]), 

@@ -53,7 +53,7 @@ main(int argc, char* argv[]){
 	printf("Error in parser, abandoning semantic analysis\n");
       }
       if(status == 0){
-	//yycodegen(globalhead);
+	yycodegen(globalhead);
       }
       else printf("Error in parser or semantic, abandoning codeGen\n");
     }
