@@ -61,13 +61,13 @@ enum rules {
 };
 
 enum opcodes {
-  ADD = 700,
+  ASN = 700,
+  ADD,
   SUB,
   MUL,
   DIV,
   MOD,
   NEG,
-  ASN,
   ADDR,
   LCONT,
   SCONT,
@@ -80,6 +80,7 @@ enum opcodes {
   RET,
   proc,
   class,
+  package,
 };
 
 #endif
