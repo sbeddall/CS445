@@ -13,7 +13,7 @@ package  {
 		 var l:Int = 3;
 	}
 		
-	z = lol(x,y);
+//	z = lol(x,y);
 				 	
 	class Lol {
 	       var p:Int = 2;

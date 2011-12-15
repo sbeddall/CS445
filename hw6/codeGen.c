@@ -130,19 +130,21 @@ void generateTAC(node* head){;
     case packageStatement:
       {
 	list* endLabel = newListItem();
-	endLabel->content = makeTAC("end", NULL, NULL, NULL);
 	
 	head->code = newListItem();
-	if(head->nchildren > 2){
-	  if(head->children[1]->label == IDENT){
-	    if(head->children[1]->contents != NULL){
-	      head->code->content = makeLabeledTAC(head->children[1]->contents,
-						   NULL, NULL, NULL, NULL);
-	    }
+	//if(head->nchildren > 2){
+	if(head->children[0]->label == IDENT){
+	  if(head->children[0]->contents != NULL){
+	    head->code->content = makeLabeledTAC(head->children[0]->contents,
+						 "package", NULL, NULL, NULL);
+	    endLabel->content = makeLabeledTAC(head->children[0]->contents,"end", NULL, NULL, NULL);
 	  }
 	}
+	  /*}
 	else 
 	  head->code->content = makeLabeledTAC("anon_pkg",NULL,NULL,NULL,NULL);
+	  */
+	
 	
 	concatenateList(head->code,concatenateChildren(head));
 	concatenateList(head->code, endLabel);
@@ -222,35 +224,35 @@ void generateTAC(node* head){;
       {
 	head->code = newListItem();
 	char* title = "ANON";
-	if(head->nchildren == 3){
+	if(head->nchildren == 2){
 	  //1
+	  if(head->children[0]->label == IDENT){
+	    title = head->children[0]->contents;
+	  }
+	}
+	else if(head->nchildren == 3){
+	  //2
 	  if(head->children[1]->label == IDENT){
 	    title = head->children[1]->contents;
+	  }
+	}
+	else if(head->nchildren == 3){
+	  //1
+	  if(head->children[0]->label == IDENT){
+	    title = head->children[0]->contents;
 	  }
 	}
 	else if(head->nchildren == 4){
 	  //2
-	  if(head->children[2]->label == IDENT){
-	    title = head->children[2]->contents;
-	  }
-	}
-	else if(head->nchildren == 5){
-	  //1
 	  if(head->children[1]->label == IDENT){
 	    title = head->children[1]->contents;
-	  }
-	}
-	else if(head->nchildren == 6){
-	  //2
-	  if(head->children[2]->label == IDENT){
-	    title = head->children[2]->contents;
 	  }
 	}
 	
 	head->code->content = makeLabeledTAC(title, "class",NULL,NULL,NULL);
 
 	list* endLabel = newListItem();
-	endLabel->content = makeTAC("end", NULL, NULL, NULL);
+	endLabel->content = makeLabeledTAC(title,"end", NULL, NULL, NULL);
 	
 	list* new = concatenateChildren(head);
 	/*	list* next = head->code;
@@ -272,7 +274,7 @@ void generateTAC(node* head){;
 	head->code = newListItem();
 	
 	list* endLabel = newListItem();
-	endLabel->content = makeTAC("end",  NULL, NULL, NULL);
+
 	
 	//get ident. use to start the PROC
 	char* ident = "ANON";
@@ -287,7 +289,7 @@ void generateTAC(node* head){;
 	}
 	
 	head->code->content = makeLabeledTAC(ident,"proc", NULL, NULL, NULL);
-	
+	endLabel->content = makeLabeledTAC(ident,"end",  NULL, NULL, NULL);
 	list* new = concatenateChildren(head);
 	
 	if(new != NULL){
@@ -370,7 +372,7 @@ void generateTAC(node* head){;
 	    arg2 = head->children[2]->contents;
 	}
 	//	printf("%d\n", head->children[1]->label);
-	head->code->content = makeTAC(decideOperator(head->children[1]), 
+	head->code->content = makeTAC(decideOperator(head), 
 				      head->place->name, arg1, arg2);
 	
 	//printTAC(head->code->content);
@@ -468,7 +470,7 @@ void reverseString(char* buf){
 char* decideOperator(node* operator){
   char* new = new;
   //printf("IM GOING IN! %d\n",operator->label);
-  switch(operator->label){
+  switch(operator->operator){
     //add
   case PLUS:
     new = makeNewString("ADD");
@@ -518,7 +520,7 @@ new 5%10 = 5
 val 5/10 = 0
 */
 
-
+//alternate method of concatenating list. deprecated for now. 
 void generateTACList(node* head, list* lst){;
   if(head != NULL){
     printf("%d\n", head->label);
