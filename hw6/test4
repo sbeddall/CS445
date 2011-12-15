@@ -3,9 +3,15 @@ import trace;
 package  {
 	var y:Lol;	
 		
-	var x:Int = 2 + 2 + 3;
-
+	var x:Int = 8 / 2 - 1 + 4;
+	
 	var z:Int = 3;
+	
+	var swtor:String = "Early Access";
+
+	var earlyAccess:Boolean = true;
+
+	var u:Int = x + y + z;
 
 	var z:Number = lol.Lol.i;
 	
