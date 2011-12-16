@@ -56,6 +56,12 @@ TAC* makeLabeledTAC(char* label, int cmd, char* arg1, char* arg2, char* arg3){
   return new;
 }
 
+void labelExistingTAC(char* label, TAC* existing){
+  if(label != NULL){
+    existing->entries[0] = strdup(label);
+  }  
+}
+
 void printTAC(TAC* line){
   if(line != NULL){
     int i = 1;
@@ -218,9 +224,28 @@ char* translateOpCode(int code){
   case begin:
     return strdup("BEGIN");
     break;      
+  case LT:
+    return strdup("LT");
+    break;
+  case GT:
+    return strdup("GR");
+    break;
+  case GTE:
+    return strdup("GTE");
+    break;
+  case LTE:
+    return strdup("LTE");
+    break;
+  case EQ:
+    return strdup("EQ");
+    break;
+  case -1:
+    return strdup("--");
+    break;
   default:
     strcpy(new, "wut"); //in the case of disaster
     break;
+
 
   }
   return new;

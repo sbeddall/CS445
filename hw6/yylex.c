@@ -116,8 +116,6 @@
 \" { eval(QUOTES);  yylval.n = makeNode(QUOTES, NULL,  YYDup(), 0); return QUOTES; }
 
 \: { eval(COLON);  yylval.n = makeNode(COLON, NULL,  YYDup(), 0); return COLON; }
-
-\= { eval(ASSIGN); yylval.n = makeNode(ASSIGN, NULL,  YYDup(),0);  return ASSIGN; }
   
   \< { eval(LESSTHAN);  yylval.n = makeNode(LESSTHAN, NULL,  YYDup(), 0); return LESSTHAN; }
 \> { eval(GREATERTHAN);  yylval.n = makeNode(GREATERTHAN, NULL,  YYDup(), 0); return GREATERTHAN; }
@@ -130,6 +128,8 @@
 \! { eval(NOT);  yylval.n = makeNode(NOT, NULL,  YYDup(), 0); return NOT; }
 "&&" { eval(LOGICALAND);  yylval.n = makeNode(LOGICALAND, NULL,  YYDup(), 0); return LOGICALAND; }
 "||" { eval(LOGICALOR);  yylval.n = makeNode(LOGICALOR, NULL,  YYDup(), 0); return LOGICALOR; }
+
+\= { eval(ASSIGN); yylval.n = makeNode(ASSIGN, NULL,  YYDup(),0);  return ASSIGN; }
 
 "//".* { }
 [0-9]*['.']?[0-9]* { eval(NUMBERLIT);  yylval.n = makeNode(NUMBERLIT, NULL,  YYDup(), 0); yylval.n->nodeType = strdup("Number"); return NUMBERLIT; }

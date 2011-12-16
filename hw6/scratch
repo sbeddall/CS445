@@ -1,0 +1,15 @@
+if(expression){
+
+}
+else {
+
+}
+
+_IF expression statement elseStatement
+
+LLABEL IF EXPRESSIONS
+BNIF EXPRESSIONS->place goto else
+code
+else label code
+code (whatever it may be)
+

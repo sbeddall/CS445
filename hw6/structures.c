@@ -6,6 +6,7 @@
 extern token* YYTOKEN;
 extern int LINENO;
 extern char* FILENAME;
+extern char* GLOBALFILENAME;
 extern int status;
 
 //generic linked list stuff
@@ -273,7 +274,7 @@ void printErrorVerbose(char* errorText, struct node* head){
 
 char* getFileName(){
   
-  char* filename = strdup(FILENAME);
+  char* filename = strdup(GLOBALFILENAME);
   char* iterator2 = filename;
   
   while(*iterator2 != '\0'){

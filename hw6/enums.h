@@ -83,6 +83,11 @@ enum opcodes {
   package,
   end,
   begin,
+  LT,
+  EQ,
+  GT,
+  LTE,
+  GTE,
 };
 
 #endif

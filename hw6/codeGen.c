@@ -103,7 +103,11 @@ void populatePlaces(node* head){
       
     case expr:
       {
-	
+	//special cases for places
+	/*if(head->nchildren == 1){
+	  field* location = getField( head->table, head->children[0]->contents );
+	  head->place = location;
+	  }*/
 	//add new variable to symbol table.
 	//set place to that variable in symbol table.
 	char* new = newVariable( head->table );
@@ -111,6 +115,14 @@ void populatePlaces(node* head){
 	field* location = getField( head->table, new );
 	head->place = location;
 	//printTable(head->table,0);
+      }
+      break;
+
+    case expression:
+      {
+	char* new = newVariable( head->table );
+	field* location = getField( head->table, new );
+	head->place = location;
       }
       break;
 
@@ -169,20 +181,11 @@ void generateTAC(node* head){;
       break;
       
       
-    case whileStatement:
-      //make new item
-      
-      //makelabel
-      //code
-      //endlabel
-      
-      break;
-      
+          
     case functionCall:
       {
 	head->code = newListItem();
-      
-
+	
 	//build list.
 	
 	if(head->children[1] != NULL){
@@ -195,7 +198,7 @@ void generateTAC(node* head){;
 	  
 	  head->code->content = makeTAC(CALL,head->children[0]->contents,
 					buf,head->place->name);
-	
+	  
 	  head->code = args;
 	  
 	}
@@ -206,8 +209,6 @@ void generateTAC(node* head){;
 	
 	list* new = concatenateChildren(head);
 	list* next = head->code;
-	
-	
 	
 	if(new != NULL){
 	  concatenateList(new, head->code);
@@ -226,15 +227,9 @@ void generateTAC(node* head){;
 	  name     type     initialization (head->children[2])
 	  assign value (head->children[1])
 	*/
-	//printf("Variable Binding Here!\n");
 	head->code = newListItem();
 	if(head->children[2] != NULL){
-	  /*
-	  if(head->children[2]->children[0]->label == expr){
-	    head->code->content = makeTAC("ASN", head->children[0]->co			   
-				   ead->children[2]->ch			   [0]->place->name,NULL);
-	    // printTAC(head->code->content);
-	    }*/
+
 	  if(head->children[2]->children[0]->place != NULL){
 	    head->code->content = makeTAC(ASN, head->children[0]->contents,
 					  head->children[2]->children[0]->place->name, NULL);
@@ -245,12 +240,6 @@ void generateTAC(node* head){;
 	  }
 
 	}
-	
-	/*
-	  list* new = concatenateChildren(head);	
-	  concatenateList(new, head->code);
-	  head->code = new;
-	*/
 	
 	list* new = concatenateChildren(head);
 	list* next = head->code;
@@ -338,7 +327,6 @@ void generateTAC(node* head){;
 	  concatenateList(head->code, new);
 	}
 	
-	
 	concatenateList(head->code, endLabel);
       }
       break;
@@ -392,20 +380,149 @@ void generateTAC(node* head){;
 	}
       }
       break;
+      
+    case whileStatement:
+      {
+	//while statement
+	list* bnif = newListItem();
+	char* existing = newLabel();
+	char* endLabel = newLabel();
+	list* rest = NULL;
+	list* expressionCode = NULL;
+	list* end = newListItem();
+	list* gotoTAC = newListItem();
+	
+	if(head->children[0]->place != NULL){
+	  expressionCode = head->children[0]->code;
+	  labelExistingTAC(existing, expressionCode->content);
+	  
+	  bnif->content = makeTAC(BNIF, head->children[0]->place->name,endLabel,NULL);
+	  concatenateList(expressionCode,bnif); 
+	}
+	if(head->children[1] != NULL){
+	  rest = concatenateChildren(head->children[1]);
+	}
+	
+	gotoTAC->content = makeTAC(GOTO, existing, NULL,NULL);
+	end->content = makeLabeledTAC(endLabel, -1, NULL,NULL,NULL);
+	concatenateList(gotoTAC, end);
+	
+	//head->code = concatenateChildren(head->children[1]);
+	
+	concatenateList(expressionCode, rest);
+	concatenateList(expressionCode, gotoTAC);
+
+	head->code = expressionCode;
+      }
+      break;
+
+    case ifStatement:
+      {
+	char* beginLabel = newLabel();
+	char* endLabel = newLabel();
+	char* elseLabel = newLabel();
+	
+	list* bnif = newListItem();
+	list* ifCode = NULL;
+	list* elseCode = NULL;
+	
+	if(head->children[0]->place != NULL){
+	  ifCode = head->children[0]->code;
+	  labelExistingTAC(beginLabel,ifCode->content);
+	    
+	  bnif->content = makeTAC(BNIF, head->children[0]->place->name, elseLabel, NULL);
+	  concatenateList(ifCode,bnif);
+	  concatenateList(ifCode,concatenateChildren(head->children[1]));
+	}
+	elseCode = newListItem();
+	elseCode->content = makeLabeledTAC(elseLabel, -1, NULL, NULL, NULL);
+	
+	if(head->children[2] != NULL){
+	  concatenateList(elseCode, concatenateChildren(head->children[2]->children[0]));
+	}
+
+	concatenateList(ifCode, elseCode);
+
+	
+	head->code = ifCode;
+      }
+      break;
 
     case expr:
-      /*
-            expr
-	| mathvalue
-	| expr sign expr
-	| expr++
-       */
       {
 	head->code = newListItem();
 	char* arg1 = NULL;
 	char* arg2 = NULL;
 	
 
+	if(head->children[0]->place != NULL){
+ 
+	  arg1 = head->children[0]->place->name;
+	}
+	else {
+	  arg1 = head->children[0]->contents;
+	}
+	
+	if(head->children[1] != NULL){
+	  if(head->children[1]->place != NULL){
+	    arg2 = head->children[1]->place->name;
+	  }
+	  else {
+	    arg2 = head->children[1]->contents;
+	  }
+	}
+
+	
+	if(head->operator == INCREMENT){
+	  head->code->content = makeTAC(ADD, 
+					arg1, "1", NULL);
+	}
+	else if(head->operator == DECREMENT){
+	  head->code->content = makeTAC(SUB, 
+					arg1, "1", NULL);
+	}
+	else
+	  head->code->content = makeTAC(decideOperator(head), 
+					head->place->name, arg1, arg2);
+	
+	list* new = concatenateChildren(head);
+	list* next = head->code;
+	
+	if(new != NULL){
+	  concatenateList(new, head->code);
+	  head->code = new;
+	}
+	//else head->code = concatenateChildren(head);
+      }
+      break;      
+
+    case iterationStatement:
+      {
+	head->code = newListItem();
+	if(head->operator == INCREMENT){
+	  head->code->content = makeTAC(ADD, 
+					head->children[0]->contents, "1", NULL);
+	}
+	else if(head->operator == DECREMENT){
+	  head->code->content = makeTAC(SUB, 
+					head->children[0]->contents, "1", NULL);
+	}
+
+	list* new = concatenateChildren(head);
+	
+	if(new != NULL){
+	  concatenateList(head->code,new);
+	}
+	
+      }
+      break;
+
+    case expression:
+      {
+	head->code = newListItem();
+	char* arg1 = NULL;
+	char* arg2 = NULL;
+	
 	if(head->children[0]->place != NULL){
 	  arg1 = head->children[0]->place->name;
 	}
@@ -422,62 +539,19 @@ void generateTAC(node* head){;
 	  }
 	}
 	
-	/*
-	//left side should never be NULL
-	if(head->children[0]->label == expr){
-	  arg1 = head->children[0]->place->name;
-	}
-	if(head->children[0]->label == IDENT){
-	  arg1 = head->children[0]->contents;
-	}
-	if(head->children[0]->label == NUMBERLIT ||
-	   head->children[0]->label == STRINGLIT)
-	  arg1 = head->children[0]->contents;
-	
-	
-
-	//right side MAY be NULL. must check it.
-	if(head->children[2] != NULL ){
-	  if(head->children[2]->label == expr){
-	    arg2 = head->children[2]->place->name;
-	  } 
-	  //variableName?
-	  if(head->children[2]->label == IDENT){
-	    arg2 = head->children[2]->contents;
-	  }
-	  if(head->children[2]->label == NUMBERLIT ||
-	     head->children[2]->label == STRINGLIT)
-	    arg2 = head->children[2]->contents;
-	}
-	//	printf("%d\n", head->children[1]->label);
-
-
-	*/
-
 	head->code->content = makeTAC(decideOperator(head), 
 				      head->place->name, arg1, arg2);
-	
-	//printTAC(head->code->content);
+	 
+	//printTACList(head->code);
 	
 	list* new = concatenateChildren(head);
-	list* next = head->code;
-	
 	
 	if(new != NULL){
-	  //	  printf("In expr, printing children: \n");
-	  //printTACList(new);
-	  //	  printf("In expr, printing me: \n");
-	  // printTACList(next);
-	  
 	  concatenateList(new, head->code);
 	  head->code = new;
 	}
-	else {
-	  //do nothing?
-	}
       }
-      break;      
-      
+      break;
 
     default:
       head->code = concatenateChildren(head);
@@ -578,6 +652,48 @@ int decideOperator(node* operator){
     return MOD;
     break;
     
+    //now logical operators!
+  case LESSTHAN:
+    return LT;
+    break;
+    
+  case GREATERTHAN:
+    return GT;
+    break;
+    
+  case EQUALSEQUALS:
+    return EQ;
+    break;
+
+  case STRICTEQUALS:
+    break;
+
+  case STRICTNOTEQ:
+    break;
+
+  case GTHANEQ:
+    return GTE;
+    break;
+
+  case LTHANEQ:
+    return LTE;
+    break;
+
+  case NOTEQUAL:
+    break;
+
+  case NOT:
+    break;
+
+  case NOTEQUALEQUAL:
+    break;
+ 
+  case LOGICALAND:
+    break;
+    
+  case LOGICALOR:
+    break;
+
     //we have problems if we get to here!
   case INCREMENT:
     break;
@@ -712,9 +828,9 @@ void generateTACList(node* head, list* lst){;
     case expr:
       /*
             expr
-	| mathvalue
-	| expr sign expr
-	| expr++
+	case mathvalue
+	case expr sign expr
+	case expr++
        
       {
 	head->code = newListItem();

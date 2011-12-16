@@ -381,7 +381,7 @@ expr:
    | expr DIVIDE expr {$$ = makeNode(expr, NULL, NULL, 2, $1, $3); $$->operator = DIVIDE;}
    | expr MODULO expr {$$ = makeNode(expr, NULL, NULL, 2, $1, $3); $$->operator = MODULO;}
    | expr INCREMENT {$$ = makeNode(expr, NULL, NULL, 1, $2); $$->operator = INCREMENT;}
-   | expr DECREMENT {$$ = makeNode(expr, NULL, NULL, 1, $2); $$->operator = DECREMENT;}
+   | expr DECREMENT {$$ = makeNode(expr, NULL, NULL, 1, $2); $$->operator = DECREMENT; }
    ;
 
 nativeType:
@@ -531,6 +531,7 @@ elseStatement:
 expression:
    LPAREN value logicalOperator expression RPAREN {$$ = makeNode(expression, NULL, NULL, 2, $2, $4); $$->operator = $3->label;}
    | LPAREN value RPAREN {$$ = makeNode(expression, NULL, NULL, 1, $2);}
+   | LPAREN value logicalOperator value RPAREN {$$ = makeNode(expression, NULL,NULL, 2, $2, $4); $$->operator = $3->label;}
    ;
 
 whileStatement:
@@ -579,8 +580,8 @@ logicalOperator:
    ;
 
 iterationStatement:
-   variableName INCREMENT SEMICOLON {$$ = makeNode(iterationStatement, NULL, NULL, 1, $1);}
-   | variableName DECREMENT SEMICOLON {$$ = makeNode(iterationStatement, NULL, NULL, 1, $1);}
+variableName INCREMENT SEMICOLON {$$ = makeNode(iterationStatement, NULL, NULL, 1, $1); $$->operator = $2->label;}
+   | variableName DECREMENT SEMICOLON {$$ = makeNode(iterationStatement, NULL, NULL, 1, $1); $$->operator = $2->label;}
    ;
 
 throwStatement:

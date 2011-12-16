@@ -17,6 +17,7 @@ typedef struct TAC {
 TAC* makeBlankTAC();
 TAC* makeTAC(int cmd, char* arg1, char* arg2, char* arg3);
 TAC* makeLabeledTAC(char* label, int cmd, char* arg1, char* arg2, char* arg3);
+void labelExistingTAC(char* label, TAC* existing);
 void printTAC(TAC* line);
 void printTACList(list* head);
 void printTACListToFile(list* head);

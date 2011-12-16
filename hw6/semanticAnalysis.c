@@ -342,7 +342,7 @@ void functionHandler(struct node* head){
 	   iterator->children[i]->label == variableBinding){
 	  head->children[z]->args = functionArgumentHandler(NULL, iterator->children[i]);
 	  head->children[z]->numArgs = getNumArgsFromDeclarationList(iterator->children[i],0);
-	  printf("%d\n",head->children[z]->numArgs);
+	  //printf("%d\n",head->children[z]->numArgs);
 	}
       }
     }
@@ -455,7 +455,7 @@ char* resolveName(node* head, char* str){
 	str = (char*)malloc(100*sizeof(char));
 	strcpy(str,head->contents);
 	strcat(str, ".as");
-	printf("%s\n", str);
+	//printf("%s\n", str);
 	//str = strdup(head->contents);
       }
       else {
