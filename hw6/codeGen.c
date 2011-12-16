@@ -184,12 +184,30 @@ void generateTAC(node* head){;
       
 
 	//build list.
-      
-	head->code->content = makeTAC(CALL,head->children[0]->contents,
-				      "n",head->place->name);
+	
+	if(head->children[1] != NULL){
+	  list* args = createArgumentTAC(head->children[1], NULL);
+	  int numArgs = getNumArgs(head->children[1], 0);
+	  char* buf = (char*)malloc(sizeof(char)*10);
+	  itoa(numArgs,buf);
 	    
+	  concatenateList(args, head->code);
+	  
+	  head->code->content = makeTAC(CALL,head->children[0]->contents,
+					buf,head->place->name);
+	
+	  head->code = args;
+	  
+	}
+	else {
+	  head->code->content = makeTAC(CALL,head->children[0]->contents,
+					"0",head->place->name);
+	}
+	
 	list* new = concatenateChildren(head);
 	list* next = head->code;
+	
+	
 	
 	if(new != NULL){
 	  concatenateList(new, head->code);
@@ -492,7 +510,7 @@ list* concatenateChildren(node* head){
 }
 
 
-
+//I'm actually reall happy with this function. it works!
 char* itoa(int val, char* buf){
   int new = (unsigned int)val;
   char* temp = buf;
@@ -571,6 +589,38 @@ int decideOperator(node* operator){
   
   return 0;
 }
+
+
+list* createArgumentTAC(node* head, list* lst){
+  switch(head->label){
+  case valueList:
+    {
+      if(lst == NULL){
+	lst = newListItem();
+	lst->content = makeTAC(PARM,head->children[0]->contents,NULL,NULL);
+      }
+      else {
+	genericAdd(lst,makeTAC(PARM,head->children[0]->contents,NULL,NULL));
+      }
+      
+      return createArgumentTAC(head->children[1],lst);
+    }
+    break;
+  default:
+    {
+      if(lst == NULL){
+	lst = newListItem();
+	lst->content = makeTAC(PARM,head->contents,NULL,NULL);
+      }
+      else {
+	genericAdd(lst,makeTAC(PARM,head->contents,NULL,NULL));
+      }
+      return lst;
+    }
+  }
+}
+
+
 
 /*
 val 53

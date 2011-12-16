@@ -21,5 +21,5 @@ void generateTACList(node*, list* lst);
 
 /*Helpers*/
 int decideOperator(node* operator);
-
+list* createArgumentTAC(node* head, list* lst);
 #endif

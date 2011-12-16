@@ -3,7 +3,7 @@ import trace;
 package  {
 	var y:Lol;	
 		
-	var x:Int = 8 / 2 - 1 + 4;
+	var x:Int = 8 / 2 - 1 + lol(2,3);
 	
 	var z:Int = 3;
 	
